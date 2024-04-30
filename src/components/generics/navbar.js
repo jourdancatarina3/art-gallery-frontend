@@ -48,22 +48,22 @@ const Navbar = () => {
             </div>
             :
             <div className="flex gap-5 ml-3 items-center">
-                <FontAwesomeIcon className="text-xl" icon={faHeart} />
-                <FontAwesomeIcon  className="text-xl" icon={faMessage} />
-                <Image
-                    onClick={() => console.log('hi')}
-                    src={avatar_url} 
-                    alt='user' 
-                    width={20} 
-                    height={20} 
-                    style={{ 
-                        width: '25px', 
-                        height: '25px', 
-                        objectFit: 'cover', 
-                        borderRadius: '50%',
-                        cursor: 'pointer',
-                    }} 
-                />
+                <Link href='/'><FontAwesomeIcon className="text-xl" icon={faHeart} /></Link>
+                <Link href='/'><FontAwesomeIcon  className="text-xl" icon={faMessage} /></Link>
+                <Link href='/'>
+                    <Image
+                        src={avatar_url} 
+                        alt='user' 
+                        width={20} 
+                        height={20} 
+                        style={{ 
+                            width: '25px', 
+                            height: '25px', 
+                            objectFit: 'cover', 
+                            borderRadius: '50%',
+                        }} 
+                    />
+                </Link>
             </div>
             }
         </div>
