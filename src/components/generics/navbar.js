@@ -8,12 +8,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
 
+const LAPTOP_SCREEN = 1024;
+
 const Navbar = () => {
     const isLoggedIn = true;
     const currentRoute = 'Home';
     const navRoutes = [
         { name: 'Home', route: '/', isLoggedIn: false },
         { name: 'Artworks', route: '/artworks', isLoggedIn: false },
+        { name: 'About us', route: '/about', isLoggedIn: false },
         { name: 'Bids', route: '/bids', isLoggedIn: true }
     ]
     const avatar_url = 'https://img.freepik.com/free-photo/graffiti-children-bicycle_1122-2206.jpg?t=st=1714461301~exp=1714464901~hmac=ccbf74e606515181e1f549bfabb4ff2a55e10437094614f8a432d5fa4550a2f6&w=900'
@@ -41,7 +44,7 @@ const Navbar = () => {
             ))}
             
             {!isLoggedIn ?
-            <div className="flex gap-2 ml-3 items-center">
+            <div className="flex gap-3 ml-3 items-center">
                 <button><Link href='/' className='font-semibold'>Sign up</Link></button>
                 <div className='h-5 w-0.5 mx-1 bg-black'></div>
                 <button><Link href='/' className='font-semibold'>Login</Link></button>
