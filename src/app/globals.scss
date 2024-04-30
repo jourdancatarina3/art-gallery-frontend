@@ -23,12 +23,12 @@ body {
   color: black;
   font-family: 'Adamina', serif;
   background-color: white;
-}
 
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
 }
 
 @layer utilities {
