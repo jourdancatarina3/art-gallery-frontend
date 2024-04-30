@@ -9,7 +9,7 @@ import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
 
 const Navbar = () => {
-    const isLoggedIn = false;
+    const isLoggedIn = true;
     const currentRoute = 'Home';
     const navRoutes = [
         { name: 'Home', route: '/', isLoggedIn: false },
@@ -19,7 +19,7 @@ const Navbar = () => {
     const avatar_url = 'https://img.freepik.com/free-photo/graffiti-children-bicycle_1122-2206.jpg?t=st=1714461301~exp=1714464901~hmac=ccbf74e606515181e1f549bfabb4ff2a55e10437094614f8a432d5fa4550a2f6&w=900'
 
     return (
-    <div className='w-screen flex justify-center py-3 shadow-md font-Adamina'>
+    <div className='w-screen flex justify-center py-3 shadow-md font-Adamina bg-white'>
         <div className='container xl grow flex gap-3 px-5 justify-between'>
             <div className="flex gap-2 items-center">
                 <Image src='/images/favicon.svg' alt='logo' width={30} height={30} />
