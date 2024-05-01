@@ -1,8 +1,12 @@
 import React from 'react'
+import Navbar from '@/components/generics/navbar'
 
 function page() {
     return (
-        <div>about page</div>
+        <div>
+            <Navbar />
+            about page
+        </div>
     )
 }
 
