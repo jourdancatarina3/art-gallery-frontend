@@ -1,4 +1,3 @@
-import Header from "@/components/Header/Header";
 import Image from "next/image";
 
 const artData = [
@@ -98,7 +97,6 @@ const artistsData = [
 export default function Home() {
   return (
     <main className="min-h-screen w-screen pb-72">
-      <Header />
       <div className="w-5/6 mx-auto">
         <div className="mt-5">
           <h1 className="font-inter text-5xl">Featured Artwork</h1>
