@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const api_url = 'http://127.0.0.1:8000/api/';
 
+// Note: computed fields are fields that are derived from other fields in the model
 /*
 Artwork fields
 - artist_id: int
@@ -12,6 +13,9 @@ Artwork fields
 - description: string
 - starting_bid: float or null
 - status: int (0: open, 1: reserved, 2: sold)
+- image_urls: [string]
+- slug: COMPUTED field (string)
+- first_image_url: COMPUTED field (string)
 */
 
 export const useArtworkStore = create((set) => ({
