@@ -100,9 +100,7 @@ const artistsData = [
 export default function Home() {
   return (
     <main className="min-h-screen w-screen pb-72">
-      <nav className="navbar p-0">  
-        <Navbar />
-      </nav>
+      <Navbar />
       <div className="container xl w-5/6 mx-auto">
         <div className="mt-5">
           <h1 className="font-inter text-5xl">Featured Artwork</h1>
