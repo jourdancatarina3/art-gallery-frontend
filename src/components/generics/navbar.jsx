@@ -13,7 +13,8 @@ import { useArtworkStore } from '@/store/artwork';
 
 const LAPTOP_SCREEN = 1024;
 
-const Navbar = ({search}) => {
+const Navbar = (props) => {
+    const { showSearch=false } = props;
     const { user, getUser } = useAuthStore();
     const { fetchArtworks } = useArtworkStore();
     const router = useRouter();
@@ -40,13 +41,13 @@ const Navbar = ({search}) => {
 
 
     return (
-    <nav className='navbar w-screen flex justify-center py-3 shadow-md font-Adamina bg-white'>
+    <nav className='navbar h-[75px] w-screen flex justify-center py-3 shadow-md font-Adamina bg-white'>
         <div className='container xl grow flex gap-3 px-5 justify-between'>
             <div className="flex gap-2 items-center">
                 <Image src='/images/favicon.svg' alt='logo' width={30} height={30} />
                 <h1 className='text-2xl font-semibold text-black font-Adamina'>FASO | GALLERY</h1>
             </div>
-            {search && (
+            {showSearch && (
                 <label className="input input-bordered mx-5 grow flex items-center gap-2 rounded-sm">
                     <input
                         onChange={e => setSearchKey(e.target.value)}
