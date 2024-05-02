@@ -46,7 +46,7 @@ const Navbar = ({search}) => {
                 <Image src='/images/favicon.svg' alt='logo' width={30} height={30} />
                 <h1 className='text-2xl font-semibold text-black font-Adamina'>FASO | GALLERY</h1>
             </div>
-            {search ? (
+            {search && (
                 <label className="input input-bordered mx-5 grow flex items-center gap-2 rounded-sm">
                     <input
                         onChange={e => setSearchKey(e.target.value)}
@@ -55,48 +55,47 @@ const Navbar = ({search}) => {
                     />
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" /></svg>
                 </label>
-            ) : (
-                <div className='w-5/12' />
-            )
+                )   
+            }
+            <div className="flex gap-3">
+                {navRoutes.map((route, index) => (
+                    (!route.isLoggedIn || route.isLoggedIn === isLoggedIn) && (
+                    <div key={index} className="flex flex-col justify-center">
+                        <button className={`font-medium ${pathname === route.route ? 'text-black' : 'text-gray-500'}`}>
+                            <Link href={route.route}>{route.name}</Link>
+                        </button>
+                        <div className={`h-0.5 w-full ${pathname === route.route ? 'bg-black' : 'bg-transparent'}`}></div>
+                    </div>
+                    )
+                ))}
                 
-            }
-            {navRoutes.map((route, index) => (
-                (!route.isLoggedIn || route.isLoggedIn === isLoggedIn) && (
-                <div key={index} className="flex flex-col justify-center">
-                    <button className={`font-medium ${pathname === route.route ? 'text-black' : 'text-gray-500'}`}>
-                        <Link href={route.route}>{route.name}</Link>
-                    </button>
-                    <div className={`h-0.5 w-full ${pathname === route.route ? 'bg-black' : 'bg-transparent'}`}></div>
+                {!isLoggedIn ?
+                <div className="flex gap-3 ml-3 items-center">
+                    <button><Link href='/register' className='font-semibold'>Sign up</Link></button>
+                    <div className='h-5 w-0.5 mx-1 bg-black'></div>
+                    <button><Link href='/login' className='font-semibold'>Login</Link></button>
                 </div>
-                )
-            ))}
-            
-            {!isLoggedIn ?
-            <div className="flex gap-3 ml-3 items-center">
-                <button><Link href='/register' className='font-semibold'>Sign up</Link></button>
-                <div className='h-5 w-0.5 mx-1 bg-black'></div>
-                <button><Link href='/login' className='font-semibold'>Login</Link></button>
+                :
+                <div className="flex gap-5 ml-3 items-center">
+                    <Link href='/'><FontAwesomeIcon className="text-xl" icon={faHeart} /></Link>
+                    <Link href='/'><FontAwesomeIcon  className="text-xl" icon={faMessage} /></Link>
+                    <Link href='/'>
+                        <Image
+                            src={avatar_url} 
+                            alt='user' 
+                            width={20} 
+                            height={20} 
+                            style={{ 
+                                width: '25px', 
+                                height: '25px', 
+                                objectFit: 'cover', 
+                                borderRadius: '50%',
+                            }} 
+                        />
+                    </Link>
+                </div>
+                }
             </div>
-            :
-            <div className="flex gap-5 ml-3 items-center">
-                <Link href='/'><FontAwesomeIcon className="text-xl" icon={faHeart} /></Link>
-                <Link href='/'><FontAwesomeIcon  className="text-xl" icon={faMessage} /></Link>
-                <Link href='/'>
-                    <Image
-                        src={avatar_url} 
-                        alt='user' 
-                        width={20} 
-                        height={20} 
-                        style={{ 
-                            width: '25px', 
-                            height: '25px', 
-                            objectFit: 'cover', 
-                            borderRadius: '50%',
-                        }} 
-                    />
-                </Link>
-            </div>
-            }
         </div>
     </nav>
     )
