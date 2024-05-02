@@ -14,8 +14,14 @@ module.exports = {
       },
       fontFamily: {
         inter: ['Nosifer', 'sans-serif'], // Add the Inter font family
+        Adamina: ['Adamina', 'sans-serif'],
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('daisyui'),
+  ],
+  daisyui: {
+    themes: ["light"],
+  },
 };

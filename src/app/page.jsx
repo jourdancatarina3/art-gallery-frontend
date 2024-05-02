@@ -1,5 +1,8 @@
 import Image from "next/image";
 
+// components
+import Navbar from "@/components/generics/navbar";
+
 const artData = [
   {
     title: "Starry Night",
@@ -97,7 +100,10 @@ const artistsData = [
 export default function Home() {
   return (
     <main className="min-h-screen w-screen pb-72">
-      <div className="w-5/6 mx-auto">
+      <nav className="navbar p-0">  
+        <Navbar />
+      </nav>
+      <div className="container xl w-5/6 mx-auto">
         <div className="mt-5">
           <h1 className="font-inter text-5xl">Featured Artwork</h1>
           <div className="flex gap-14 mt-8">
@@ -131,6 +137,7 @@ export default function Home() {
           <h1 className="font-inter text-5xl mb-8">New<br />Artworks</h1>
           <div className="flex gap-10 overflow-x-auto">
             {artData.map((art, index) => (
+              // TODO: Modularize this, make a component fot this card because we will reuse it in the artworks page
               <div key={index} className="min-w-[335.5px] pb-5">
                 <div className="relative h-[344.3px]">
                   <Image src={art.url} alt={art.title} layout="fill" objectFit="cover" className="rounded-md" />
