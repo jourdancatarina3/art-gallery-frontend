@@ -1,8 +1,7 @@
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import create from 'zustand';
-import axios from 'axios';
+import axiosInstance from '@/utils/axios';
 
-const api_url = 'http://127.0.0.1:8001/api/';
 
 /*
 User fields
@@ -20,11 +19,7 @@ User fields
 const fetchUser = async () => {
     try {
         const { jwt } = parseCookies();
-        const data = await axios.get(api_url + 'user/', {
-            headers: {
-                Authorization: `Bearer ${jwt}`
-            }
-        });
+        const data = await axiosInstance.get('user/');
         setCookie(null, 'jwt', jwt, { maxAge: 60 * 60, path: '/' });
         return data.data;
     } catch (error) {
@@ -40,8 +35,9 @@ export const useAuthStore = create((set) => ({
         set({ user: data });
     },
     login: async (email, password) => {
+        console.log('herere')
         try {
-            const data = await axios.post(api_url + 'login/', { email, password })
+            const data = await axiosInstance.post('login/', { email, password })
             const jwt_token = data.data.jwt;
             setCookie(null, 'jwt', jwt_token, { maxAge: 60 * 60, path: '/' });
             set({ user: data.data.user });

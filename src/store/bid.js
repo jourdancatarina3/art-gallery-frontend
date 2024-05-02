@@ -1,7 +1,5 @@
 import create from 'zustand';
-import axios from 'axios';
-
-const api_url = 'http://127.0.0.1:8000/api/';
+import axiosInstance from '@/utils/axios';
 
 /*
 Bid fields
@@ -14,7 +12,7 @@ Bid fields
 export const useBidStore = create((set) => ({
     fetchBids: async (filters) => {
         try {
-            const data = await axios.get(api_url + 'bids/', { params: filters });
+            const data = await axios.get('bids/', { params: filters });
             return data.data;
         } catch (error) {
             console.log(error);
@@ -23,7 +21,7 @@ export const useBidStore = create((set) => ({
 
     fetchBid: async (id) => {
         try {
-            const data = await axios.get(api_url + `bids/${id}/`);
+            const data = await axios.get(`bids/${id}/`);
             return data.data;
         } catch (error) {
             console.log(error);
@@ -32,7 +30,7 @@ export const useBidStore = create((set) => ({
 
     createBid: async (data) => {
         try {
-            const response = await axios.post(api_url + 'bids/', data);
+            const response = await axios.post('bids/', data);
             return response.data;
         } catch (error) {
             console.log(error);
@@ -41,7 +39,7 @@ export const useBidStore = create((set) => ({
 
     updateBid: async (id, data) => {
         try {
-            const response = await axios.put(api_url + `bids/${id}/`, data);
+            const response = await axios.put(`bids/${id}/`, data);
             return response.data;
         } catch (error) {
             console.log(error);
@@ -50,7 +48,7 @@ export const useBidStore = create((set) => ({
 
     deleteBid: async (id) => {
         try {
-            const response = await axios.delete(api_url + `bids/${id}/`);
+            const response = await axios.delete(`bids/${id}/`);
             return response.data;
         } catch (error) {
             console.log(error);

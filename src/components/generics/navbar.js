@@ -9,11 +9,13 @@ import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
 
 import { useAuthStore } from '@/store/auth';
+import { useArtworkStore } from '@/store/artwork';
 
 const LAPTOP_SCREEN = 1024;
 
 const Navbar = ({search}) => {
     const { user, getUser } = useAuthStore();
+    const { fetchArtworks } = useArtworkStore();
     const router = useRouter();
     const pathname = usePathname();
     const [searchKey, setSearchKey] = useState('');
@@ -27,8 +29,14 @@ const Navbar = ({search}) => {
     const avatar_url = user?.avatar_url || 'https://img.freepik.com/free-photo/graffiti-children-bicycle_1122-2206.jpg?t=st=1714461301~exp=1714464901~hmac=ccbf74e606515181e1f549bfabb4ff2a55e10437094614f8a432d5fa4550a2f6&w=900';
 
     useEffect(() => {
-        getUser();
+        if (!isLoggedIn) getUser();
+        printArtworks();
     }, []);
+
+    const printArtworks = async () => {
+        const artworks = await fetchArtworks();
+        console.log(artworks);
+    }
 
 
     return (

@@ -1,7 +1,5 @@
 import create from 'zustand';
-import axios from 'axios';
-
-const api_url = 'http://127.0.0.1:8000/api/';
+import axiosInstance from '@/utils/axios';
 
 // Note: computed fields are fields that are derived from other fields in the model
 /*
@@ -15,13 +13,13 @@ Artwork fields
 - status: int (0: open, 1: reserved, 2: sold)
 - image_urls: [string]
 - slug: COMPUTED field (string)
-- first_image_url: COMPUTED field (string)
+- first_image: COMPUTED field (object)
 */
 
 export const useArtworkStore = create((set) => ({
     fetchArtworks: async (filters) => {
         try {
-            const data = await axios.get(api_url + 'artworks/', { params: filters });
+            const data = await axiosInstance.get('artworks/', { params: filters });
             return data.data;
         } catch (error) {
             console.log(error);
@@ -30,7 +28,7 @@ export const useArtworkStore = create((set) => ({
 
     fetchArtwork: async (id) => {
         try {
-            const data = await axios.get(api_url + `artworks/${id}/`);
+            const data = await axiosInstance.get(`artworks/${id}/`);
             return data.data;
         } catch (error) {
             console.log(error);
@@ -39,7 +37,7 @@ export const useArtworkStore = create((set) => ({
 
     createArtwork: async (data) => {
         try {
-            const response = await axios.post(api_url + 'artworks/', data);
+            const response = await axiosInstance.post('artworks/', data);
             return response.data;
         } catch (error) {
             console.log(error);
@@ -48,7 +46,7 @@ export const useArtworkStore = create((set) => ({
 
     updateArtwork: async (id, data) => {
         try {
-            const response = await axios.put(api_url + `artworks/${id}/`, data);
+            const response = await axiosInstance.put(`artworks/${id}/`, data);
             return response.data;
         } catch (error) {
             console.log(error);
@@ -57,7 +55,7 @@ export const useArtworkStore = create((set) => ({
 
     deleteArtwork: async (id) => {
         try {
-            const response = await axios.delete(api_url + `artworks/${id}/`);
+            const response = await axiosInstance.delete(`artworks/${id}/`);
             return response.data;
         } catch (error) {
             console.log(error);
@@ -66,7 +64,7 @@ export const useArtworkStore = create((set) => ({
 
     fetchCategories: async (filters) => {
         try {
-            const data = await axios.get(api_url + 'categories/', { params: filters });
+            const data = await axiosInstance.get('categories/', { params: filters });
             return data.data;
         } catch (error) {
             console.log(error);
