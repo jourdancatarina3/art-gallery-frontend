@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import Navbar from "@/components/generics/navbar";
-import ArtworkCard from "@/components/artworks/ArtworkCard";
+// import ArtworkCard from "@/components/artworks/ArtworkCard";
 
 const artData = [
   {
@@ -135,7 +135,8 @@ export default function Home() {
           <h1 className="font-inter text-5xl mb-8">New<br />Artworks</h1>
           <div className="flex gap-10 overflow-x-auto">
             {artData.map((art, index) => (
-              <ArtworkCard key={index} art={art} />
+              // <ArtworkCard key={index} art={art} />
+              asd
             ))}
           </div>
         </div>
