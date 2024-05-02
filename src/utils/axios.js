@@ -23,7 +23,7 @@ axiosInstance.interceptors.response.use(
             router.push('/') // access denied page
         } else if (error.response.status === 404) {
             const router = useRouter()
-            router.push('/') // not found page
+            router.push('/404') // not found page
         }
         return Promise.reject(error);
     }
