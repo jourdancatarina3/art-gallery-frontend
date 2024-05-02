@@ -1,7 +1,12 @@
+'use client';
+
 import Image from "next/image";
+import { useState, useEffect } from 'react';
 
 import Navbar from "@/components/generics/navbar";
-// import ArtworkCard from "@/components/artworks/ArtworkCard";
+import ArtworkCard from "@/components/artworks/ArtworkCard";
+
+import { useArtworkStore } from '@/store/artwork';
 
 const artData = [
   {
@@ -98,6 +103,13 @@ const artistsData = [
 ];
 
 export default function Home() {
+  const { fetchArtworks } = useArtworkStore();
+
+  const [artworks, setArtworks] = useState([]);
+
+  useEffect(() => {
+    fetchArtworks().then(artworks => setArtworks(artworks.objects));
+  }, []);
   return (
     <main className="min-h-screen w-screen pb-72">
       <Navbar showSearch={true} />
@@ -134,9 +146,11 @@ export default function Home() {
         <div className="mt-32">
           <h1 className="font-inter text-5xl mb-8">New<br />Artworks</h1>
           <div className="flex gap-10 overflow-x-auto">
-            {artData.map((art, index) => (
-              // <ArtworkCard key={index} art={art} />
-              asd
+            {artworks.map((art, index) => (
+              <ArtworkCard key={index} artwork={art} />
+            ))}
+            {artworks.map((art, index) => (
+              <ArtworkCard key={index} artwork={art} />
             ))}
           </div>
         </div>
