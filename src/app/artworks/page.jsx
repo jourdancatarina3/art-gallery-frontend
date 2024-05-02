@@ -72,31 +72,31 @@ const ArtworksPage = () => {
   return (
     <>
       <Navbar />
-      <div className='w-5/6 mx-auto'>
+      <div className='container xl mx-auto'>
         <div className='flex gap-3 mt-3 font-light'>
           <h1>Home</h1>
           <h1>/</h1>
           <h1 className='font-semibold'>Artworks</h1>
         </div>
         <div className='flex'>
-          <div className='w-[20%]'>
-            <h1 className='text-2xl font-semibold mt-20'>Filters</h1>
+          <div className='w-[15%]'>
+            <h3 className='text-2xl font-semibold mt-20'>Filters</h3>
             <hr className="border-0 h-px bg-gray-300 my-5" />
             <div className='flex flex-col gap-5'>
               {artGenres.map((genre) => (
                 <div className='flex gap-3 items-center' key={genre}>
                   <input
                     type='checkbox'
-                    className='w-5 h-5'
+                    className='w-5 h-5 hover:cursor-pointer'
                     checked={selectedGenres.includes(genre)}
                     onChange={() => handleGenreChange(genre)}
                   />
-                  <h1 className='text-xl tracking-widest'>{genre}</h1>
+                  <h4 className='text-md tracking-widest'>{genre}</h4>
                 </div>
               ))}
             </div>
           </div>
-          <div className='mt-5 ml-10 w-[80%]'>
+          <div className='mt-5 ml-10 w-[85%]'>
             <h1 className='text-3xl font-semibold'>ARTWORKS</h1>
             <div className='bg-gray-200 py-3.5 flex rounded mt-2 w-96'>
               <div className='px-4 cursor-pointer' onClick={handleSearch}>
@@ -109,7 +109,13 @@ const ArtworksPage = () => {
                 onChange={handleSearchInputChange}
               />
             </div>
-            <div className='mt-10 grid grid-cols-3 gap-5 flex-wrap'>
+            <div className='mt-10 flex gap-5 flex-wrap'>
+              {filteredArtworks.map((art, index) => (
+                <ArtworkCard key={index} art={art} />
+              ))}
+              {filteredArtworks.map((art, index) => (
+                <ArtworkCard key={index} art={art} />
+              ))}
               {filteredArtworks.map((art, index) => (
                 <ArtworkCard key={index} art={art} />
               ))}
