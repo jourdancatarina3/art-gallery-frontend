@@ -1,11 +1,10 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ArtDataProvider } from "./context/ArtDataContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "FASO GALLERY",
+  title: "FASO | GALLERY",
   description: "An art bidding website for artists and art enthusiasts.",
 };
 

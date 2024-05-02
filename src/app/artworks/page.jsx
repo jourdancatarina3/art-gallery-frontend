@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useContext } from 'react'
-import { ArtDataContext, useArtData, useArtDataContext } from '../context/ArtDataContext';
-import Image from 'next/image';
+import React, { useState } from 'react';
+import { useArtDataContext } from '../context/ArtDataContext';
 import Navbar from '@/components/generics/navbar';
+import ArtworkCard from '@/components/artworks/ArtworkCard';
 
 const artGenres = [
-  "Abstract",
-  "Impressionism",
+  "Painting",
+  "Sculpture",
   "Expressionism",
   "Surrealism",
   "Realism",
@@ -20,6 +20,54 @@ const artGenres = [
 
 const ArtworksPage = () => {
   const artData = useArtDataContext();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [filteredArtworks, setFilteredArtworks] = useState(artData);
+
+  const handleSearchInputChange = (event) => {
+    const { value } = event.target;
+    setSearchQuery(value.trim().toLowerCase());
+
+    if (value.trim().length >= 3) {
+      const genreFilteredArtworks = applyGenreFilter(artData);
+      const searchFilteredArtworks = applySearchFilter(genreFilteredArtworks, value.trim().toLowerCase());
+      setFilteredArtworks(searchFilteredArtworks);
+    } else {
+      setFilteredArtworks(applyGenreFilter(artData));
+    }
+  };
+
+  const handleGenreChange = (genre) => {
+    const currentIndex = selectedGenres.indexOf(genre);
+    const newSelectedGenres = [...selectedGenres];
+
+    if (currentIndex === -1) {
+      newSelectedGenres.push(genre);
+    } else {
+      newSelectedGenres.splice(currentIndex, 1);
+    }
+
+    setSelectedGenres(newSelectedGenres);
+
+    const genreFilteredArtworks = applyGenreFilter(artData, newSelectedGenres);
+    const searchFilteredArtworks = applySearchFilter(genreFilteredArtworks, searchQuery);
+    setFilteredArtworks(searchFilteredArtworks);
+  };
+
+  const applyGenreFilter = (artworks, genres = selectedGenres) => {
+    if (genres.length === 0) {
+      return artworks;
+    }
+    return artworks.filter((art) => genres.some((genre) => art.genre.includes(genre)));
+  };
+
+  const applySearchFilter = (artworks, query) => {
+    return artworks.filter((art) => art.title.toLowerCase().includes(query));
+  };
+
+  const handleSearch = () => {
+    handleSearchInputChange({ target: { value: searchQuery } });
+  };
 
   return (
     <>
@@ -35,11 +83,15 @@ const ArtworksPage = () => {
             <h1 className='text-2xl font-semibold mt-20'>Filters</h1>
             <hr className="border-0 h-px bg-gray-300 my-5" />
             <div className='flex flex-col gap-5'>
-              <h1></h1>
               {artGenres.map((genre) => (
-                <div className='flex gap-3 items-center'>
-                  <input type='checkbox' className='w-5 h-5' />
-                  <h1 className='text-xl tracking-widest'>{genre} (18) </h1>
+                <div className='flex gap-3 items-center' key={genre}>
+                  <input
+                    type='checkbox'
+                    className='w-5 h-5'
+                    checked={selectedGenres.includes(genre)}
+                    onChange={() => handleGenreChange(genre)}
+                  />
+                  <h1 className='text-xl tracking-widest'>{genre}</h1>
                 </div>
               ))}
             </div>
@@ -47,33 +99,26 @@ const ArtworksPage = () => {
           <div className='mt-5 ml-10 w-[80%]'>
             <h1 className='text-3xl font-semibold'>ARTWORKS</h1>
             <div className='bg-gray-200 py-3.5 flex rounded mt-2 w-96'>
-              <div className='px-4 cursor-pointer'>
+              <div className='px-4 cursor-pointer' onClick={handleSearch}>
                 <FontAwesomeIcon icon={faMagnifyingGlass} width={20} height={20} />
               </div>
-              <input className='focus placeholder-gray-700 focus:outline-none bg-gray-200 w-96' placeholder='Search Artwork' />
+              <input
+                className='focus placeholder-gray-700 focus:outline-none bg-gray-200 w-96'
+                placeholder='Search Artwork'
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+              />
             </div>
             <div className='mt-10 grid grid-cols-3 gap-5 flex-wrap'>
-              {artData.map((art, index) => (
-                <div key={index} className="min-w-[335.5px] pb-5">
-                  <div className="relative h-[344.3px]">
-                    <Image src={art.url} alt={art.title} layout="fill" objectFit="cover" className="rounded-md" />
-                  </div>
-                  <div className="flex justify-between mt-1.5">
-                    <h3 className="text-gray-600 font-light">{art.artist}</h3>
-                    <h3 className="text-gray-600 font-light">{art.type}</h3>
-                  </div>
-                  <div className="flex justify-between">
-                    <h3 className="text-lg font-semibold">{art.title}</h3>
-                    <h3 className="text-lg font-semibold">${art.price}</h3>
-                  </div>
-                </div>
+              {filteredArtworks.map((art, index) => (
+                <ArtworkCard key={index} art={art} />
               ))}
             </div>
           </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ArtworksPage
+export default ArtworksPage;

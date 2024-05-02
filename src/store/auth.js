@@ -2,7 +2,7 @@ import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import create from 'zustand';
 import axios from 'axios';
 
-const api_url = 'http://127.0.0.1:8000/api/';
+const api_url = 'http://127.0.0.1:8001/api/';
 
 /*
 User fields
