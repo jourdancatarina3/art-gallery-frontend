@@ -30,6 +30,7 @@ const fetchUser = async () => {
 
 export const useAuthStore = create((set) => ({
     user: null,
+    defaultAvatarUrl: 'https://img.freepik.com/free-photo/graffiti-children-bicycle_1122-2206.jpg?t=st=1714461301~exp',
     getUser: async () => {
         const data = await fetchUser();
         set({ user: data });

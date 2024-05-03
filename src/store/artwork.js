@@ -71,4 +71,22 @@ export const useArtworkStore = create((set) => ({
             console.log(error);
         }
     },
+
+    fetchTopArtist: async () => {
+        try {
+            const data = await axiosInstance.get('top-artists/');
+            return data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    fetchFeaturedArtworks: async () => {
+        try {
+            const data = await axiosInstance.get('featured-artworks/');
+            return data.data;
+        } catch (error) {
+            console.log(error);
+        }
+    },
 }));
