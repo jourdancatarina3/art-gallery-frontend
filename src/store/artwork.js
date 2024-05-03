@@ -12,6 +12,7 @@ Artwork fields
 - starting_bid: float or null
 - status: int (0: open, 1: reserved, 2: sold)
 - image_urls: [string]
+- viewers_count: int
 - slug: COMPUTED field (string)
 - first_image: COMPUTED field (object)
 */
