@@ -8,14 +8,14 @@ export const metadata = {
 
 function Page() {
     return (
-        <div>
+        <>
             <div className='absolute top-0 left-0'>
                 <Navbar />
             </div>
             <main className="flex justify-center items-center font-Adamina h-lvh">
                 <LoginPane />
             </main>
-        </div>
+        </>
     )
 }
 

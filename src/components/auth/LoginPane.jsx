@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 import { useAuthStore } from '@/store/auth';
 
@@ -43,7 +44,7 @@ function LoginPane() {
     },[])
 
     return (
-        <form onSubmit={handleLogin} className="max-w-[300px] flex flex-col gap-4 mb-[80px]" >
+        <form onSubmit={handleLogin} className="w-[350px] flex flex-col gap-4 mb-[80px]" >
             <div className='flex justify-center'>
                 <Image src='/images/favicon.svg' alt='logo' width={50} height={50} />
             </div>
@@ -71,7 +72,11 @@ function LoginPane() {
                 <p className={`text-xs text-rose-500 ${loginFail ? 'block': 'hidden'}`}>Wrong email or password</p>
             </div>
 
-            <button disabled={isLoggingIn} type="submit" class="grow btn btn-active rounded-sm w-[300px]">{!isLoggingIn ? 'Login' : 'Loging in...'}</button>
+            <button disabled={isLoggingIn} type="submit" class="w-full btn btn-active rounded-sm w-[300px]">{!isLoggingIn ? 'Login' : 'Loging in...'}</button>
+            <div className="flex justify-between w-full">
+                <Link href="/recover" className="text-xs text-gray-500">Forgot password?</Link>
+                <Link href="/register" className="text-xs text-gray-500 ml-2">Create an account</Link>
+            </div>
         </form>
     )
 }

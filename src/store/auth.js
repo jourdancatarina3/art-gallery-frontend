@@ -40,7 +40,7 @@ export const useAuthStore = create((set) => ({
         try {
             const data = await axiosInstance.post('login/', { email, password })
             const jwt_token = data.data.jwt;
-            setCookie(null, 'jwt', jwt_token, { maxAge: 60 * 60 * 24 * 30, path: '/' });
+            setCookie(null, 'jwt', jwt_token, { maxAge: 60 * 60 * 24 * 365, path: '/' });
             set({ user: data.data.user });
             return true;
         } catch (error) {
@@ -48,4 +48,13 @@ export const useAuthStore = create((set) => ({
             return false;
         }
     },
+    checkEmailAvailability: async (email) => {
+        try {
+            const data = await axiosInstance.post('check-email/', { email });
+            return data.data;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
 }));
