@@ -60,10 +60,6 @@ function RegisterPane() {
                     Adress
                     <input type="text" className="grow" placeholder="Crusty crab" />
                 </label>
-                <label className="input input-bordered flex items-center gap-2 rounded-sm">
-                    Avatar URL
-                    <input type="text" className="grow" placeholder="" />
-                </label>
                 <textarea className="textarea textarea-bordered rounded-sm" placeholder="Bio"></textarea>
                 <textarea className="textarea textarea-bordered rounded-sm" placeholder="Achievements"></textarea>
                 <div className="join w-full flex">
