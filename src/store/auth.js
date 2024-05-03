@@ -20,7 +20,7 @@ const fetchUser = async () => {
     try {
         const { jwt } = parseCookies();
         const data = await axiosInstance.get('user/');
-        setCookie(null, 'jwt', jwt, { maxAge: 60 * 60, path: '/' });
+        // setCookie(null, 'jwt', jwt, { maxAge: 60 * 60 * 24 *  7, path: '/' });
         return data.data;
     } catch (error) {
         console.log(error);
@@ -40,7 +40,7 @@ export const useAuthStore = create((set) => ({
         try {
             const data = await axiosInstance.post('login/', { email, password })
             const jwt_token = data.data.jwt;
-            setCookie(null, 'jwt', jwt_token, { maxAge: 60 * 60, path: '/' });
+            setCookie(null, 'jwt', jwt_token, { maxAge: 60 * 60 * 24 * 30, path: '/' });
             set({ user: data.data.user });
             return true;
         } catch (error) {
