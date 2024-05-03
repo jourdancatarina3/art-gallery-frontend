@@ -23,6 +23,7 @@ const ArtworkPane = () => {
     const [artworks, setArtworks] = useState([]);
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
+    const [categorySearchKey, setCategorySearchKey] = useState('')
 
     const initializeArtworks = async () => {
         setIsLoading(true);
@@ -52,8 +53,12 @@ const ArtworkPane = () => {
     }
 
     const getCategories = async () => {
+        const filters = {}
+        if (categorySearchKey.trim().length > 0) {
+            filters['name__icontains'] = categorySearchKey;
+        }
         try {
-            const data = await fetchCategories();
+            const data = await fetchCategories(filters);
             setCategories(data.objects);
         } catch (error) {
             console.log(error);
@@ -63,6 +68,10 @@ const ArtworkPane = () => {
     const handleSearchKeyChange = useDebouncedCallback(() => {
         getArtworks();
     }, 500);
+
+    const handleCattegorySearch = useDebouncedCallback(() => {
+        getCategories();
+    }, 500)
 
     const limitCategoryCount = (count) => {
         return count > 99 ? '99+' : count;
@@ -79,6 +88,10 @@ const ArtworkPane = () => {
         handleSearchKeyChange();
     }, [searchKey, selectedCategories])
 
+    useEffect(() => {
+        handleCattegorySearch();
+    }, [categorySearchKey])
+
 
     return (
         <div className='container xl mx-auto'>
@@ -89,8 +102,9 @@ const ArtworkPane = () => {
             </div>
             <div className='flex justify-between'>
                 <div className='w-[15%]'>
-                    <h3 className='text-2xl font-semibold mt-20'>Filters</h3>
-                    <hr className="border-0 h-px bg-gray-300 my-5" />
+                    <h3 className='text-2xl font-semibold mt-20 mb-2'>Category</h3>
+                    <input onChange={(e) => {setCategorySearchKey(e.target.value)}} type="text" placeholder="Search category" className="input rounded-sm input-bordered w-full max-w-xs" />
+                    <hr className="border-0 h-px bg-gray-300 my-3" />
                     <div className='flex flex-col gap-5'>
                     {categories.map((category) => (
                         <div className='flex gap-3 items-center' key={category.id}>
@@ -117,7 +131,7 @@ const ArtworkPane = () => {
                 <div className='mt-5 pl-10 w-[85%]'>
                     <h1 className='text-3xl font-semibold'>ARTWORKS</h1>
                     <div className='bg-gray-200 py-3.5 flex rounded mt-2 w-96'>
-                        <div className='px-4 cursor-pointer' onClick={getArtworks}>
+                        <div className='px-4'>
                             <FontAwesomeIcon icon={faMagnifyingGlass} width={20} height={20} />
                         </div>
                         <input
