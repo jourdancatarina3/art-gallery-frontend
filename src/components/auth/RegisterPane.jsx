@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { useAuthStore } from '@/store/auth';
 
@@ -28,7 +29,7 @@ function RegisterPane() {
             </div>
             <h1 className="text-3xl font-semibold text-center my-5">Create Account</h1>
             <div className="flex flex-col gap-3">
-                <label className="input input-bordered flex items-center gap-2">
+                <label className="input input-bordered flex items-center gap-2 rounded-sm">
                     Email<span className="text-red-500">*</span>
                     <input type="text" className="grow" placeholder="donatello@ninja.com" />
                     {isEmailAvailable !== null && isEmailAvailable && (
@@ -43,33 +44,36 @@ function RegisterPane() {
                         <span className="loading loading-infinity loading-sm text-success"></span>
                     )}
                 </label>
-                <label className="input input-bordered flex items-center gap-2">
+                <label className="input input-bordered flex items-center gap-2 rounded-sm">
                     Full Name
                     <input type="text" className="grow" placeholder="Michelangelo Perez" />
                 </label>
-                <label className="input input-bordered flex items-center gap-2">
+                <label className="input input-bordered flex items-center gap-2 rounded-sm">
                     Display Name<span className="text-red-500">*</span>
                     <input type="text" className="grow" placeholder="Raphael_gwapo123" />
                 </label>
-                <label className="input input-bordered flex items-center gap-2">
+                <label className="input input-bordered flex items-center gap-2 rounded-sm">
                     Phone Number
                     <input type="text" className="grow" placeholder="+63..." />
                 </label>
-                <label className="input input-bordered flex items-center gap-2">
+                <label className="input input-bordered flex items-center gap-2 rounded-sm">
                     Adress
                     <input type="text" className="grow" placeholder="Crusty crab" />
                 </label>
-                <label className="input input-bordered flex items-center gap-2">
+                <label className="input input-bordered flex items-center gap-2 rounded-sm">
                     Avatar URL
                     <input type="text" className="grow" placeholder="" />
                 </label>
-                <textarea className="textarea textarea-bordered" placeholder="Bio"></textarea>
-                <textarea className="textarea textarea-bordered" placeholder="Achievements"></textarea>
+                <textarea className="textarea textarea-bordered rounded-sm" placeholder="Bio"></textarea>
+                <textarea className="textarea textarea-bordered rounded-sm" placeholder="Achievements"></textarea>
                 <div className="join w-full flex">
                     <button type="button" className={`btn join-item grow hover:bg-green-300 ${userType === 0 ? 'bg-green-300' : ''}`} onClick={() => setUserType(0)}>Artist</button>
                     <button type="button" className={`btn join-item grow hover:bg-green-300 ${userType === 1 ? 'bg-green-300' : ''}`} onClick={() => setUserType(1)}>Art Collector</button>
                 </div>
-                <button disabled={!isEmailAvailable || isCheckingEmail} type="submit" class="h-full btn btn-neutral text-xl font-normal py-3">Create Account</button>
+                <button disabled={!isEmailAvailable || isCheckingEmail} type="submit" class="mt-3 h-full btn btn-neutral text-xl rounded-sm font-normal py-3">Create Account</button>
+                <div className="">
+                    <p className="text-sm" >Already have an account? <Link href="/login" className="text-blue-400 text-sm">Login</Link></p>
+                </div>
             </div>
         </form>
     );

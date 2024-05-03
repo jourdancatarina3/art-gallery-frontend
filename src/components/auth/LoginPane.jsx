@@ -72,10 +72,10 @@ function LoginPane() {
                 <p className={`text-xs text-rose-500 ${loginFail ? 'block': 'hidden'}`}>Wrong email or password</p>
             </div>
 
-            <button disabled={isLoggingIn} type="submit" class="w-full btn btn-active rounded-sm w-[300px]">{!isLoggingIn ? 'Login' : 'Loging in...'}</button>
+            <button disabled={isLoggingIn} type="submit" class="w-full btn btn-active rounded-sm btn-neutral w-[300px]">{!isLoggingIn ? 'Login' : 'Loging in...'}</button>
             <div className="flex justify-between w-full">
                 <Link href="/recover" className="text-xs text-gray-500">Forgot password?</Link>
-                <Link href="/register" className="text-xs text-gray-500 ml-2">Create an account</Link>
+                <Link href="/register" className="text-xs text-gray-500 ml-2 text-blue-400 ">Create an account</Link>
             </div>
         </form>
     )
