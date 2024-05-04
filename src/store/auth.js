@@ -50,7 +50,7 @@ export const useAuthStore = create((set) => ({
     },
     checkEmailAvailability: async (email) => {
         try {
-            const data = await axiosInstance.post('check-email/', { email });
+            const data = await axiosInstance.get('check-email/', { params: {email} });
             return data.data;
         } catch (error) {
             console.log(error);
