@@ -55,7 +55,7 @@ const Navbar = (props) => {
     return (
     <nav className='navbar h-[75px] w-screen flex justify-center py-3 shadow-md font-Adamina bg-white'>
         <div className='container xl grow flex gap-3 px-5 justify-between'>
-            <div className="flex gap-2 items-center">
+            <div onClick={() => {router.push('/')}} className="flex gap-2 items-center cursor-pointer">
                 <Image src='/images/favicon.svg' alt='logo' width={30} height={30} />
                 <h1 className='text-2xl font-semibold text-black font-Adamina'>FASO | GALLERY</h1>
             </div>

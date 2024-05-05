@@ -37,7 +37,7 @@ const ArtworkPane = () => {
         try {
             const filters = {};
             if (searchKey.trim().length > 0) {
-                filters.title__icontains = searchKey;
+                filters.search_key = searchKey;
             }
             if (selectedCategories.length > 0) {
                 filters.category_id__in = selectedCategories.toString();
@@ -136,7 +136,7 @@ const ArtworkPane = () => {
                         </div>
                         <input
                             className='focus placeholder-gray-700 focus:outline-none bg-gray-200 w-96'
-                            placeholder='Search Artwork'
+                            placeholder='Search Artwork or Artist...'
                             value={searchKey}
                             onChange={(event) => setSearchKey(event.target.value)}
                         />

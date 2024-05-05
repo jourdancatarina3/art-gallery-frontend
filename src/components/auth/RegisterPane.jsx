@@ -40,6 +40,8 @@ function RegisterPane() {
     const [achievements, setAchievements] = useState('');
     const [about, setAbout] = useState('');
 
+    const preventSubmit = !isEmailAvailable || isCheckingEmail || !isPasswordMatch;
+
     const emailFormatChecker = () => {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailPattern.test(email.trim());
@@ -90,7 +92,7 @@ function RegisterPane() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (validateUserData()) {
+        if (!preventSubmit && validateUserData()) {
             setIsSubmitting(true);
             const splitedName = fullName.trim().split(' ');
             console.log(splitedName, 'splitedName')
@@ -333,8 +335,10 @@ function RegisterPane() {
                     </button>
                 </div>
                 <button
-                    disabled={!isEmailAvailable || isCheckingEmail || !isPasswordMatch}
-                    type="submit" class="mt-3 h-full btn btn-neutral text-xl rounded-sm font-normal py-3"
+                    class={`mt-3 h-full btn btn-neutral text-xl rounded-sm font-normal py-3
+                        ${preventSubmit ? 'cursor-no-drop' : ''}`
+                    }
+                    type="submit"
                 >
                     {isSubmitting ? 'Creating Account...' : 'Create Account'}
                 </button>
