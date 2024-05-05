@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation'   
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faPaintbrush } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import { useDebouncedCallback } from 'use-debounce';
 
 import ArtworkCard from '@/components/artworks/ArtworkCard';
+import BaseLoading from '@/components/generics/BaseLoading';
 
 import { useArtworkStore } from '@/store/artwork';
 
@@ -152,11 +154,25 @@ const ArtworkPane = () => {
                                 onChange={(event) => setSearchKey(event.target.value)}
                             />
                         </div>
-                        <button className='btn btn-neutral text-xl rounded-sm font-normal h-[52px]'>
+                        <Link
+                            href={'/artworks/new'}
+                            className='btn btn-neutral text-xl rounded-sm font-normal h-[52px]'
+                        >
+                            <FontAwesomeIcon icon={faPaintbrush} width={20} height={20} />
                             Post Artwork
-                        </button>
+                        </Link>
                     </div>
                     <div className='mt-10 flex gap-5 flex-wrap'>
+                    {isFetchingArtworks && (
+                        <>
+                            {[...Array(6)].map((_, index) => (
+                                <div key={index} className='flex flex-col gap-2'>
+                                    <BaseLoading width={350} height={467} />
+                                    <BaseLoading width={350} height={50} />
+                                </div>
+                            ))}
+                        </>
+                    )}
                     {artworks.map((item, index) => (
                         <ArtworkCard key={index} artwork={item} />
                     ))}

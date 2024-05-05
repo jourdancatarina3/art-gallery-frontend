@@ -25,7 +25,7 @@ const ArtworkCard = (props) => {
   return (
     <div className="min-w-[350px] max-w-[350px] pb-5">
       <div className="relative h-[467px] overflow-hidden">
-        <Image src={artwork?.first_image?.image_url || defaultAvatarUrl} alt={artwork.title} layout="fill" objectFit="cover" className="rounded-md transition-transform duration-300 transform-gpu scale-100 hover:scale-105 cursor-pointer" />
+        <Image src={artwork?.first_image?.image_url || defaultAvatarUrl} alt={artwork.title} layout="fill" objectFit="cover" className="rounded-sm transition-transform duration-300 transform-gpu scale-100 hover:scale-105 cursor-pointer" />
       </div>
       <div className="relative w-full flex justify-end px-2">
         <div className='absolute p-1 translate-y-[-125%] rounded flex items-center gap-1 shadow-2xl hover:bg-neutral-800 transition duration-200'>
