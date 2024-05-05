@@ -89,4 +89,13 @@ export const useArtworkStore = create((set) => ({
             console.log(error);
         }
     },
+
+    createCategory: async (data) => {
+        try {
+            const response = await axiosInstance.post('categories/', { name: data });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }));

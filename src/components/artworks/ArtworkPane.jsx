@@ -96,7 +96,7 @@ const ArtworkPane = () => {
     }, 500)
 
     const limitCategoryCount = (count) => {
-        return count > 99 ? '99+' : count;
+        return count > 999 ? '1k+' : count;
     }
 
     useEffect(() => {

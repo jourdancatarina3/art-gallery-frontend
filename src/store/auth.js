@@ -34,6 +34,11 @@ export const useAuthStore = create((set) => ({
     getUser: async () => {
         const data = await fetchUser();
         set({ user: data });
+        if (data) {
+            return data;
+        } else {
+            return null;
+        }
     },
     login: async (email, password) => {
         console.log('herere')
