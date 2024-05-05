@@ -228,13 +228,13 @@ function NewArtworkPane() {
                     <div className="block flex justify-end gap-2 w-full">
                         <button
                             onClick={() => router.push('/artworks')}
-                            className="btn btn-neutral rounded-sm w-[100px]"
+                            className="btn btn-active rounded-sm w-[100px]"
                         >
                             Cancel
                         </button>  
                         <button
                             onClick={handleSave}
-                            className="btn btn-active rounded-sm w-[100px]"
+                            className="btn btn-neutral rounded-sm w-[100px]"
                         >
                             Save
                         </button>

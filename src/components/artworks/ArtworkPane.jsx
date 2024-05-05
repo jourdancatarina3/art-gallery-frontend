@@ -35,7 +35,8 @@ const ArtworkPane = () => {
     const [totalArtworks, setTotalArtworks] = useState(0);
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
-    const [categorySearchKey, setCategorySearchKey] = useState('')
+    const [categorySearchKey, setCategorySearchKey] = useState('');
+    const [finishedInitialFetch, setFinishedInitialFetch] = useState(false);
 
     const pageCount = Math.ceil(totalArtworks / ARTWORK_SIZE_PER_REQUEST);
     const currentPage = Math.ceil(top + 1 / ARTWORK_SIZE_PER_REQUEST)
@@ -45,6 +46,7 @@ const ArtworkPane = () => {
         await getArtworks();
         await getCategories();
         setIsLoading(false);
+        setFinishedInitialFetch(true);
     };
 
     const getArtworks = async () => {
@@ -107,12 +109,14 @@ const ArtworkPane = () => {
     },[])
 
     useEffect(() => {
+        if (!finishedInitialFetch) return;
         handleSearchKeyChange();
-    }, [searchKey, selectedCategories])
+    }, [searchKey, selectedCategories, handleSearchKeyChange])
 
     useEffect(() => {
+        if (!finishedInitialFetch) return;
         handleCattegorySearch();
-    }, [categorySearchKey])
+    }, [categorySearchKey, handleCattegorySearch])
 
 
     return (
