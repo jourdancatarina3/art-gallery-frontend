@@ -11,7 +11,7 @@ const UserDropdown = forwardRef((props, ref) => {
 
     return (
         <div ref={ref} className="absolute translate-x-[-85%]">
-            <div className="bg-neutral-900 rounded-md shadow-lg w-[150px]">
+            <div className="bg-neutral-800 rounded-md shadow-lg w-[150px]">
                 <div className="flex flex-col gap-2 py-2 px-3">
                     <a href={`/user/${userId}`} className="text-white truncate hover:bg-white/[0.1] transition duration-100">
                         {userName}

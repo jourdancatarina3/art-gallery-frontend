@@ -14,7 +14,7 @@ import { useArtworkStore } from '@/store/artwork';
 
 function NewArtworkPane() {
     const router = useRouter();
-    const { getUser } = useAuthStore();
+    const { user, getUser } = useAuthStore();
     const { fetchCategories, createCategory } = useArtworkStore();
     const pathname = usePathname();
 
@@ -79,9 +79,12 @@ function NewArtworkPane() {
     }, 500);
 
     const checkUserLogin = async () => {
-        const user = await getUser();
         if (!user) {
-            router.push(`/login?redirect=${pathname}`)
+            await getUser().then((res) => {
+                if (!res) {
+                    router.push(`/login?redirect=${pathname}`);
+                }
+            })
         }
     }
 
