@@ -13,7 +13,7 @@ function page() {
         <div className='absolute top-0 left-0'>
             <Navbar />
         </div>
-        <main className="flex justify-center items-center font-Adamina h-lvh">
+        <main className="flex justify-center items-center font-Adamina min-h-lvh py-10">
             <RegisterPane />
         </main>
         </>

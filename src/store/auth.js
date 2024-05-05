@@ -10,7 +10,7 @@ User fields
 - username: string
 - avatar_url: string or null
 - phone_number: string or null
-- address: string or null
+- location: string or null
 - user_type: int (0: seller, 1: buyer)
 - achievements: string or null
 - about: string or null

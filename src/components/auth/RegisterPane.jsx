@@ -104,7 +104,7 @@ function RegisterPane() {
             <div className='flex justify-center'>
                 <Image src='/images/favicon.svg' alt='logo' width={50} height={50} />
             </div>
-            <h1 className="text-3xl font-semibold text-center my-5">Create Account</h1>
+            <h1 className="text-3xl font-semibold text-center my-5">Sign up</h1>
             <div className="flex flex-col gap-3">
                 <label className="input input-bordered flex items-center gap-2 rounded-sm">
                     Email<span className="text-red-500">*</span>
@@ -187,10 +187,13 @@ function RegisterPane() {
                         onChange={(e) => setAddress(e.target.value)}
                         type="text" className="grow" placeholder="" maxLength={infoMaxLength.address}
                     />
+                    <div className="tooltip tooltip-left" data-tip="This information helps us recommend artworks near you or recommend your artworks to people nearby.">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
                 </label>
                 <textarea
                     onChange={(e) => setAbout(e.target.value)}
-                    className="textarea textarea-bordered rounded-sm" placeholder="Bio (500 characters max)" maxLength={infoMaxLength.bio}
+                    className="textarea textarea-bordered rounded-sm h-[100px]" placeholder="Bio (500 characters max)" maxLength={infoMaxLength.bio}
                 ></textarea>
                 <textarea
                     onChange={(e) => setAchievements(e.target.value)}
