@@ -24,6 +24,7 @@ const ArtworkPane = () => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [isFetchingArtworks, setIsFetchingArtworks] = useState(false);
+    const [isFetchingCategories, setIsFetchingCategories] = useState(false);
     const [searchKey, setSearchKey] = useState('');
     const [artworks, setArtworks] = useState([]);
     const [totalArtworks, setTotalArtworks] = useState(0);
@@ -43,6 +44,7 @@ const ArtworkPane = () => {
 
     const getArtworks = async () => {
         setIsFetchingArtworks(true);
+        setArtworks([]);
         try {
             const filters = {
                 top: top,
@@ -65,6 +67,8 @@ const ArtworkPane = () => {
     }
 
     const getCategories = async () => {
+        setIsFetchingCategories(true);
+        setCategories([]);
         const filters = {}
         if (categorySearchKey.trim().length > 0) {
             filters['name__icontains'] = categorySearchKey;
@@ -75,6 +79,7 @@ const ArtworkPane = () => {
         } catch (error) {
             console.log(error);
         }
+        setIsFetchingCategories(false);
     };
 
     const handleSearchKeyChange = useDebouncedCallback(() => {
@@ -118,6 +123,17 @@ const ArtworkPane = () => {
                     <input onChange={(e) => {setCategorySearchKey(e.target.value)}} type="text" placeholder="Search category" className="input rounded-sm input-bordered w-full max-w-xs" />
                     <hr className="border-0 h-px bg-gray-300 my-3" />
                     <div className='flex flex-col gap-5'>
+                    <div className="flex flex-col gap-2">
+                        {isFetchingCategories && (
+                            <>
+                                {[...Array(6)].map((_, index) => (
+                                    <div className="max-w-full overflow-x-hidden rounded-md" key={index}>
+                                        <BaseLoading width={230} height={45} />
+                                    </div>
+                                ))}
+                            </>
+                        )}
+                    </div>
                     {categories.map((category) => (
                         <div className='flex gap-3 items-center' key={category.id}>
                         <input
