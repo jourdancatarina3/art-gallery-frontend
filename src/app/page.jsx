@@ -76,9 +76,9 @@ export default function Home() {
                   <h1 className="text-4xl font-semibold">{featuredArtworks[0]?.title || 'The Starry Night'}</h1>
                   <h2 className="mt-2 font-light">Artist: {featuredArtworks[0]?.artist?.username || 'Yurim'}</h2>
                   <h2 className="font-light">Date: {formatDate(featuredArtworks[0]?.created_on || null)}</h2>
-                  <p className="mt-5 text-lg max-h-[400px] overflow-hidden line-clamp-6">
+                  <pre className="mt-5 text-lg max-h-[400px] overflow-hidden line-clamp-6 font-Adamina" style={{ whiteSpace: 'pre-wrap' }}>
                     {featuredArtworks[0]?.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
-                  </p>
+                  </pre>
                   <h2 className="mt-2 text-xl font-bold">
                   Current Bid: ${featuredArtworks[0]?.current_highest_bid || featuredArtworks[0]?.starting_bid || 0}
                   </h2>
