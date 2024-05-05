@@ -1,8 +1,17 @@
-import React from 'react'
+import Navbar from '@/components/generics/navbar';
+import NewArtworkPane from '@/components/artworks/NewArtworkPane';
+
+export const metadata = {
+    title: 'FASO GALLERY | New Artwork',
+    description: 'Create a new artwork.',
+};
 
 function page() {
     return (
-        <div>new</div>
+    <>
+        <Navbar />
+        <NewArtworkPane />
+    </>
     )
 }
 

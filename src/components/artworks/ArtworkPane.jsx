@@ -6,17 +6,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { faPaintbrush } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
 
 import ArtworkCard from '@/components/artworks/ArtworkCard';
 import BaseLoading from '@/components/generics/BaseLoading';
 
 import { useArtworkStore } from '@/store/artwork';
+import { useAuthStore } from '@/store/auth';
 
 const ARTWORK_SIZE_PER_REQUEST = 21;
 
 const ArtworkPane = () => {
     const { fetchArtworks, fetchCategories } = useArtworkStore();
+    const { user } = useAuthStore();
+    const router = useRouter();
+    const pathname = usePathname();
 
     const searchParams = useSearchParams()
     const paramSearchKey = searchParams.get('search');

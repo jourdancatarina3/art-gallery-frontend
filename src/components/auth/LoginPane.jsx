@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react'
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 import { useAuthStore } from '@/store/auth';
@@ -9,6 +9,8 @@ import { useAuthStore } from '@/store/auth';
 function LoginPane() {
     const { user, login, getUser } = useAuthStore()
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const redirect = searchParams.get('redirect') || '/'
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -24,8 +26,12 @@ function LoginPane() {
             setLoginFail(true)
         } else {
             setLoginFail(false)
-            router.push('/')
+            router.push(redirect);
         }
+    }
+
+    const navigateToRegister = () => {
+        router.push(`/register?redirect=${redirect}`)
     }
 
     const checkUser = async () => {
@@ -48,7 +54,6 @@ function LoginPane() {
             <div className='flex justify-center'>
                 <Image src='/images/favicon.svg' alt='logo' width={50} height={50} />
             </div>
-
             <h1 className="text-3xl font-semibold text-center my-5">Welcome back</h1>
 
             <label className="input input-bordered flex items-center gap-2 rounded-sm">
@@ -75,7 +80,7 @@ function LoginPane() {
             <button disabled={isLoggingIn} type="submit" class="w-full btn btn-active rounded-sm btn-neutral w-[300px]">{!isLoggingIn ? 'Login' : 'Loging in...'}</button>
             <div className="flex justify-between w-full">
                 <Link href="/recover" className="text-xs text-gray-500">Forgot password?</Link>
-                <Link href="/register" className="text-xs text-gray-500 ml-2 text-blue-400 ">Create an account</Link>
+                <button onClick={navigateToRegister} className="text-xs text-gray-500 ml-2 text-blue-400 ">Create an account</button>
             </div>
         </form>
     )

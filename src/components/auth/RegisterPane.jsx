@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation' 
+import { useRouter, useSearchParams } from 'next/navigation' 
 import { useDebouncedCallback } from 'use-debounce';
 
 import { useAuthStore } from '@/store/auth';
@@ -22,6 +22,8 @@ const infoMaxLength = {
 function RegisterPane() {
     const { checkEmailAvailability, register } = useAuthStore();
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const redirect = searchParams.get('redirect') || '/';
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [email, setEmail] = useState(null);
@@ -114,7 +116,7 @@ function RegisterPane() {
                 const response = await register(data);
                 setIsSubmitting(false);
                 if (response) {
-                    router.push('/login');
+                    router.push(`/login?redirect=${redirect}`);
                 } else {
                     alert('An error occurred. Please try again');
                 }
