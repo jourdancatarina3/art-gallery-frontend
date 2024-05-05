@@ -27,7 +27,7 @@ export default function Home() {
     fetchTopArtist().then(artist => setTopArtist(artist));
   }, []);
   return (
-    <main className="min-h-screen w-screen pb-72">
+    <main className="min-h-screen w-screen pb-72 font-Adamina">
       <Navbar showSearch={true} />
       <div className="container xl w-5/6 mx-auto">
         <div className="mt-5">

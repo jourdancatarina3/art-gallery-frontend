@@ -4,26 +4,33 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation'   
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Link from 'next/link';
 import { useDebouncedCallback } from 'use-debounce';
 
 import ArtworkCard from '@/components/artworks/ArtworkCard';
 
 import { useArtworkStore } from '@/store/artwork';
 
+const ARTWORK_SIZE_PER_REQUEST = 21;
 
 const ArtworkPane = () => {
     const { fetchArtworks, fetchCategories } = useArtworkStore();
 
     const searchParams = useSearchParams()
     const paramSearchKey = searchParams.get('search');
+    const top = searchParams.get('top') || 0;
 
     const [isLoading, setIsLoading] = useState(true);
     const [isFetchingArtworks, setIsFetchingArtworks] = useState(false);
     const [searchKey, setSearchKey] = useState('');
     const [artworks, setArtworks] = useState([]);
+    const [totalArtworks, setTotalArtworks] = useState(0);
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [categorySearchKey, setCategorySearchKey] = useState('')
+
+    const pageCount = Math.ceil(totalArtworks / ARTWORK_SIZE_PER_REQUEST);
+    const currentPage = Math.ceil(top + 1 / ARTWORK_SIZE_PER_REQUEST)
 
     const initializeArtworks = async () => {
         setIsLoading(true);
@@ -35,7 +42,9 @@ const ArtworkPane = () => {
     const getArtworks = async () => {
         setIsFetchingArtworks(true);
         try {
-            const filters = {};
+            const filters = {
+                top: top,
+            };
             if (searchKey.trim().length > 0) {
                 filters.search_key = searchKey;
             }
@@ -46,6 +55,7 @@ const ArtworkPane = () => {
             const data = await fetchArtworks(filters);
             console.log(data, 'hreee')
             setArtworks(data.objects);
+            setTotalArtworks(data.total_count)
         } catch (error) {
             console.log(error);
         }
@@ -94,11 +104,11 @@ const ArtworkPane = () => {
 
 
     return (
-        <div className='container xl mx-auto'>
+        <div className='container xl mx-auto font-Adamina'>
             <div className='flex gap-3 mt-3 font-light'>
-                <h3>Home</h3>
+                <Link href='/'>Home</Link>
                 <h3>/</h3>
-                <h3 className='font-semibold'>Artworks</h3>
+                <Link href='/artworks' className='font-semibold' >Artworks</Link>
             </div>
             <div className='flex justify-between'>
                 <div className='w-[15%]'>
@@ -130,21 +140,35 @@ const ArtworkPane = () => {
                 </div>
                 <div className='mt-5 pl-10 w-[85%]'>
                     <h1 className='text-3xl font-semibold'>ARTWORKS</h1>
-                    <div className='bg-gray-200 py-3.5 flex rounded mt-2 w-96'>
-                        <div className='px-4'>
-                            <FontAwesomeIcon icon={faMagnifyingGlass} width={20} height={20} />
+                    <div className='flex flex-wrap gap-x-5 gap-y-3 items-center mt-2'>
+                        <div className='bg-gray-200 py-3.5 flex rounded-sm w-96 h-[52px]'>
+                            <div className='px-4'>
+                                <FontAwesomeIcon icon={faMagnifyingGlass} width={20} height={20} />
+                            </div>
+                            <input
+                                className='focus placeholder-gray-700 focus:outline-none bg-gray-200 w-96'
+                                placeholder='Search Artwork or Artist...'
+                                value={searchKey}
+                                onChange={(event) => setSearchKey(event.target.value)}
+                            />
                         </div>
-                        <input
-                            className='focus placeholder-gray-700 focus:outline-none bg-gray-200 w-96'
-                            placeholder='Search Artwork or Artist...'
-                            value={searchKey}
-                            onChange={(event) => setSearchKey(event.target.value)}
-                        />
+                        <button className='btn btn-neutral text-xl rounded-sm font-normal h-[52px]'>
+                            Post Artwork
+                        </button>
                     </div>
                     <div className='mt-10 flex gap-5 flex-wrap'>
                     {artworks.map((item, index) => (
                         <ArtworkCard key={index} artwork={item} />
                     ))}
+                    </div>
+                    <div className="flex justify-center">
+                        <div className="join">
+                            <button className="join-item btn">1</button>
+                            <button className="join-item btn btn-active">2</button>
+                            <button className="join-item btn">3</button>
+                            <button className="join-item btn">4</button>
+                            <button className="join-item btn">»</button>
+                        </div>
                     </div>
                 </div>
             </div>
