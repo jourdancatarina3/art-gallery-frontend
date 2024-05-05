@@ -27,7 +27,7 @@ const Navbar = (props) => {
         { name: 'About us', route: '/about', isLoggedIn: false },
         { name: 'Bids', route: '/bids', isLoggedIn: true }
     ]
-    const avatar_url = user?.avatar_url || 'https://img.freepik.com/free-photo/graffiti-children-bicycle_1122-2206.jpg?t=st=1714461301~exp=1714464901~hmac=ccbf74e606515181e1f549bfabb4ff2a55e10437094614f8a432d5fa4550a2f6&w=900';
+    const avatar_url = user?.avatar_url || 'https://i.pinimg.com/564x/80/01/3b/80013ba9fbd82789fba7dd72e2428b96.jpg';
 
     useEffect(() => {
         if (!isLoggedIn) getUser();

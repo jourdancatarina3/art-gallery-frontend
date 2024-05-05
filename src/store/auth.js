@@ -56,5 +56,14 @@ export const useAuthStore = create((set) => ({
             console.log(error);
             return false;
         }
-    }
+    },
+    register: async (data) => {
+        try {
+            const response = await axiosInstance.post('register/', data);
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    },
 }));
