@@ -336,7 +336,7 @@ function RegisterPane() {
                     disabled={!isEmailAvailable || isCheckingEmail || !isPasswordMatch}
                     type="submit" class="mt-3 h-full btn btn-neutral text-xl rounded-sm font-normal py-3"
                 >
-                    Create Account
+                    {isSubmitting ? 'Creating Account...' : 'Create Account'}
                 </button>
                 <div className="flex justify-center">
                     <p className="text-sm" >Already have an account? <Link href="/login" className="text-blue-400 text-sm">Login</Link></p>
