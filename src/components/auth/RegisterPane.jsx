@@ -10,6 +10,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
 import { useAuthStore } from '@/store/auth';
+import FullLoader from '@/components/generics/FullLoader';
 
 const infoMaxLength = {
     email: 50,
@@ -209,6 +210,8 @@ function RegisterPane() {
     }, [password, confirmPassword]);
 
     return (
+        <>
+        {isSubmitting && <FullLoader />}
         <form
             onSubmit={handleSubmit}
             className="min-w-[350px] max-w-[500px] grow flex flex-col gap-4 mb-[80px] px-3"
@@ -449,6 +452,7 @@ function RegisterPane() {
                 </div>
             </div>
         </form>
+        </>
     );
 }
 
