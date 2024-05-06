@@ -9,28 +9,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 const SingleArtworkPage = ({ params }) => {
-  const { id: artworkId } = params;
+  const { id: slug } = params;
   const { fetchArtwork, defaultAvatarUrl } = useArtworkStore();
   const [artwork, setArtwork] = useState(null);
   const [isLoadingArtwork, setIsLoadingArtwork] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(-1);
   const [hoveredIndex, setHoveredIndex] = useState(-1);
+  const artworkId = slug.split('-').shift();
+
+  const fetchArtworkById = async () => {
+    try {
+      setIsLoadingArtwork(true);
+      const data = await fetchArtwork(artworkId);
+      setArtwork(data);
+    } catch (error) {
+      console.error('Error fetching artwork:', error);
+    } finally {
+      setIsLoadingArtwork(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchArtworkById = async () => {
-      try {
-        setIsLoadingArtwork(true);
-        const data = await fetchArtwork(artworkId);
-        setArtwork(data);
-      } catch (error) {
-        console.error('Error fetching artwork:', error);
-      } finally {
-        setIsLoadingArtwork(false);
-      }
-    };
-
     fetchArtworkById();
-  }, [artworkId, fetchArtwork]);
+  }, []);
 
   const handleEmailClick = () => {
     const artworkTitle = artwork ? artwork.title : '';
@@ -39,9 +40,6 @@ const SingleArtworkPage = ({ params }) => {
     const mailtoLink = `mailto:${artwork.artist.email}?subject=Interested in your artwork "${artworkTitle}" &body=${encodedMessage}`;
     window.open(mailtoLink, '_blank');
   };
- 
-
-  console.log("ARTWORK: ", artwork)
 
   return (
     <div>
@@ -130,7 +128,9 @@ const SingleArtworkPage = ({ params }) => {
           </div>
         </div>
       ) : (
-        <p>Loading artwork...</p>
+        <div className="flex justify-center items-center h-lvh">
+          <span className="loading loading-infinity loading-lg text-blue-400"></span>
+        </div>
       )}
     </div>
   );
