@@ -181,7 +181,7 @@ function RegisterPane() {
                 const response = await register(data);
                 setIsSubmitting(false);
                 if (response) {
-                    router.push(`/login?redirect=${redirect}`);
+                    router.push(`/login?redirect=${redirect}&email=${email}`);
                 } else {
                     alert('An error occurred. Please try again');
                 }
