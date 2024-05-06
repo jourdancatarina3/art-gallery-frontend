@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { useArtDataContext } from '../context/ArtDataContext';
 import Navbar from '@/components/generics/navbar';
 import ArtworkCard from '@/components/artworks/ArtworkCard';
+import Link from 'next/link';
 
 const artGenres = [
   "Painting",
@@ -26,7 +27,7 @@ const ArtworksPage = () => {
 
   const handleSearchInputChange = (event) => {
     const { value } = event.target;
-    setSearchQuery(value.trim().toLowerCase());
+    setSearchQuery(value.toLowerCase());
 
     if (value.trim().length >= 3) {
       const genreFilteredArtworks = applyGenreFilter(artData);
@@ -74,7 +75,7 @@ const ArtworksPage = () => {
       <Navbar />
       <div className='w-5/6 mx-auto'>
         <div className='flex gap-3 mt-3 font-light'>
-          <h1>Home</h1>
+          <Link href='/' >Home</Link>
           <h1>/</h1>
           <h1 className='font-semibold'>Artworks</h1>
         </div>
