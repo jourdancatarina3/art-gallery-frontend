@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useState, useEffect, useRef } from 'react';
+// import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation' 
 import { useDebouncedCallback } from 'use-debounce';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-regular-svg-icons';
 
 import { useAuthStore } from '@/store/auth';
 
@@ -22,7 +23,7 @@ const infoMaxLength = {
 }
 
 function RegisterPane() {
-    const { checkEmailAvailability, register } = useAuthStore();
+    const { checkEmailAvailability, register, defaultAvatarUrl } = useAuthStore();
     const router = useRouter();
     const searchParams = useSearchParams();
     const redirect = searchParams.get('redirect') || '/';
@@ -43,6 +44,67 @@ function RegisterPane() {
     const [userType, setUserType] = useState(null);
     const [achievements, setAchievements] = useState('');
     const [about, setAbout] = useState('');
+
+    const pfpInputRef = useRef(null);
+    const [resizedImageUrl, setResizedImageUrl] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+
+    const handlePfpClick = () => {
+        pfpInputRef.current.click();
+    }
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file && file.type.includes('image')) {
+            setImageFile(file); // Store the image file in state
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    let width = img.width;
+                    let height = img.height;
+
+                    const MINIMUM_SIDE_LENGTH = 300;
+
+                    if (width < height) {
+                        width = MINIMUM_SIDE_LENGTH;
+                        height = Math.round((img.height / img.width) * width);
+                    } else {
+                        height = MINIMUM_SIDE_LENGTH;
+                        width = Math.round((img.width / img.height) * height);
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const resizedImage = canvas.toDataURL(file.type);
+
+                    // Set the resized image URL to the component state
+                    setResizedImageUrl(resizedImage);
+                };
+            };
+            reader.readAsDataURL(file);
+        } else {
+            alert('Invalid file type. Please select an image file');
+        }
+    };
+
+    const removeImage = () => {
+        setResizedImageUrl(null);
+        setImageFile(null);
+    }
+
+    useEffect(() => {
+        if (imageFile) {
+            console.log('imageFile', imageFile)
+        }
+    }, [imageFile]);
 
     const preventSubmit = !isEmailAvailable || isCheckingEmail || !isPasswordMatch;
 
@@ -152,7 +214,7 @@ function RegisterPane() {
             className="min-w-[350px] max-w-[500px] grow flex flex-col gap-4 mb-[80px] px-3"
         >
             <div className='flex justify-center'>
-                <Image src='/images/favicon.svg' alt='logo' width={50} height={50} />
+                <img src='/images/favicon.svg' alt='logo' style={{width: "50px", height: "50px"}} />
             </div>
             <h1 className="text-3xl font-semibold text-center my-5">Sign up</h1>
 
@@ -272,9 +334,33 @@ function RegisterPane() {
                 <div className='flex'>
                     <div className='w-[30%]'>
                         <p className="text-sm mb-3 mt-3">Profile Picture</p>
-                        <button className='flex justify-center items-center border-dashed border-2 border-sky-300 rounded-full w-[100px] h-[100px] hover:bg-sky-100 transition duration-100'>
+                        <input className='hidden' ref={pfpInputRef} type="file" accept="image/*" onChange={handleFileChange} />
+                        {resizedImageUrl ? (
+                        <div className='rounded-full w-[100px] h-[100px]'>
+                            <img 
+                                className='rounded-full w-[100px] h-[100px] object-cover'
+                                src={resizedImageUrl} alt="Resized Image"
+                            />
+                            <div className='relative'>
+                                <button
+                                    onClick={removeImage}
+                                    className="absolute translate-y-[-100%] bg-red-200/[.3] w-[100px] h-[100px] rounded-full flex justify-center items-center opacity-0 hover:opacity-100 transition duration-100"
+                                >
+                                    <FontAwesomeIcon className='text-red-500' icon={faTrashAlt} />
+                                </button>
+                            </div>
+                        </div>
+                        ):
+                        (    
+                        <button
+                            onClick={handlePfpClick}
+                            type="button"
+                            className='flex justify-center items-center border-dashed border-2 border-sky-300 rounded-full w-[100px] h-[100px] hover:bg-sky-100 transition duration-100'
+                        >
                             <FontAwesomeIcon className='text-sky-300' icon={faPlus} />
                         </button>
+                        )
+                        }
                     </div>
                     <div className="flex flex-col gap-2 w-[70%]">
                         <label class="form-control w-full">
