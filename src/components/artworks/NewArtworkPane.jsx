@@ -35,7 +35,6 @@ function NewArtworkPane() {
         'https://img.freepik.com/free-vector/watercolor-chinese-style-background_52683-96106.jpg?t=st=1714461089~exp=1714464689~hmac=0ec0a2ce896216278394e5252ef09a0083a7d4b9945b68336c3c35083b48e41f&w=740',
         'https://img.freepik.com/free-vector/watercolor-chinese-style-background_52683-96106.jpg?t=st=1714461089~exp=1714464689~hmac=0ec0a2ce896216278394e5252ef09a0083a7d4b9945b68336c3c35083b48e41f&w=740',
         'https://img.freepik.com/free-vector/watercolor-chinese-style-background_52683-96106.jpg?t=st=1714461089~exp=1714464689~hmac=0ec0a2ce896216278394e5252ef09a0083a7d4b9945b68336c3c35083b48e41f&w=740',
-        'https://img.freepik.com/free-vector/watercolor-chinese-style-background_52683-96106.jpg?t=st=1714461089~exp=1714464689~hmac=0ec0a2ce896216278394e5252ef09a0083a7d4b9945b68336c3c35083b48e41f&w=740',
     ]);
 
     const limitCategoryCount = (count) => {
@@ -119,12 +118,14 @@ function NewArtworkPane() {
             <div className="grid grid-cols-1 md:grid-cols-2">
                 <div className='flex flex-col p-5'>
                     <h2 className="text-xl font-bold mb-3">Images</h2>
+                    {imagesUrl.length === 0 && (
                     <button className="flex justify-center items-center border-dashed border-2 border-sky-300 w-full h-[400px] rounded hover:bg-sky-100 transition duration-100">
                         <div className="text-xl text-sky-300 flex flex-col gap-3">
                             <FontAwesomeIcon icon={faPlus} />
                             Add Image
                         </div>
                     </button>
+                    )}
 
                     {imagesUrl.length > 0 && (
                         <div className="mt-5 flex justify-center flex-wrap gap-5">
@@ -147,6 +148,9 @@ function NewArtworkPane() {
                                     </div>
                                 </div>
                             ))}
+                            <button className="relative h-[200px] w-[150px] flex justify-center items-center border-dashed border-2 border-sky-300 rounded hover:bg-sky-100 transition duration-100">
+                                <FontAwesomeIcon className='text-sky-300' icon={faPlus} />
+                            </button>
                         </div>
                     )}
                 </div>
