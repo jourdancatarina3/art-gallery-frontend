@@ -157,7 +157,7 @@ const ArtworkPane = () => {
                         />
                         <div className="flex items-center">
                             <h4 className='text-md tracking-widest'>{category.name}</h4>
-                            <div className="badge">( {limitCategoryCount(category.artwork_count)} )</div>
+                            <div className="badge">{limitCategoryCount(category.artwork_count)}</div>
                         </div>
                         </div>
                     ))}

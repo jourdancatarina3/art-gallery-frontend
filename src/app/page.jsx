@@ -109,9 +109,6 @@ export default function Home() {
             {artworks.map((art, index) => (
               <ArtworkCard key={index} artwork={art} />
             ))}
-            {artworks.map((art, index) => (
-              <ArtworkCard key={index} artwork={art} />
-            ))}
           </div>
         </div>
 
