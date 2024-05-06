@@ -36,3 +36,33 @@ body {
     text-wrap: balance;
   }
 }
+
+.base-loading {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  background-color: #d3d3d3;
+  border-radius: 5px;
+
+  &::after {
+    display: block;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    animation: loading 1s infinite;
+  }
+}
+
+@keyframes loading {
+  100% {
+    transform: translateX(100%);
+  }
+}
