@@ -43,8 +43,7 @@ const ArtworkPane = () => {
 
     const initializeArtworks = async () => {
         setIsLoading(true);
-        await getArtworks();
-        await getCategories();
+        await Promise.all([getArtworks(), getCategories()])
         setIsLoading(false);
         setFinishedInitialFetch(true);
     };
@@ -64,7 +63,6 @@ const ArtworkPane = () => {
             }
 
             const data = await fetchArtworks(filters);
-            console.log(data, 'hreee')
             setArtworks(data.objects);
             setTotalArtworks(data.total_count)
         } catch (error) {

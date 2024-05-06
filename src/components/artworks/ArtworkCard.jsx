@@ -20,7 +20,6 @@ const ArtworkCard = (props) => {
   }
 
   useEffect(() => {
-    console.log(artwork, 'card here');
   },[]);
 
   return (
