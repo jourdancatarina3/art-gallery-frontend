@@ -5,6 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation' 
 import { useDebouncedCallback } from 'use-debounce';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { useAuthStore } from '@/store/auth';
 
@@ -267,36 +269,48 @@ function RegisterPane() {
                     </label>
                 </label>
 
-                <label class="form-control w-full">
-                    <div class="label">
-                        <span class="label-text flex items-center gap-1">
-                            <p>Phone Number</p>
-                        </span>
+                <div className='flex'>
+                    <div className='w-[30%]'>
+                        <p className="text-sm mb-3 mt-3">Profile Picture</p>
+                        <button className='flex justify-center items-center border-dashed border-2 border-sky-300 rounded-full w-[100px] h-[100px] hover:bg-sky-100 transition duration-100'>
+                            <FontAwesomeIcon className='text-sky-300' icon={faPlus} />
+                        </button>
                     </div>
-                    <label className="input input-bordered flex items-center gap-2 rounded-sm">
-                        <input
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                            type="text" className="grow" placeholder="Phone Number" maxLength={infoMaxLength.phoneNumber}
-                        />
-                    </label>
-                </label>
+                    <div className="flex flex-col gap-2 w-[70%]">
+                        <label class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text flex items-center gap-1">
+                                    <p>Phone Number</p>
+                                </span>
+                            </div>
+                            <label className="input input-bordered flex items-center gap-2 rounded-sm">
+                                <input
+                                    onChange={(e) => setPhoneNumber(e.target.value)}
+                                    type="text" className="grow" placeholder="Phone Number" maxLength={infoMaxLength.phoneNumber}
+                                />
+                            </label>
+                        </label>
 
-                <label class="form-control w-full">
-                    <div class="label">
-                        <span class="label-text flex items-center gap-1">
-                            <p>Location</p>
-                        </span>
+                        <label class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text flex items-center gap-1">
+                                    <p>Location</p>
+                                </span>
+                            </div>
+                            <label className="input input-bordered flex items-center gap-2 rounded-sm">
+                                <input
+                                    onChange={(e) => setlocation(e.target.value)}
+                                    type="text" className="grow" placeholder="Location" maxLength={infoMaxLength.location}
+                                />
+                                <div className="tooltip tooltip-left" data-tip="This information helps us recommend artworks near you or recommend your artworks to people nearby.">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </div>
+                            </label>
+                        </label>
                     </div>
-                    <label className="input input-bordered flex items-center gap-2 rounded-sm">
-                        <input
-                            onChange={(e) => setlocation(e.target.value)}
-                            type="text" className="grow" placeholder="Location" maxLength={infoMaxLength.location}
-                        />
-                        <div className="tooltip tooltip-left" data-tip="This information helps us recommend artworks near you or recommend your artworks to people nearby.">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        </div>
-                    </label>
-                </label>
+                </div>
+
+
 
                 <label class="form-control w-full">
                     <div class="label">
