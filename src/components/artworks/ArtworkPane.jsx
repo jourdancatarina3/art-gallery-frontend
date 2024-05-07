@@ -124,9 +124,9 @@ const ArtworkPane = () => {
                 <h3>/</h3>
                 <Link href='/artworks' className='font-semibold' >Artworks</Link>
             </div>
-            <div className='flex justify-between'>
-                <div className='w-[15%]'>
-                    <h3 className='text-2xl font-semibold mt-20 mb-2'>Category</h3>
+            <div className='flex gap-10'>
+                <div className='max-w-[200px]'>
+                    <h3 className='text-2xl font-semibold mt-5 mb-2'>Category</h3>
                     <input onChange={(e) => {setCategorySearchKey(e.target.value)}} type="text" placeholder="Search category" className="input rounded-sm input-bordered w-full max-w-xs" />
                     <hr className="border-0 h-px bg-gray-300 my-3" />
                     <div className='flex flex-col gap-5'>
@@ -143,30 +143,31 @@ const ArtworkPane = () => {
                     </div>
                     {categories.map((category) => (
                         <div className='flex gap-3 items-center' key={category.id}>
-                        <input
-                            type='checkbox'
-                            className='w-5 h-5 hover:cursor-pointer'
-                            checked={selectedCategories.includes(category.id)}
-                            onChange={(event) => {
-                                if (event.target.checked) {
-                                    setSelectedCategories([...selectedCategories, category.id]);
-                                } else {
-                                    setSelectedCategories(selectedCategories.filter((cat) => cat !== category.id));
-                                }
-                            }}
-                        />
-                        <div className="flex items-center">
-                            <h4 className='text-md tracking-widest'>{category.name}</h4>
-                            <div className="badge">{limitCategoryCount(category.artwork_count)}</div>
-                        </div>
+                            <input
+                                id={category.id}
+                                type='checkbox'
+                                className='checkbox checkbox-sm rounded-sm hover:cursor-pointer'
+                                checked={selectedCategories.includes(category.id)}
+                                onChange={(event) => {
+                                    if (event.target.checked) {
+                                        setSelectedCategories([...selectedCategories, category.id]);
+                                    } else {
+                                        setSelectedCategories(selectedCategories.filter((cat) => cat !== category.id));
+                                    }
+                                }}
+                            />
+                            <label className="flex items-center cursor-pointer" for={category.id}>
+                                <h4 className='text-md tracking-widest max-w-[150px] truncate'>{category.name}</h4>
+                                <div className="badge">{limitCategoryCount(category.artwork_count)}</div>
+                            </label>
                         </div>
                     ))}
                     </div>
                 </div>
-                <div className='mt-5 pl-10 w-[85%]'>
+                <div className='mt-5 grow'>
                     <h1 className='text-3xl font-semibold'>ARTWORKS</h1>
                     <div className='flex flex-wrap gap-x-5 gap-y-3 items-center mt-2'>
-                        <div className='bg-gray-200 py-3.5 flex rounded-sm w-96 h-[52px]'>
+                        <div className='bg-gray-200 py-3.5 flex rounded-sm w-[50%] h-[52px]'>
                             <div className='px-4'>
                                 <FontAwesomeIcon icon={faMagnifyingGlass} width={20} height={20} />
                             </div>

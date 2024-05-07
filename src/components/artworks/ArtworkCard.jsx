@@ -23,8 +23,8 @@ const ArtworkCard = (props) => {
   },[]);
 
   return (
-    <div className="min-w-[350px] max-w-[350px] pb-5">
-      <div className="relative h-[467px] overflow-hidden">
+    <div className="min-w-[300px] max-w-[300px] pb-5">
+      <div className="relative h-[400px] overflow-hidden">
         <Link href={`/artworks/${artwork?.slug}`}>
           <Image src={artwork?.first_image?.image_url || defaultAvatarUrl} alt={artwork.title} layout="fill" objectFit="cover" className="rounded-sm transition-transform duration-300 transform-gpu scale-100 hover:scale-105 cursor-pointer" />
         </Link>

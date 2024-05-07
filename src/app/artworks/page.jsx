@@ -1,5 +1,6 @@
 
 import Navbar from '@/components/generics/navbar';
+import Footer from '@/components/generics/Footer';
 import ArtworkPane from '@/components/artworks/ArtworkPane';
 
 export const metadata = {
@@ -12,6 +13,7 @@ const ArtworksPage = () => {
     <>
       <Navbar />
       <ArtworkPane />
+      <Footer />
     </>
   );
 };

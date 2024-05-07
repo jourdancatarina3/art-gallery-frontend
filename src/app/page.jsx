@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import Navbar from "@/components/generics/navbar";
 import ArtworkCard from "@/components/artworks/ArtworkCard";
 import BaseLoading from "@/components/generics/BaseLoading";
+import Footer from "@/components/generics/Footer";
 
 import { useArtworkStore } from '@/store/artwork';
 import { useAuthStore } from '@/store/auth';
@@ -42,8 +43,9 @@ export default function Home() {
     fetchTopArtist().then(artist => setTopArtist(artist));
   }, []);
   return (
+    <>
+    <Navbar showSearch={true} />
     <main className="min-h-screen w-screen pb-72 font-Adamina">
-      <Navbar showSearch={true} />
       <div className="container xl w-5/6 mx-auto">
         <div className="mt-5">
           <h1 className="font-inter text-5xl">Featured Artwork</h1>
@@ -127,5 +129,7 @@ export default function Home() {
         </div>
       </div>
     </main>
+    <Footer />
+    </>
   );
 }
