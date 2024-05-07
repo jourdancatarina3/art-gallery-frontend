@@ -119,7 +119,7 @@ const ArtworkPane = () => {
 
 
     return (
-        <div className='container xl overflow-x-hidden mx-auto font-Adamina'>
+        <div className='container xl overflow-hidden mx-auto font-Adamina'>
             <div className='flex gap-3 mt-3 font-light'>
                 <Link href='/'>Home</Link>
                 <h3>/</h3>
@@ -135,7 +135,7 @@ const ArtworkPane = () => {
                         {isFetchingCategories && (
                             <>
                                 {[...Array(6)].map((_, index) => (
-                                    <div className="max-w-full overflow-x-hidden rounded-md" key={index}>
+                                    <div className="max-w-full overflow-hidden rounded-md" key={index}>
                                         <BaseLoading width={230} height={45} />
                                     </div>
                                 ))}
@@ -168,17 +168,14 @@ const ArtworkPane = () => {
                 <div className='mt-5 grow'>
                     <h1 className='text-3xl font-semibold'>ARTWORKS</h1>
                     <div className='flex flex-wrap gap-x-5 gap-y-3 items-center mt-2'>
-                        <div className='bg-gray-200 py-3.5 flex rounded-sm w-[50%] h-[52px]'>
-                            <div className='px-4'>
-                                <FontAwesomeIcon icon={faMagnifyingGlass} width={20} height={20} />
-                            </div>
+                        <label className="input input-bordered flex bg-gray-200 rounded-sm items-center gap-2 w-[50%]">
                             <input
-                                className='focus placeholder-gray-700 focus:outline-none bg-gray-200 w-96'
-                                placeholder='Search Artwork or Artist...'
                                 value={searchKey}
                                 onChange={(event) => setSearchKey(event.target.value)}
-                            />
-                        </div>
+                                type="text" className="grow" placeholder="Search Artwork or Artist..." />
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" /></svg>
+                        </label>
+
                         <Link
                             href={'/artworks/new'}
                             className='btn btn-neutral text-xl rounded-sm font-normal h-[52px]'
@@ -206,14 +203,19 @@ const ArtworkPane = () => {
                         {pageCount > 1 && (
                         <div className="join">
                             {Math.ceil(currentPage / ARTWORK_SIZE_PER_REQUEST) !== 1 && (
-                                <button className="join-item btn">«</button>
+                                <button
+                                    onClick={() => {
+                                        getArtworks(top - ARTWORK_SIZE_PER_REQUEST);
+                                        setTop(top - ARTWORK_SIZE_PER_REQUEST)
+                                    }}
+                                    className="join-item btn"
+                                >«</button>
                             )}
                             {[...Array(pageCount)].map((_, index) => (
                                 <button
                                     key={index}
                                     className={`join-item btn ${Math.ceil(currentPage / ARTWORK_SIZE_PER_REQUEST) === index + 1 ? 'btn-active' : ''}`}
                                     onClick={() => {
-                                        console.log(index * ARTWORK_SIZE_PER_REQUEST, 'heree')
                                         getArtworks(index * ARTWORK_SIZE_PER_REQUEST);
                                         setTop(index * ARTWORK_SIZE_PER_REQUEST)
                                     }}
@@ -222,7 +224,13 @@ const ArtworkPane = () => {
                                 </button>
                             ))}
                             {Math.ceil(currentPage / ARTWORK_SIZE_PER_REQUEST) !== pageCount && (
-                                <button className="join-item btn">»</button>
+                                <button
+                                    onClick={() => {
+                                        getArtworks(top + ARTWORK_SIZE_PER_REQUEST);
+                                        setTop(top + ARTWORK_SIZE_PER_REQUEST)
+                                    }}
+                                    className="join-item btn"
+                                >»</button>
                             )}
                         </div>
                         )}
