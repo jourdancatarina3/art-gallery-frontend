@@ -10,11 +10,11 @@ export const metadata = {
 
 const ArtworksPage = () => {
   return (
-    <>
+    <div className='max-w-screen overflow-x-hidden'>
       <Navbar />
       <ArtworkPane />
       <Footer />
-    </>
+    </div>
   );
 };
 

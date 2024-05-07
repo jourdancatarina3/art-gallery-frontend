@@ -42,7 +42,7 @@ const SingleArtworkPage = ({ params }) => {
   };
 
   return (
-    <div className=''>
+    <>
       <Navbar className="fixed left-0 top-0" />
       {!isLoadingArtwork ? (
         <div className='mt-7 container mx-auto'>
@@ -109,8 +109,9 @@ const SingleArtworkPage = ({ params }) => {
                     </a>
                   </div>
 
-                
-                <h1 className='text-gray-600 text-md capitalize'>{artwork.category.name}</h1>
+                {artwork?.category && (
+                  <h1 className='text-gray-600 text-md capitalize'>{artwork.category.name}</h1>
+                )}
                 <div className='flex flex-col gap-3 overflow-y-scroll h-52'>
                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
@@ -130,7 +131,7 @@ const SingleArtworkPage = ({ params }) => {
           <span className="loading loading-infinity loading-lg text-blue-400"></span>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

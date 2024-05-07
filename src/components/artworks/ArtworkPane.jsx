@@ -25,8 +25,9 @@ const ArtworkPane = () => {
 
     const searchParams = useSearchParams()
     const paramSearchKey = searchParams.get('search');
-    const top = searchParams.get('top') || 0;
+    const paramTop = searchParams.get('top') || 0;
 
+    const [top, setTop] = useState(parseInt(paramTop) || 0)
     const [isLoading, setIsLoading] = useState(true);
     const [isFetchingArtworks, setIsFetchingArtworks] = useState(false);
     const [isFetchingCategories, setIsFetchingCategories] = useState(false);
@@ -48,7 +49,7 @@ const ArtworkPane = () => {
         setFinishedInitialFetch(true);
     };
 
-    const getArtworks = async () => {
+    const getArtworks = async (top=0) => {
         setIsFetchingArtworks(true);
         setArtworks([]);
         try {
@@ -118,19 +119,19 @@ const ArtworkPane = () => {
 
 
     return (
-        <div className='container xl mx-auto font-Adamina'>
+        <div className='container xl overflow-x-hidden mx-auto font-Adamina'>
             <div className='flex gap-3 mt-3 font-light'>
                 <Link href='/'>Home</Link>
                 <h3>/</h3>
                 <Link href='/artworks' className='font-semibold' >Artworks</Link>
             </div>
-            <div className='flex gap-10'>
-                <div className='max-w-[200px]'>
+            <div className='flex gap-10 min-h-lvh'>   
+                <div className='max-w-[200px] min-w-[200px]'>
                     <h3 className='text-2xl font-semibold mt-5 mb-2'>Category</h3>
                     <input onChange={(e) => {setCategorySearchKey(e.target.value)}} type="text" placeholder="Search category" className="input rounded-sm input-bordered w-full max-w-xs" />
                     <hr className="border-0 h-px bg-gray-300 my-3" />
                     <div className='flex flex-col gap-5'>
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-1">
                         {isFetchingCategories && (
                             <>
                                 {[...Array(6)].map((_, index) => (
@@ -202,13 +203,29 @@ const ArtworkPane = () => {
                     ))}
                     </div>
                     <div className="flex justify-center">
+                        {pageCount > 1 && (
                         <div className="join">
-                            <button className="join-item btn">1</button>
-                            <button className="join-item btn btn-active">2</button>
-                            <button className="join-item btn">3</button>
-                            <button className="join-item btn">4</button>
-                            <button className="join-item btn">»</button>
+                            {Math.ceil(currentPage / ARTWORK_SIZE_PER_REQUEST) !== 1 && (
+                                <button className="join-item btn">«</button>
+                            )}
+                            {[...Array(pageCount)].map((_, index) => (
+                                <button
+                                    key={index}
+                                    className={`join-item btn ${Math.ceil(currentPage / ARTWORK_SIZE_PER_REQUEST) === index + 1 ? 'btn-active' : ''}`}
+                                    onClick={() => {
+                                        console.log(index * ARTWORK_SIZE_PER_REQUEST, 'heree')
+                                        getArtworks(index * ARTWORK_SIZE_PER_REQUEST);
+                                        setTop(index * ARTWORK_SIZE_PER_REQUEST)
+                                    }}
+                                >
+                                    {index + 1}
+                                </button>
+                            ))}
+                            {Math.ceil(currentPage / ARTWORK_SIZE_PER_REQUEST) !== pageCount && (
+                                <button className="join-item btn">»</button>
+                            )}
                         </div>
+                        )}
                     </div>
                 </div>
             </div>
