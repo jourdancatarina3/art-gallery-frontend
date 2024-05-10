@@ -360,7 +360,7 @@ function RegisterPane() {
                             type="button"
                             className='flex justify-center items-center border-dashed border-2 border-sky-300 rounded-full w-[100px] h-[100px] hover:bg-sky-100 transition duration-100'
                         >
-                            <FontAwesomeIcon className='text-sky-300' icon={faPlus} />
+                            <FontAwesomeIcon className='text-sky-300 w-[15px] h-[15px]' icon={faPlus} />
                         </button>
                         )
                         }
