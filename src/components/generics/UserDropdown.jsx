@@ -16,7 +16,7 @@ const UserDropdown = forwardRef((props, ref) => {
     return (
         <div ref={ref} className="absolute translate-x-[-90%]">
             <div className="bg-neutral-800 rounded-md shadow-lg w-[250px]">
-                <div className="flex flex-col gap-4 py-3 px-5">
+                <div className="flex flex-col gap-3 p-4">
                     <a href={`/user/${userId}`} className="flex items-center gap-2 text-white truncate hover:underline transition duration-100">
                         <Image
                             src={avatarUrl} 
@@ -32,15 +32,18 @@ const UserDropdown = forwardRef((props, ref) => {
                         />
                         {userName}
                     </a>
-                    <a href={`/user/${userId}/artworks`} className="text-white hover:underline transition duration-100">My Artworks</a>
-                    <a href={`/user/${userId}/settings`} className="text-white hover:underline transition duration-100">Settings</a>
-                    <a
-                        onClick={logout}
-                        className="flex gap-2 items-center text-red-500 drop-shadow-md cursor-pointer hover:underline transition duration-100"
-                    >
-                        <FontAwesomeIcon icon={faPowerOff} />
-                        Logout
-                    </a>
+                    <hr className='opacity-20'></hr>
+                    <div className='flex flex-col gap-2 pl-3'>
+                        <a href={`/user/${userId}/artworks`} className="text-white hover:underline transition duration-100">My Artworks</a>
+                        <a href={`/user/${userId}/settings`} className="text-white hover:underline transition duration-100">Settings</a>
+                        <a
+                            onClick={logout}
+                            className="flex gap-2 items-center text-red-500 drop-shadow-md cursor-pointer hover:underline transition duration-100"
+                        >
+                            <FontAwesomeIcon icon={faPowerOff} />
+                            Logout
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
