@@ -113,7 +113,7 @@ const Navbar = (props) => {
                                 }} 
                             />
                         </button>
-                        {showUserDropdown && <UserDropdown ref={userDropDown} userName={user.username} userId={user.id} />}
+                        {showUserDropdown && <UserDropdown ref={userDropDown} userName={user.username} userId={user.id} avatarUrl={user.avatar_url} />}
                     </div>
                 </div>
                 }

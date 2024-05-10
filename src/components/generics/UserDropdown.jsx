@@ -2,26 +2,43 @@
 
 import { forwardRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
 
 import { useAuthStore } from '@/store/auth';
 
 const UserDropdown = forwardRef((props, ref) => {
-    const { userName, userId } = props;
-    const { logout } = useAuthStore();
+    const { logout, defaultAvatarUrl } = useAuthStore();
+    const { userName, userId, avatarUrl=defaultAvatarUrl } = props;
 
     return (
-        <div ref={ref} className="absolute translate-x-[-85%]">
-            <div className="bg-neutral-800 rounded-md shadow-lg w-[150px]">
-                <div className="flex flex-col gap-2 py-2 px-3">
-                    <a href={`/user/${userId}`} className="text-white truncate hover:bg-white/[0.1] transition duration-100">
+        <div ref={ref} className="absolute translate-x-[-90%]">
+            <div className="bg-neutral-800 rounded-md shadow-lg w-[250px]">
+                <div className="flex flex-col gap-4 py-3 px-5">
+                    <a href={`/user/${userId}`} className="flex items-center gap-2 text-white truncate hover:underline transition duration-100">
+                        <Image
+                            src={avatarUrl} 
+                            alt='user' 
+                            width={20} 
+                            height={20} 
+                            style={{ 
+                                width: '25px', 
+                                height: '25px', 
+                                objectFit: 'cover', 
+                                borderRadius: '50%',
+                            }} 
+                        />
                         {userName}
                     </a>
-                    <a href={`/user/${userId}/artworks`} className="text-white hover:bg-white/[0.1] transition duration-100">My Artworks</a>
-                    <a href={`/user/${userId}/settings`} className="text-white hover:bg-white/[0.1] transition duration-100">Settings</a>
+                    <a href={`/user/${userId}/artworks`} className="text-white hover:underline transition duration-100">My Artworks</a>
+                    <a href={`/user/${userId}/settings`} className="text-white hover:underline transition duration-100">Settings</a>
                     <a
                         onClick={logout}
-                        className="text-red-300 hover:bg-white/[0.1] transition duration-100"
+                        className="flex gap-2 items-center text-red-500 drop-shadow-md cursor-pointer hover:underline transition duration-100"
                     >
+                        <FontAwesomeIcon icon={faPowerOff} />
                         Logout
                     </a>
                 </div>
