@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { faPaintbrush } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
@@ -186,8 +187,8 @@ const ArtworkPane = () => {
                             href={'/artworks/new'}
                             className='btn btn-neutral text-xl rounded-sm font-normal h-[52px]'
                         >
-                            <FontAwesomeIcon icon={faPaintbrush} width={20} height={20} />
-                            Post Artwork
+                            <FontAwesomeIcon icon={faPlus} width={20} height={20} />
+                            Add Artwork
                         </Link>
                     </div>
                     <div className='mt-10 flex gap-5 flex-wrap'>
