@@ -55,6 +55,7 @@ const SingleArtworkPage = ({ params }) => {
       setIsLoadingArtwork(true);
       const data = await fetchArtwork(artworkId);
       setArtwork(data);
+      document.title = `${data.title} | FASO Gallery`;
     } catch (error) {
       console.error('Error fetching artwork:', error);
     } finally {
