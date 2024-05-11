@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useDebouncedCallback } from 'use-debounce';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,11 +12,13 @@ import Image from 'next/image';
 
 import { useAuthStore } from '@/store/auth';
 import { useArtworkStore } from '@/store/artwork';
+import { useCloudinaryStore } from '@/store/cloudinary';
 
 function NewArtworkPane() {
     const router = useRouter();
     const { user, getUser } = useAuthStore();
     const { fetchCategories, createCategory } = useArtworkStore();
+    const { uploadImage, deleteImage, deleteImageMany } = useCloudinaryStore();
     const pathname = usePathname();
 
     const [title, setTitle] = useState('');
@@ -32,10 +34,53 @@ function NewArtworkPane() {
     const [focusCategorySearch, setFocusCategorySearch] = useState(false);
     const [isCreatingCategory, setIsCreatingCategory] = useState(false);
     const [imagesUrl, setImagesUrl] = useState([
-        'https://img.freepik.com/free-vector/watercolor-chinese-style-background_52683-96106.jpg?t=st=1714461089~exp=1714464689~hmac=0ec0a2ce896216278394e5252ef09a0083a7d4b9945b68336c3c35083b48e41f&w=740',
-        'https://img.freepik.com/free-vector/watercolor-chinese-style-background_52683-96106.jpg?t=st=1714461089~exp=1714464689~hmac=0ec0a2ce896216278394e5252ef09a0083a7d4b9945b68336c3c35083b48e41f&w=740',
-        'https://img.freepik.com/free-vector/watercolor-chinese-style-background_52683-96106.jpg?t=st=1714461089~exp=1714464689~hmac=0ec0a2ce896216278394e5252ef09a0083a7d4b9945b68336c3c35083b48e41f&w=740',
     ]);
+    const [isUploading, setIsUploading] = useState(false);
+    const [createdArtwork, setCreatedArtwork] = useState(false);
+
+    const imageInputRef = useRef();
+
+    const triggerUpload = () => {
+        imageInputRef.current.click();
+    }
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (imagesUrl.length >= 5) {
+            alert('You can only upload up to 5 images');
+            return;
+        }
+        if (isUploading) return;
+        if (!file || !file.type.includes('image')) {
+            alert('Invalid file type');
+            return;
+        }
+        setIsUploading(true);
+        const data = {
+            file: file,
+            width: 600,
+            height: 800,
+            cover: 'fill',
+            folder: 'artworks'
+        }
+        uploadImage(data).then((res) => {
+            setImagesUrl([...imagesUrl, res.url]);
+            setIsUploading(false);
+        }).catch((error) => {
+            console.log(error);
+            setIsUploading(false);
+        })
+    }
+
+    const removeImage = (index, url) => {
+        deleteImage(url, 'faso/artworks/').then((res) => {
+            console.log(res);
+        }).catch((e) => {
+            console.error(e);
+        })
+        const temp = imagesUrl;
+        temp.splice(index, 1);
+        setImagesUrl([...temp]);
+}
 
     const limitCategoryCount = (count) => {
         return count > 999 ? '1k+' : count;
@@ -93,7 +138,14 @@ function NewArtworkPane() {
     useEffect(() => {
         checkUserLogin();
         getCategories();
-    }, [])
+
+        return () => {
+            if (!createdArtwork) {
+                deleteImageMany(imagesUrl, 'faso/artworks/');
+                console.log('Delete images');
+            }
+        }
+    }, [imagesUrl])
 
     useEffect(() => {
         handleCattegorySearch();
@@ -104,7 +156,7 @@ function NewArtworkPane() {
             <div className="flex flex-wrap justify-between items-center mb-5 px-3 gap-3">    
                 <FontAwesomeIcon
                     onClick={() => router.push('/artworks')} icon={faClose}
-                    className='text-3xl cursor-pointer'
+                    className='text-3xl h-[30px] cursor-pointer'
                 />
                 <h1 className='font-bold text-xl sm:text-3xl'>New Artwork</h1>
                 <button
@@ -118,12 +170,22 @@ function NewArtworkPane() {
             <div className="grid grid-cols-1 md:grid-cols-2">
                 <div className='flex flex-col p-5'>
                     <h2 className="text-xl font-bold mb-3">Images</h2>
+                    <input type="file" accept="image/*" ref={imageInputRef} className="hidden" onChange={handleFileChange}/>
                     {imagesUrl.length === 0 && (
-                    <button className="flex justify-center items-center border-dashed border-2 border-sky-300 w-full h-[400px] rounded hover:bg-sky-100 transition duration-100">
-                        <div className="text-xl text-sky-300 flex flex-col gap-3">
-                            <FontAwesomeIcon icon={faPlus} />
-                            Add Image
-                        </div>
+                    <button
+                        disabled={isUploading}
+                        onClick={triggerUpload}
+                        className={`flex justify-center items-center border-dashed border-2 border-sky-300 w-full text-sky-300
+                            h-[400px] rounded ${isUploading? 'cursor-not-allowed': ''} hover:bg-sky-100 transition duration-100`}
+                    >
+                        {!isUploading ? (
+                            <div className="text-xl flex flex-col gap-3">
+                                <FontAwesomeIcon icon={faPlus} />
+                                Add Image
+                            </div>
+                        ): (
+                            <span className="loading loading-infinity loading-lg"></span>
+                        )}
                     </button>
                     )}
 
@@ -137,19 +199,24 @@ function NewArtworkPane() {
                                     <div className="relative">
                                         <button className="absolute z-10 translate-x-[-100%] p-1">
                                             <FontAwesomeIcon
-                                                onClick={() => {
-                                                    const temp = imagesUrl;
-                                                    temp.splice(index, 1);
-                                                    setImagesUrl([...temp]);
-                                                }}
+                                                onClick={() => {removeImage(index, url)}}
                                                 className='text-error shadow-md' icon={faTrash} width={20} height={20}
                                             />
                                         </button>
                                     </div>
                                 </div>
                             ))}
-                            <button className="relative h-[200px] w-[150px] flex justify-center items-center border-dashed border-2 border-sky-300 rounded hover:bg-sky-100 transition duration-100">
-                                <FontAwesomeIcon className='text-sky-300' icon={faPlus} />
+                            <button
+                                disabled={isUploading}
+                                onClick={triggerUpload}
+                                className={`relative h-[200px] w-[150px] flex justify-center items-center border-dashed border-2 text-sky-300
+                                    border-sky-300 rounded ${isUploading? 'cursor-not-allowed': ''} hover:bg-sky-100 transition duration-100`}
+                            >
+                                {!isUploading ? (
+                                    <FontAwesomeIcon className='' icon={faPlus} />
+                                ): (
+                                    <span className="loading loading-infinity loading-md"></span>
+                                )}
                             </button>
                         </div>
                     )}
