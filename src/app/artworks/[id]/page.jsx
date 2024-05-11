@@ -8,6 +8,8 @@ import { useArtworkStore } from '@/store/artwork';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useSearchParams } from 'next/navigation';
 
 import FullLoader from '@/components/generics/FullLoader';
@@ -66,12 +68,20 @@ const SingleArtworkPage = ({ params }) => {
             {artwork && <h1 className='font-semibold'>{artwork.title}</h1>}
           </div>
 
-          {prevPath && (
-          <FontAwesomeIcon
-              onClick={() => window.history.back()} icon={faClose}
-              className='text-3xl h-[30px] cursor-pointer'
-          />
-          )}
+          <div className='flex items-center gap-3'>
+            {isArtworkArtist && (
+              <div className='flex gap-3'>
+                <FontAwesomeIcon icon={faTrash} className='h-[25px] cursor-pointer text-error' />
+                <FontAwesomeIcon icon={faPenToSquare} className='h-[25px] cursor-pointer text-success' />
+              </div>
+            )}
+            {prevPath && (
+            <FontAwesomeIcon
+                onClick={() => window.history.back()} icon={faClose}
+                className='text-3xl h-[30px] cursor-pointer'
+            />
+            )}
+          </div>
         </div>
 
         <div className='w-full h-auto flex flex-wrap justify-center mt-20 gap-10'>
