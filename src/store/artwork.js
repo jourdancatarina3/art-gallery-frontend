@@ -38,6 +38,16 @@ export const useArtworkStore = create((set) => ({
     },
 
     createArtwork: async (data) => {
+        const formData = new FormData();
+        Object.keys(data).forEach(key => {
+            if (key === 'image_urls') {
+                data[key].forEach((image) => {
+                    formData.append('image_urls', image);
+                });
+            } else {
+                formData.append(key, data[key]);
+            }
+        });
         try {
             const response = await axiosInstance.post('artworks/', data);
             return response.data;

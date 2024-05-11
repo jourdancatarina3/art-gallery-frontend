@@ -17,7 +17,7 @@ import { useCloudinaryStore } from '@/store/cloudinary';
 function NewArtworkPane() {
     const router = useRouter();
     const { user, getUser } = useAuthStore();
-    const { fetchCategories, createCategory } = useArtworkStore();
+    const { fetchCategories, createCategory, createArtwork } = useArtworkStore();
     const { uploadImage, deleteImage, deleteImageMany } = useCloudinaryStore();
     const pathname = usePathname();
 
@@ -86,8 +86,30 @@ function NewArtworkPane() {
         return count > 999 ? '1k+' : count;
     }
 
-    const handleSave = () => {
-        console.log('Save')
+    const handleSave = async () => {
+        setIsUploading(true);
+        try {
+            const data = {
+                artist_id: user.id,
+                category_id: categoryId,
+                title: title,
+                description: description,
+                status: status,
+                image_urls: imagesUrl
+            }
+            if (status === 0){
+                data['starting_bid'] = price;
+            } else{
+                data['sold_price'] = price;
+            }
+            const res = await createArtwork(data);
+            setCreatedArtwork(true);
+            console.log(res, 'res');
+            router.push(`/artworks/${res.artwork.slug}`);
+        } catch (error) {
+            console.log(error);
+        }
+        setIsUploading(false);
     }
 
     const createNewCategory = () => {
@@ -142,7 +164,6 @@ function NewArtworkPane() {
         return () => {
             if (!createdArtwork) {
                 deleteImageMany(imagesUrl, 'faso/artworks/');
-                console.log('Delete images');
             }
         }
     }, [imagesUrl])
