@@ -6,11 +6,16 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useArtworkStore } from '@/store/artwork';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { useSearchParams } from 'next/navigation';
 
 import FullLoader from '@/components/generics/FullLoader';
 
 const SingleArtworkPage = ({ params }) => {
+  const searchParams = useSearchParams();
+  const prevPath = searchParams.get('prev');
+
   const { id: slug } = params;
   const { fetchArtwork, defaultAvatarUrl } = useArtworkStore();
   const [artwork, setArtwork] = useState(null);
@@ -48,15 +53,24 @@ const SingleArtworkPage = ({ params }) => {
       <Navbar className="fixed left-0 top-0" />
       {isLoadingArtwork ? <FullLoader /> : (  
       <div className='mt-7 container mx-auto'>
-        <div className='flex gap-3 mt-3 font-light'>
-          <Link href='/'>Home</Link>
-          <h1>/</h1>
-          <Link href='/artworks'>Artworks</Link>
-          <h1>/</h1>
-          {artwork && <h1 className='font-semibold'>{artwork.title}</h1>}
+        <div className="flex justify-between items-center w-full">
+          <div className='flex gap-3 mt-3 font-light'>
+            <Link href='/'>Home</Link>
+            <h1>/</h1>
+            <Link href='/artworks'>Artworks</Link>
+            <h1>/</h1>
+            {artwork && <h1 className='font-semibold'>{artwork.title}</h1>}
+          </div>
+
+          {prevPath && (
+          <FontAwesomeIcon
+              onClick={() => window.history.back()} icon={faClose}
+              className='text-3xl h-[30px] cursor-pointer'
+          />
+          )}
         </div>
 
-        <div className='w-3/4 mx-auto h-auto flex mt-20'>
+        <div className='w-full h-auto flex mt-20'>
           <div className="min-w-[477.1px]">
             {artwork && (
               <div className="relative h-[569.4px]">

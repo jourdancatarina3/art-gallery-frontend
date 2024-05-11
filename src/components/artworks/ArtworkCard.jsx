@@ -2,11 +2,13 @@
 
 import Image from 'next/image'
 import { useEffect } from 'react'
+import { useRouter} from 'next/navigation'
 
 import { useAuthStore } from '@/store/auth';
 import Link from 'next/link';
 
 const ArtworkCard = (props) => {
+  const router = useRouter();
   const { artwork } = props;
   const { defaultAvatarUrl } = useAuthStore();
   const price = parseFloat(artwork.current_highest_bid || artwork.starting_bid || 0);
@@ -23,12 +25,15 @@ const ArtworkCard = (props) => {
   },[]);
 
   return (
-    <div className="card w-[300px] bg-base-100 shadow-md rounded-md">
-        <Link href={`/artworks/${artwork?.slug}`} className="w-[300px] h-[400px] max-h-[400px] overflow-hidden relative">
+    <div
+      onClick={() => router.push(`/artworks/${artwork?.slug}?prev=yes`)}
+      className="card w-[300px] bg-base-100 shadow-md rounded-md cursor-pointer"
+    >
+        <figure className="w-[300px] h-[400px] max-h-[400px] rounded-t-md overflow-hidden relative">
             <Image src={artwork?.first_image?.image_url || defaultAvatarUrl} layout="fill" objectFit="cover" alt={artwork.title}
               className='transition-transform duration-300 transform-gpu scale-100 hover:scale-105 cursor-pointer'
             />
-        </Link>
+        </figure>
         <div className="relative w-full flex justify-end px-2">
           <div className='absolute p-1 translate-y-[-125%] rounded flex items-center gap-1 shadow-2xl bg-neutral-800/[.2] hover:bg-neutral-800 transition duration-200'>
             <p className="text-xs text-white">
@@ -39,7 +44,7 @@ const ArtworkCard = (props) => {
             </div>
           </div>  
         </div>
-        <div className="card-body p-3">
+        <div className="card-body py-3 px-5">
             <h2 className="card-title">
                 {artwork.title}
                 <div className="badge badge-error text-white">HOT</div>

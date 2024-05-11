@@ -29,10 +29,9 @@ const ArtworkPane = () => {
     const paramTop = searchParams.get('top') || 0;
 
     const [top, setTop] = useState(parseInt(paramTop) || 0)
-    const [isLoading, setIsLoading] = useState(true);
     const [isFetchingArtworks, setIsFetchingArtworks] = useState(false);
     const [isFetchingCategories, setIsFetchingCategories] = useState(false);
-    const [searchKey, setSearchKey] = useState('');
+    const [searchKey, setSearchKey] = useState(paramSearchKey || '');
     const [artworks, setArtworks] = useState([]);
     const [totalArtworks, setTotalArtworks] = useState(0);
     const [categories, setCategories] = useState([]);
@@ -44,13 +43,11 @@ const ArtworkPane = () => {
     const currentPage = Math.ceil(top + 1 / ARTWORK_SIZE_PER_REQUEST)
 
     const initializeArtworks = async () => {
-        setIsLoading(true);
         await Promise.all([getArtworks(), getCategories()])
-        setIsLoading(false);
         setFinishedInitialFetch(true);
     };
 
-    const getArtworks = async (top=0) => {
+    const getArtworks = async () => {
         setIsFetchingArtworks(true);
         setArtworks([]);
         try {
@@ -110,6 +107,8 @@ const ArtworkPane = () => {
 
     useEffect(() => {
         if (!finishedInitialFetch) return;
+        router.push(`${pathname}?top=0&search=${searchKey}`)
+        setTop(0);
         handleSearchKeyChange();
     }, [searchKey, selectedCategories, handleSearchKeyChange])
 
@@ -117,6 +116,12 @@ const ArtworkPane = () => {
         if (!finishedInitialFetch) return;
         handleCattegorySearch();
     }, [categorySearchKey, handleCattegorySearch])
+
+    useEffect(() => {
+        if (!finishedInitialFetch) return;
+        router.push(`${pathname}?top=${top}`)
+        getArtworks();
+    }, [top])
 
 
     return (
@@ -206,7 +211,6 @@ const ArtworkPane = () => {
                             {Math.ceil(currentPage / ARTWORK_SIZE_PER_REQUEST) !== 1 && (
                                 <button
                                     onClick={() => {
-                                        getArtworks(top - ARTWORK_SIZE_PER_REQUEST);
                                         setTop(top - ARTWORK_SIZE_PER_REQUEST)
                                     }}
                                     className="join-item btn"
@@ -217,7 +221,6 @@ const ArtworkPane = () => {
                                     key={index}
                                     className={`join-item btn ${Math.ceil(currentPage / ARTWORK_SIZE_PER_REQUEST) === index + 1 ? 'btn-active' : ''}`}
                                     onClick={() => {
-                                        getArtworks(index * ARTWORK_SIZE_PER_REQUEST);
                                         setTop(index * ARTWORK_SIZE_PER_REQUEST)
                                     }}
                                 >
@@ -227,7 +230,6 @@ const ArtworkPane = () => {
                             {Math.ceil(currentPage / ARTWORK_SIZE_PER_REQUEST) !== pageCount && (
                                 <button
                                     onClick={() => {
-                                        getArtworks(top + ARTWORK_SIZE_PER_REQUEST);
                                         setTop(top + ARTWORK_SIZE_PER_REQUEST)
                                     }}
                                     className="join-item btn"
