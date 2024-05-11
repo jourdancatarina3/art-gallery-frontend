@@ -97,7 +97,7 @@ export default function Home() {
 
         <div className="mt-32">
           <h1 className="font-inter text-5xl mb-8">New<br />Artworks</h1>
-          <div className="flex gap-10 overflow-x-auto">
+          <div className="flex gap-5 overflow-x-auto">
             {isLoadingArtworks && (
               <>
                 {[...Array(6)].map((_, index) => (
