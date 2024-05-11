@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState, useEffect } from 'react';
+import Link from "next/link";
 
 import Navbar from "@/components/generics/navbar";
 import ArtworkCard from "@/components/artworks/ArtworkCard";
@@ -85,8 +86,8 @@ export default function Home() {
                   Current Bid: ${featuredArtworks[0]?.current_highest_bid || featuredArtworks[0]?.starting_bid || 0}
                   </h2>
                   <div className="flex gap-5 mt-3">
-                    <button className="bg-neutral px-8 py-2 text-lg text-white rounded-sm">Bid Now</button>
-                    <button className="text-lg">Learn More...</button>
+                    <Link href={`/artworks/${featuredArtworks[0].slug}?prev=yes`} className="bg-neutral px-8 py-2 text-lg text-white rounded-sm">Bid Now</Link>
+                    <Link href={`/artworks/${featuredArtworks[0].slug}?prev=yes`} className="text-lg flex items-center">Learn More...</Link>
                   </div>
                 </>
               )

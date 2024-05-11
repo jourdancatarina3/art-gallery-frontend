@@ -98,9 +98,9 @@ function NewArtworkPane() {
                 image_urls: imagesUrl
             }
             if (status === 0){
-                data['starting_bid'] = price;
+                data['starting_bid'] = parseFloat(price);
             } else{
-                data['sold_price'] = price;
+                data['sold_price'] = parseFloat(price);
             }
             const res = await createArtwork(data);
             setCreatedArtwork(true);
@@ -373,7 +373,7 @@ function NewArtworkPane() {
                                 </div>
                                 <label className="input input-bordered flex items-center gap-2 rounded-sm">
                                     ₱
-                                    <input type="text" className="grow" placeholder="0.00" />
+                                    <input onChange={(e) => setPrice(e.target.value)} type="text" className="grow" placeholder="0.00" />
                                 </label>
                             </label>
                             )}
