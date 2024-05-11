@@ -11,15 +11,15 @@ import { useAuthStore } from '@/store/auth';
 
 const UserDropdown = forwardRef((props, ref) => {
     const { logout, defaultAvatarUrl } = useAuthStore();
-    const { userName, userId, avatarUrl=defaultAvatarUrl } = props;
+    const { userName, userId, avatarUrl } = props;
 
     return (
-        <div ref={ref} className="absolute translate-x-[-90%]">
+        <div ref={ref} className="absolute translate-x-[-90%] translate-y-[60%]">
             <div className="bg-neutral-800 rounded-md shadow-lg w-[250px]">
                 <div className="flex flex-col gap-3 p-4">
                     <a href={`/user/${userId}`} className="flex items-center gap-2 text-white truncate hover:underline transition duration-100">
                         <Image
-                            src={avatarUrl} 
+                            src={avatarUrl || defaultAvatarUrl} 
                             alt='user' 
                             width={20} 
                             height={20} 

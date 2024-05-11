@@ -173,9 +173,14 @@ function RegisterPane() {
                 password: password.trim(),
                 phone_number: phoneNumber.trim(),
                 location: location.trim(),
-                user_type: userType,
                 achievements: achievements.trim(),
                 about: about.trim(),
+            }
+            if (userType) {
+                data['user_type'] = userType;
+            }
+            if (imageFile) {
+                data['avatar_file'] = imageFile;
             }
             try {
                 const response = await register(data);

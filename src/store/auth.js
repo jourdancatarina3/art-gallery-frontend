@@ -30,7 +30,7 @@ const fetchUser = async () => {
 
 export const useAuthStore = create((set) => ({
     user: null,
-    defaultAvatarUrl: 'https://img.freepik.com/free-photo/graffiti-children-bicycle_1122-2206.jpg?t=st=1714461301~exp',
+    defaultAvatarUrl: 'https://i.pinimg.com/564x/80/01/3b/80013ba9fbd82789fba7dd72e2428b96.jpg',
     getUser: async () => {
         const data = await fetchUser();
         set({ user: data });
@@ -63,14 +63,21 @@ export const useAuthStore = create((set) => ({
         }
     },
     register: async (data) => {
+        const formData = new FormData();
+    
+        Object.keys(data).forEach(key => {
+            formData.append(key, data[key]);
+        });
+    
         try {
-            const response = await axiosInstance.post('register/', data);
+            const response = await axiosInstance.post('register/', formData);
             return response.data;
         } catch (error) {
             console.log(error);
             return false;
         }
     },
+    
 
     logout: () => {
         destroyCookie(null, 'jwt');

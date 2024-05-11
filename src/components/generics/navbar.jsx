@@ -95,7 +95,7 @@ const Navbar = (props) => {
                         <span className="indicator-item badge badge-error text-xs px-[2px] w-[10px] h-[10px]"></span> 
                         <Link href='/'><FontAwesomeIcon  className="text-xl" icon={faMessage} /></Link>
                     </div>
-                    <div>
+                    <div className='flex items-center'>
                         <button
                             className="w-[25px]"
                             onClick={() => {setShowUserDropdown(!showUserDropdown)}}
