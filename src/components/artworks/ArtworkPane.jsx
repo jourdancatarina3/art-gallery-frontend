@@ -8,6 +8,7 @@ import { faPaintbrush } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
+import Image from 'next/image';
 
 import ArtworkCard from '@/components/artworks/ArtworkCard';
 import BaseLoading from '@/components/generics/BaseLoading';
@@ -19,7 +20,7 @@ const ARTWORK_SIZE_PER_REQUEST = 21;
 
 const ArtworkPane = () => {
     const { fetchArtworks, fetchCategories } = useArtworkStore();
-    const { user } = useAuthStore();
+    const { user, defaultAvatarUrl } = useAuthStore();
     const router = useRouter();
     const pathname = usePathname();
 
@@ -187,10 +188,10 @@ const ArtworkPane = () => {
                     <div className='mt-10 flex gap-5 flex-wrap'>
                     {isFetchingArtworks && (
                         <>
-                            {[...Array(6)].map((_, index) => (
+                            {[...Array(8)].map((_, index) => (
                                 <div key={index} className='flex flex-col gap-2'>
-                                    <BaseLoading width={350} height={467} />
-                                    <BaseLoading width={350} height={50} />
+                                    <BaseLoading width={300} height={400} />
+                                    <BaseLoading width={300} height={50} />
                                 </div>
                             ))}
                         </>
@@ -199,7 +200,7 @@ const ArtworkPane = () => {
                         <ArtworkCard key={index} artwork={item} />
                     ))}
                     </div>
-                    <div className="flex justify-center">
+                    <div className="flex justify-center mt-5">
                         {pageCount > 1 && (
                         <div className="join">
                             {Math.ceil(currentPage / ARTWORK_SIZE_PER_REQUEST) !== 1 && (
