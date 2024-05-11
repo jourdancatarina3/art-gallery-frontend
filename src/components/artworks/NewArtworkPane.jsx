@@ -173,7 +173,7 @@ function NewArtworkPane() {
     }, [categorySearchKey]);
 
     return (
-        <main className='font-Adamina container mx-auto my-5'>
+        <main className='font-Adamina container mx-auto my-5 min-h-lvh'>
             <div className="flex flex-wrap justify-between items-center mb-5 px-3 gap-3">    
                 <FontAwesomeIcon
                     onClick={() => router.push('/artworks')} icon={faClose}

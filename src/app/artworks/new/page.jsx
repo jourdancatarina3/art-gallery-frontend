@@ -1,4 +1,5 @@
 import Navbar from '@/components/generics/navbar';
+import Footer from '@/components/generics/Footer';
 import NewArtworkPane from '@/components/artworks/NewArtworkPane';
 
 export const metadata = {
@@ -11,6 +12,7 @@ function page() {
     <>
         <Navbar />
         <NewArtworkPane />
+        <Footer />
     </>
     )
 }

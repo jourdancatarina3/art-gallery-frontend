@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/generics/navbar';
+import Footer from '@/components/generics/Footer';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -79,7 +80,7 @@ const SingleArtworkPage = ({ params }) => {
     <>
       <Navbar className="fixed left-0 top-0" />
       {isLoadingArtwork ? <FullLoader /> : (  
-      <div className='mt-7 container mx-auto'>
+      <div className='mt-7 container mx-auto min-h-lvh'>
         <div className="flex justify-between items-center w-full">
           <div className='flex gap-3 mt-3 font-light'>
             <Link href='/'>Home</Link>
@@ -93,7 +94,7 @@ const SingleArtworkPage = ({ params }) => {
             {isArtworkArtist && (
               <div className='flex gap-3'>
                 <FontAwesomeIcon onClick={() => setShowDeleteModal(true)} icon={faTrash} className='h-[25px] cursor-pointer text-error' />
-                <FontAwesomeIcon icon={faPenToSquare} className='h-[25px] cursor-pointer text-success' />
+                <FontAwesomeIcon onClick={() => router.push(`/artworks/${artwork.slug}/edit`)} icon={faPenToSquare} className='h-[25px] cursor-pointer text-success' />
               </div>
             )}
             {prevPath && (
@@ -181,6 +182,7 @@ const SingleArtworkPage = ({ params }) => {
       </div>
       )}
       {showDeleteModal && <ArtworkDeleteModal setShowDeleteModal={setShowDeleteModal} deleteArtwork={removeArtwork} />}
+      <Footer />
     </>
   );
 };
