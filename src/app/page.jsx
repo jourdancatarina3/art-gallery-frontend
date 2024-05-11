@@ -43,11 +43,9 @@ export default function Home() {
     fetchTopArtist().then(artist => setTopArtist(artist));
   }, []);
   return (
-    <>
     <div className="overflow-x-hidden">
-      <Navbar showSearch={true} />
-    </div>
-    <main className="min-h-screen pb-72 font-Adamina overflow-x-hidden">
+    <Navbar showSearch={true} />
+    <main className="min-h-screen pb-72 font-Adamina">
       <div className="container xl w-5/6 mx-auto">
         <div className="mt-5">
           <h1 className="font-inter text-5xl">Featured Artwork</h1>
@@ -132,6 +130,6 @@ export default function Home() {
       </div>
     </main>
     <Footer />
-    </>
+    </div>
   );
 }

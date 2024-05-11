@@ -11,10 +11,12 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { useSearchParams } from 'next/navigation';
 
 import FullLoader from '@/components/generics/FullLoader';
+import { useAuthStore } from '@/store/auth';
 
 const SingleArtworkPage = ({ params }) => {
   const searchParams = useSearchParams();
   const prevPath = searchParams.get('prev');
+  const { user } = useAuthStore();
 
   const { id: slug } = params;
   const { fetchArtwork, defaultAvatarUrl } = useArtworkStore();
@@ -23,6 +25,8 @@ const SingleArtworkPage = ({ params }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(-1);
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const artworkId = slug.split('-').shift();
+
+  const isArtworkArtist = user?.id === artwork?.artist.id;
 
   const fetchArtworkById = async () => {
     try {
@@ -138,7 +142,7 @@ const SingleArtworkPage = ({ params }) => {
               </div>
             </div>
             <div className='flex flex-row flex-wrap gap-3 mt-3'>
-              <button className='grow px-5 text-center bg-gray-300 rounded-sm text-center text-black font-bold py-3'>ADD A BID</button>
+              <button disabled={isArtworkArtist} className={`grow px-5 text-center bg-gray-300 rounded-sm text-center text-black font-bold py-3 ${isArtworkArtist && 'cursor-not-allowed'}`}>ADD A BID</button>
               <button className='grow px-5 text-center btn btn-neutral rounded-sm text-center font-bold py-3'>SHOW BIDS</button>
             </div>
           </div>

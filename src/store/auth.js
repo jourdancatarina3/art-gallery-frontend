@@ -81,6 +81,7 @@ export const useAuthStore = create((set) => ({
 
     logout: () => {
         destroyCookie(null, 'jwt');
+        window.location.reload();
         set({ user: null });
     }
 }));
