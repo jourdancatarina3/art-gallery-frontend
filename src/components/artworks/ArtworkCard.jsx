@@ -10,8 +10,11 @@ import Link from 'next/link';
 const ArtworkCard = (props) => {
   const router = useRouter();
   const { artwork } = props;
-  const { defaultAvatarUrl } = useAuthStore();
+  const { defaultAvatarUrl, user } = useAuthStore();
   const price = parseFloat(artwork.current_highest_bid || artwork.starting_bid || 0);
+
+  const isUserOwner = user?.id === artwork?.artist?.id;
+  const name = isUserOwner ? 'You' : artwork?.artist?.username;
 
   const parseViewCount = (count) => {
     if (count < 1000) {
@@ -50,7 +53,7 @@ const ArtworkCard = (props) => {
                 <div className="badge badge-error text-white">HOT</div>
             </h2>
             <div className="flex justify-between">
-              <p>{artwork.artist.username}</p>
+              <p className={`${isUserOwner && 'text-success'}`}>{name}</p>
               <p className='text-end'>${price}</p>
             </div>
             {artwork?.category && (
