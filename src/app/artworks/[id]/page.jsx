@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/generics/navbar';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useArtworkStore } from '@/store/artwork';
@@ -13,22 +14,41 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useSearchParams } from 'next/navigation';
 
 import FullLoader from '@/components/generics/FullLoader';
+import ArtworkDeleteModal from '@/components/artworks/ArtworkDeleteModal';
 import { useAuthStore } from '@/store/auth';
 
 const SingleArtworkPage = ({ params }) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const prevPath = searchParams.get('prev');
-  const { user } = useAuthStore();
+  const { user, getUser } = useAuthStore();
+  const { fetchArtwork, defaultAvatarUrl, deleteArtwork } = useArtworkStore();
 
   const { id: slug } = params;
-  const { fetchArtwork, defaultAvatarUrl } = useArtworkStore();
   const [artwork, setArtwork] = useState(null);
   const [isLoadingArtwork, setIsLoadingArtwork] = useState(true);
   const [selectedImageIndex, setSelectedImageIndex] = useState(-1);
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const artworkId = slug.split('-').shift();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const isArtworkArtist = user?.id === artwork?.artist.id;
+
+  const removeArtwork = async () => {
+    setShowDeleteModal(false);
+    setIsLoadingArtwork(true);
+    try {
+      const user = await getUser();
+      if (user.id !== artwork.artist.id) {
+        return;
+      }
+      await deleteArtwork(artwork.id);
+      router.push('/artworks');
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
+    setIsLoadingArtwork(false);
+  }
 
   const fetchArtworkById = async () => {
     try {
@@ -71,7 +91,7 @@ const SingleArtworkPage = ({ params }) => {
           <div className='flex items-center gap-3'>
             {isArtworkArtist && (
               <div className='flex gap-3'>
-                <FontAwesomeIcon icon={faTrash} className='h-[25px] cursor-pointer text-error' />
+                <FontAwesomeIcon onClick={() => setShowDeleteModal(true)} icon={faTrash} className='h-[25px] cursor-pointer text-error' />
                 <FontAwesomeIcon icon={faPenToSquare} className='h-[25px] cursor-pointer text-success' />
               </div>
             )}
@@ -159,6 +179,7 @@ const SingleArtworkPage = ({ params }) => {
         </div>
       </div>
       )}
+      {showDeleteModal && <ArtworkDeleteModal setShowDeleteModal={setShowDeleteModal} deleteArtwork={removeArtwork} />}
     </>
   );
 };
