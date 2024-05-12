@@ -75,7 +75,8 @@ function BidsModal(params) {
                                 <span className="loading loading-infinity loading-lg text-blue-400"></span>
                             </div>
                         ):(
-                        <div className='grow w-full px-2 pt-3 flex flex-col gap-3 overflow-y-auto'>
+                        bids.length > 0 ?    
+                        (<div className='grow w-full px-2 pt-3 flex flex-col gap-3 overflow-y-auto'>
                             {bids.map((bid, index) => (
                             <div key={bid.id}>
                                 {user.id === bid.user.id && (
@@ -94,14 +95,28 @@ function BidsModal(params) {
                                     className={`border border-black/[.3] rounded-md w-full px-2 py-1 flex justify-between items-center
                                     ${index === 0 && 'bg-black text-white'}`}>
                                     <div className='flex flex-col gap-2'>
-                                        <h3 className='font-bold'>{user.id !== bid.user.id? bid.user.username: 'You'}</h3>
+                                        <h3 className='font-bold'>{user.id !== bid.user.id? (bid.is_anonymous? 'Anonymous' : bid.user.username): 'You'}</h3>
                                         <p className='text-xs'>{dateFormatter(bid.bid_on)}</p>
                                     </div>
                                     <h3 className='font-bold'>₱{bid.bid_amount}</h3>
                                 </div>
                             </div>
                             ))}
+                        </div>) :
+                        (
+                        <div className="grow w-full flex flex-col justify-center gap-2 items-center">
+                            <p className="text-gray-400 text-sm">No bids yet.</p>
+                            <button
+                                onClick={() => {
+                                    setShowBidsModal(false);
+                                    setShowAddBidModal(true);
+                                }}
+                                className="badge badge-success text-white text-sm">
+                                + Add Bid
+                            </button>
                         </div>
+                            
+                        )
                         )}
                     </div>
                 </div>

@@ -16,6 +16,7 @@ import { useSearchParams } from 'next/navigation';
 
 import FullLoader from '@/components/generics/FullLoader';
 import ArtworkDeleteModal from '@/components/artworks/ArtworkDeleteModal';
+import AddBidModal from '@/components/artworks/AddBidModal';
 import BidsModal from '@/components/artworks/BidsModal';
 import { useAuthStore } from '@/store/auth';
 
@@ -177,7 +178,13 @@ const SingleArtworkPage = ({ params }) => {
               </div>
             </div>
             <div className='flex flex-row flex-wrap gap-3 mt-3'>
-              <button disabled={isArtworkArtist} className={`grow px-5 text-center bg-gray-300 rounded-sm text-center text-black font-bold py-3 ${isArtworkArtist && 'cursor-not-allowed'}`}>ADD A BID</button>
+              <button
+                onClick={() => setShowAddBidModal(true)}
+                disabled={isArtworkArtist}
+                className={`grow px-5 text-center bg-gray-300 rounded-sm text-center text-black font-bold py-3 ${isArtworkArtist && 'cursor-not-allowed'}`}
+              >
+                ADD A BID
+              </button>
               <button
                 onClick={() => setShowBidsModal(true)}
                 className='grow px-5 text-center btn btn-neutral rounded-sm text-center font-bold py-3'>
@@ -190,6 +197,7 @@ const SingleArtworkPage = ({ params }) => {
       )}
       {showDeleteModal && <ArtworkDeleteModal setShowDeleteModal={setShowDeleteModal} deleteArtwork={removeArtwork} />}
       {showBidsModal && <BidsModal setShowBidsModal={setShowBidsModal} artworkId={artworkId} setShowAddBidModal={setShowAddBidModal} artistId={artwork.artist.id} />}
+      {showAddBidModal && <AddBidModal setShowAddBidModal={setShowAddBidModal} setShowBidsModal={setShowBidsModal} artworkId={artworkId}/>}
       <Footer />
     </div>
   );
