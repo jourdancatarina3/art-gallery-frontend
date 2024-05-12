@@ -48,10 +48,14 @@ const ArtworkCard = (props) => {
           </div>  
         </div>
         <div className="card-body py-3 px-5">
-            <h2 className="card-title">
-                {artwork.title}
-                <div className="badge badge-error text-white">HOT</div>
-            </h2>
+            <div className='flex gap-2 items-center'>
+              <h2 className="card-title tracking-widest max-w-[180px] line-clamp-1">
+                  {artwork.title}
+              </h2>
+              {artwork.bids_count > 0 && (
+              <div className="badge badge-error text-white">{artwork.bids_count} BID{artwork.bids_count > 1 && 'S'}</div>
+              )}
+            </div>
             <div className="flex justify-between">
               <p className={`${isUserOwner && 'text-success'}`}>{name}</p>
               <p className='text-end'>${price}</p>
