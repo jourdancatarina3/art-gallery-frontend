@@ -19,7 +19,7 @@ function NewArtworkPane() {
     const router = useRouter();
     const { user, getUser } = useAuthStore();
     const { fetchCategories, createCategory, createArtwork } = useArtworkStore();
-    const { uploadImage, deleteImage, deleteImageMany } = useCloudinaryStore();
+    const { uploadImage, deleteImage } = useCloudinaryStore();
     const pathname = usePathname();
 
     const [title, setTitle] = useState('');
@@ -162,13 +162,7 @@ function NewArtworkPane() {
     useEffect(() => {
         checkUserLogin();
         getCategories();
-
-        return () => {
-            if (!createdArtwork) {
-                deleteImageMany(imagesUrl, 'faso/artworks/');
-            }
-        }
-    }, [imagesUrl])
+    }, [])
 
     useEffect(() => {
         handleCattegorySearch();

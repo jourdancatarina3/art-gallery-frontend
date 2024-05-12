@@ -20,7 +20,7 @@ function EditArtworkPane(params) {
     const router = useRouter();
     const { user, getUser } = useAuthStore();
     const { fetchCategories, createCategory, fetchArtwork, updateArtwork } = useArtworkStore();
-    const { uploadImage, deleteImage, deleteImageMany } = useCloudinaryStore();
+    const { uploadImage, deleteImage } = useCloudinaryStore();
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -204,14 +204,6 @@ function EditArtworkPane(params) {
     useEffect(() => {
         initializeArtworkData()
         getCategories();
-
-        return () => {
-            if (!createdArtwork) {
-                if (newImages.length > 0) {
-                    deleteImageMany(newImages, 'faso/artworks/')
-                }
-            }
-        }
     }, [])
 
     useEffect(() => {
