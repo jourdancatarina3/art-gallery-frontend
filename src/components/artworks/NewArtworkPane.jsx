@@ -13,6 +13,7 @@ import Image from 'next/image';
 import { useAuthStore } from '@/store/auth';
 import { useArtworkStore } from '@/store/artwork';
 import { useCloudinaryStore } from '@/store/cloudinary';
+import FullLoader from '../generics/FullLoader';
 
 function NewArtworkPane() {
     const router = useRouter();
@@ -37,6 +38,7 @@ function NewArtworkPane() {
     ]);
     const [isUploading, setIsUploading] = useState(false);
     const [createdArtwork, setCreatedArtwork] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const imageInputRef = useRef();
 
@@ -80,18 +82,18 @@ function NewArtworkPane() {
         const temp = imagesUrl;
         temp.splice(index, 1);
         setImagesUrl([...temp]);
-}
+    }
 
     const limitCategoryCount = (count) => {
         return count > 999 ? '1k+' : count;
     }
 
     const handleSave = async () => {
-        setIsUploading(true);
+        setIsLoading(true);
         try {
             const data = {
                 artist_id: user.id,
-                category_id: categoryId,
+                category_id: categoryId === -1 ? null : categoryId,
                 title: title,
                 description: description,
                 status: status,
@@ -109,7 +111,7 @@ function NewArtworkPane() {
         } catch (error) {
             console.log(error);
         }
-        setIsUploading(false);
+        setIsLoading(false);
     }
 
     const createNewCategory = () => {
@@ -174,6 +176,7 @@ function NewArtworkPane() {
 
     return (
         <main className='font-Adamina container mx-auto my-5 min-h-lvh'>
+            {isLoading && <FullLoader />}
             <div className="flex flex-wrap justify-between items-center mb-5 px-3 gap-3">    
                 <FontAwesomeIcon
                     onClick={() => router.push('/artworks')} icon={faClose}
@@ -200,8 +203,8 @@ function NewArtworkPane() {
                             h-[400px] rounded ${isUploading? 'cursor-not-allowed': ''} hover:bg-sky-100 transition duration-100`}
                     >
                         {!isUploading ? (
-                            <div className="text-xl flex flex-col gap-3">
-                                <FontAwesomeIcon icon={faPlus} />
+                            <div className="text-xl flex flex-col gap-3 items-center">
+                                <FontAwesomeIcon icon={faPlus} width={30} height={30} />
                                 Add Image
                             </div>
                         ): (
