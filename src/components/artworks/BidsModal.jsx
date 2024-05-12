@@ -34,7 +34,7 @@ function BidsModal(params) {
     }, [])
     return (
         <div className='fixed inset-0 flex justify-center items-center bg-black/[.5] z-20 font-Adamina'>
-            <div className="mockup-phone">
+            <div className="mockup-phone mx-3">
                 <div className="camera"></div> 
                 <div className="display">
                     <div className="artboard artboard-demo phone-1 justify-start">
