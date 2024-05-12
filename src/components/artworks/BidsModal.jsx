@@ -10,7 +10,7 @@ import { useAuthStore } from '@/store/auth';
 import ArtworkDeleteModal from './ArtworkDeleteModal';
 
 function BidsModal(params) {
-    const { setShowBidsModal, artworkId, setShowAddBidModal } = params;
+    const { setShowBidsModal, artworkId, setShowAddBidModal, artistId } = params;
     const { fetchBids, deleteBid } = useBidStore();
     const { user } = useAuthStore();
 
@@ -57,14 +57,18 @@ function BidsModal(params) {
                 <div className="camera"></div> 
                 <div className="display">
                     <div className="artboard artboard-demo phone-1 justify-start">
-                        <div className='flex justify-between w-full px-5 py-3 items-center'>
-                        <button
-                            onClick={() => {
-                                setShowBidsModal(false);
-                                setShowAddBidModal(true);
-                            }}
-                            className="badge badge-success text-white text-sm">add</button>
+                        <div className='flex justify-between w-full px-5 py-3 items-center flex-row-reverse'>
                             <FontAwesomeIcon onClick={() => setShowBidsModal(false)} className='cursor-pointer' icon={faClose} width={15} height={15} />
+                            {user.id !== artistId && (
+                            <button
+                                onClick={() => {
+                                    setShowBidsModal(false);
+                                    setShowAddBidModal(true);
+                                }}
+                                className="badge badge-success text-white text-sm">
+                                add
+                            </button>
+                            )}
                         </div>
                         {isLoading ? (
                             <div className="grow w-full flex flex-col justify-center items-center">

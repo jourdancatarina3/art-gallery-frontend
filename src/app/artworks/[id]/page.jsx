@@ -189,7 +189,7 @@ const SingleArtworkPage = ({ params }) => {
       </div>
       )}
       {showDeleteModal && <ArtworkDeleteModal setShowDeleteModal={setShowDeleteModal} deleteArtwork={removeArtwork} />}
-      {showBidsModal && <BidsModal setShowBidsModal={setShowBidsModal} artworkId={artworkId} setShowAddBidModal={setShowAddBidModal} />}
+      {showBidsModal && <BidsModal setShowBidsModal={setShowBidsModal} artworkId={artworkId} setShowAddBidModal={setShowAddBidModal} artistId={artwork.artist.id} />}
       <Footer />
     </div>
   );
