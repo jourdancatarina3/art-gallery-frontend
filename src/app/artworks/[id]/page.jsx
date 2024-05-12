@@ -16,6 +16,7 @@ import { useSearchParams } from 'next/navigation';
 
 import FullLoader from '@/components/generics/FullLoader';
 import ArtworkDeleteModal from '@/components/artworks/ArtworkDeleteModal';
+import BidsModal from '@/components/artworks/BidsModal';
 import { useAuthStore } from '@/store/auth';
 
 const SingleArtworkPage = ({ params }) => {
@@ -32,6 +33,8 @@ const SingleArtworkPage = ({ params }) => {
   const [hoveredIndex, setHoveredIndex] = useState(-1);
   const artworkId = slug.split('-').shift();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showBidsModal, setShowBidsModal] = useState(false);
+  const [showAddBidModal, setShowAddBidModal] = useState(false);
 
   const isArtworkArtist = user?.id === artwork?.artist.id;
 
@@ -77,7 +80,7 @@ const SingleArtworkPage = ({ params }) => {
   };
 
   return (
-    <>
+    <div className='overflow-x-hidden'>
       <Navbar className="fixed left-0 top-0" />
       {isLoadingArtwork ? <FullLoader /> : (  
       <div className='mt-7 container mx-auto min-h-lvh'>
@@ -175,15 +178,20 @@ const SingleArtworkPage = ({ params }) => {
             </div>
             <div className='flex flex-row flex-wrap gap-3 mt-3'>
               <button disabled={isArtworkArtist} className={`grow px-5 text-center bg-gray-300 rounded-sm text-center text-black font-bold py-3 ${isArtworkArtist && 'cursor-not-allowed'}`}>ADD A BID</button>
-              <button className='grow px-5 text-center btn btn-neutral rounded-sm text-center font-bold py-3'>SHOW BIDS</button>
+              <button
+                onClick={() => setShowBidsModal(true)}
+                className='grow px-5 text-center btn btn-neutral rounded-sm text-center font-bold py-3'>
+                SHOW BIDS
+              </button>
             </div>
           </div>
         </div>
       </div>
       )}
       {showDeleteModal && <ArtworkDeleteModal setShowDeleteModal={setShowDeleteModal} deleteArtwork={removeArtwork} />}
+      {showBidsModal && <BidsModal setShowBidsModal={setShowBidsModal} artworkId={artworkId} setShowAddBidModal={setShowAddBidModal} />}
       <Footer />
-    </>
+    </div>
   );
 };
 
