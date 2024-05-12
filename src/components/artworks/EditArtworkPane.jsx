@@ -54,10 +54,7 @@ function EditArtworkPane(params) {
             setPrice(artwork.sold_price || artwork.starting_bid || 0);
             setCategory(artwork.category?.name || '');
             setCategoryId(artwork.category?.id || null);
-            artwork.images.forEach(image => {
-                setImagesUrl([])
-                setImagesUrl(prev => [...prev, image.image_url]);
-            })
+            setImagesUrl(artwork.images.map(image => image.image_url));
             await checkUserLogin();
             if (artwork.artist.id !== user.id) {
                 router.push('/');
@@ -168,7 +165,9 @@ function EditArtworkPane(params) {
     const updatedTitle = prevArtwork? ( prevArtwork.title !== title) : false;
     const updatedDescription = prevArtwork? (prevArtwork.description !== description) : false;
     const updatedStatus = prevArtwork? (prevArtwork.status !== status) : false;
-    const updatedPrice = prevArtwork? (status === 0 ? prevArtwork.starting_bid.toString() !== price.toString() : prevArtwork.sold_price.toString() !== price.toString()) : false;
+    const prevStartingBid = prevArtwork && prevArtwork.starting_bid? prevArtwork.starting_bid.toString() : null;
+    const prevSoldPrice = prevArtwork && prevArtwork.sold_price? prevArtwork.sold_price.toString() : null;
+    const updatedPrice = prevArtwork? (status === 0 ? prevStartingBid !== price.toString() : prevSoldPrice !== price.toString()) : false;
     const updatedCategory = prevArtwork? (prevArtwork.category?.id !== categoryId) : false;
     const hasNewChanges = updatedImages || updatedTitle || updatedDescription || updatedStatus || updatedPrice || updatedCategory;
 
@@ -214,6 +213,10 @@ function EditArtworkPane(params) {
             }
         }
     }, [])
+
+    useEffect(() => {
+        console.log(imagesUrl, 'images')
+    }, [imagesUrl])
 
     useEffect(() => {
         handleCattegorySearch();
