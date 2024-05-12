@@ -19,8 +19,13 @@ function BidsModal(params) {
             artwork_id: artworkId
         }
         const data = await fetchBids(filters);
-        console.log(data);
+        setBids(data);
         setIsloading(false);
+    }
+
+    const dateFormatter = (datetime) => {
+        const date = new Date(datetime);
+        return date.toDateString();
     }
 
     useEffect(() => {
@@ -48,15 +53,17 @@ function BidsModal(params) {
                             </div>
                         ):(
                         <div className='grow w-full px-2 flex flex-col gap-3 overflow-y-auto'>
-                            <div className='border border-black/[.3] rounded-md w-full px-2 py-1 flex justify-between items-center'>
+                            {bids.map((bid, index) => (
+                            <div key={bid.id} 
+                                className={`border border-black/[.3] rounded-md w-full px-2 py-1 flex justify-between items-center
+                                ${index === 0 && 'bg-black text-white'}`}>
                                 <div className='flex flex-col gap-2'>
-                                    <h3 className='font-bold'>sheldon gwapo</h3>
-                                    <p className='text-xs'>May 12, 2024</p>
+                                    <h3 className='font-bold'>{bid.user.username}</h3>
+                                    <p className='text-xs'>{dateFormatter(bid.bid_on)}</p>
                                 </div>
-                                <h3 className='font-bold'>$500</h3>
+                                <h3 className='font-bold'>₱{bid.bid_amount}</h3>
                             </div>
-
-                            
+                            ))}
                         </div>
                         )}
                     </div>
