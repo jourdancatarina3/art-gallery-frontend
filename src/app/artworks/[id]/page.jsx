@@ -36,6 +36,7 @@ const SingleArtworkPage = ({ params }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showBidsModal, setShowBidsModal] = useState(false);
   const [showAddBidModal, setShowAddBidModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
 
   const isArtworkArtist = user?.id === artwork?.artist.id;
 
@@ -61,6 +62,7 @@ const SingleArtworkPage = ({ params }) => {
       const data = await fetchArtwork(artworkId);
       setArtwork(data);
       document.title = `${data.title} | FASO Gallery`;
+      setSelectedImage(data.first_image?.image_url);
     } catch (error) {
       console.error('Error fetching artwork:', error);
     } finally {
@@ -79,6 +81,15 @@ const SingleArtworkPage = ({ params }) => {
     const mailtoLink = `mailto:${artwork.artist.email}?subject=Interested in your artwork "${artworkTitle}" &body=${encodedMessage}`;
     window.open(mailtoLink, '_blank');
   };
+
+  const handleImageClick = (index) => {
+    const selectedImageUrl = artwork.images[index]?.image_url || defaultAvatarUrl;
+    setSelectedImage(selectedImageUrl);
+    setSelectedImageIndex(index);
+  };
+  
+
+  console.log("ARTWORK: ", selectedImage)
 
   return (
     <div className='overflow-x-hidden'>
@@ -116,7 +127,7 @@ const SingleArtworkPage = ({ params }) => {
               {artwork && (
                 <div className="relative h-[569.4px]">
                   <Image
-                    src={artwork.first_image?.image_url || defaultAvatarUrl}
+                    src={selectedImage || defaultAvatarUrl}
                     alt={artwork.title}
                     layout="fill"
                     objectFit="cover"
@@ -127,18 +138,18 @@ const SingleArtworkPage = ({ params }) => {
             </div>
 
             <div className='flex flex-col justify-between'>
-              {[...Array(5)].map((_, index) => (
+              {artwork.images.map((image, index) => (
                 <div
                   key={index}
                   className='min-w-[83.2px] cursor-pointer'
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(selectedImageIndex)}
-                  onClick={() => setSelectedImageIndex(index)}
+                  onClick={() => handleImageClick(index)}
                 >
                   {artwork && (
                     <div className="relative h-[101.5px]">
                       <Image
-                        src={artwork.first_image?.image_url || defaultAvatarUrl}
+                        src={image.image_url || defaultAvatarUrl}
                         alt={artwork.title}
                         layout="fill"
                         objectFit="cover"
