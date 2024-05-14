@@ -40,6 +40,27 @@ export const useAuthStore = create((set) => ({
             return null;
         }
     },
+
+    getGalleryUsers: async (filters) => {
+        try {
+            const data = await axiosInstance.get('gallery-user/', { params: filters })
+            return data.data;
+        } catch (e) {
+            console.error(e)
+            return false;
+        }
+    },
+
+    getGalleryUser: async (id) => {
+        try {
+            const data = await axiosInstance.get(`gallery-user/${id}/`)
+            return data.data;
+        } catch (e) {
+            console.error(e);
+            return null
+        }
+    },
+
     login: async (email, password) => {
         console.log('herere')
         try {

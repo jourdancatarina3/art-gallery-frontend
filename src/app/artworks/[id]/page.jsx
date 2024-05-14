@@ -114,7 +114,7 @@ const SingleArtworkPage = ({ params }) => {
             )}
             {prevPath && (
             <FontAwesomeIcon
-                onClick={() => window.history.back()} icon={faClose}
+                onClick={() => router.back()} icon={faClose}
                 className='text-3xl h-[30px] cursor-pointer'
             />
             )}
@@ -131,17 +131,17 @@ const SingleArtworkPage = ({ params }) => {
                     alt={artwork.title}
                     layout="fill"
                     objectFit="cover"
-                    className=""
+                    className=" shadow-md"
                   />
                 </div>
               )}
             </div>
 
-            <div className='flex flex-col justify-between'>
+            <div className='flex flex-col justify-start gap-3'>
               {artwork.images.map((image, index) => (
                 <div
                   key={index}
-                  className='min-w-[83.2px] cursor-pointer'
+                  className='min-w-[83.2px] cursor-pointer shadow-md'
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(selectedImageIndex)}
                   onClick={() => handleImageClick(index)}

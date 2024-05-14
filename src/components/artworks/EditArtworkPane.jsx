@@ -20,7 +20,7 @@ function EditArtworkPane(params) {
     const router = useRouter();
     const { user, getUser } = useAuthStore();
     const { fetchCategories, createCategory, fetchArtwork, updateArtwork } = useArtworkStore();
-    const { uploadImage, deleteImage } = useCloudinaryStore();
+    const { uploadImage, deleteImage, deleteImageMany } = useCloudinaryStore();
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -51,7 +51,7 @@ function EditArtworkPane(params) {
             setTitle(artwork.title);
             setDescription(artwork.description);
             setStatus(artwork.status);
-            setPrice(artwork.sold_price || artwork.starting_bid || 0);
+            setPrice(artwork.sold_price || artwork.starting_bid);
             setCategory(artwork.category?.name || '');
             setCategoryId(artwork.category?.id || null);
             setImagesUrl(artwork.images.map(image => image.image_url));
@@ -167,7 +167,8 @@ function EditArtworkPane(params) {
     const updatedStatus = prevArtwork? (prevArtwork.status !== status) : false;
     const prevStartingBid = prevArtwork && prevArtwork.starting_bid? prevArtwork.starting_bid.toString() : null;
     const prevSoldPrice = prevArtwork && prevArtwork.sold_price? prevArtwork.sold_price.toString() : null;
-    const updatedPrice = prevArtwork? (status === 0 ? prevStartingBid !== price.toString() : prevSoldPrice !== price.toString()) : false;
+    const tempPrice = price ? price.toString() : null
+    const updatedPrice = prevArtwork? (status === 0 ? prevStartingBid !== tempPrice : prevSoldPrice !== tempPrice) : false;
     const updatedCategory = prevArtwork? (prevArtwork.category?.id !== categoryId) : false;
     const hasNewChanges = updatedImages || updatedTitle || updatedDescription || updatedStatus || updatedPrice || updatedCategory;
 
@@ -204,6 +205,13 @@ function EditArtworkPane(params) {
     useEffect(() => {
         initializeArtworkData()
         getCategories();
+
+        return () => {
+            console.log('leaving...')
+            if (!createdArtwork && newImages.length > 0) {
+                deleteImageMany(newImages, 'faso/artworks/')
+            }
+        }
     }, [])
 
     useEffect(() => {
