@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect } from 'react';
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import Navbar from "@/components/generics/navbar";
 import ArtworkCard from "@/components/artworks/ArtworkCard";
@@ -12,11 +13,13 @@ import Footer from "@/components/generics/Footer";
 import { useArtworkStore } from '@/store/artwork';
 import { useAuthStore } from '@/store/auth';
 import { formatDate } from '@/utils/dateTime'
+import { Router } from "next/router";
 
 // TODO: Add base loader when fetching
 export default function Home() {
   const { fetchArtworks, fetchTopArtist, fetchFeaturedArtworks } = useArtworkStore();
   const { defaultAvatarUrl } = useAuthStore();
+  const router = useRouter();
 
   const [isLoadingFeatured, setIsLoadingFeatured] = useState(true);
   const [isLoadingArtworks, setIsLoadingArtworks] = useState(true);
@@ -121,7 +124,7 @@ export default function Home() {
             {topArtist.map((artist, index) => (
               <div key={index} className="min-w-[300px] pb-5">
                 <div className="relative h-[300px]">
-                  <Image src={artist.avatar_url || defaultAvatarUrl} alt='Artist Profile' layout="fill" objectFit="cover" className="rounded-full" />
+                  <Image onClick={() => {router.push(`/user/${artist.id}`)}} src={artist.avatar_url || defaultAvatarUrl} alt='Artist Profile' layout="fill" objectFit="cover" className="rounded-full cursor-pointer" />
                 </div>
                   <h3 className="text-lg font-semibold text-center mt-3">{artist.username}</h3>
               </div>

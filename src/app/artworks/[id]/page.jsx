@@ -172,7 +172,10 @@ const SingleArtworkPage = ({ params }) => {
                 <h1 className='font-bold text-md'>{artwork.title}</h1>
                 <h1 className='font-bold text-md'>Current Bid: ${artwork.starting_bid}</h1>
                 <div className='flex justify-between items-center'>
-                    <h1 className='text-gray-600 text-md capitalize'>Artist: {artwork.artist.first_name} {artwork.artist.last_name}</h1>
+                    <div className="flex gap-2">
+                      Artist: 
+                      <Link href={`/user/${artwork.artist.id}`} className='text-gray-600 text-md capitalize underline'>{artwork.artist.username}</Link>
+                    </div>
                     <a href={`mailto:${artwork.artist.email}`} onClick={handleEmailClick} target='_blank'>
                       <FontAwesomeIcon icon={faEnvelope} className='text-2xl cursor-pointer' />
                     </a>

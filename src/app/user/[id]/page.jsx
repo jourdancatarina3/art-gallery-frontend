@@ -98,7 +98,7 @@ function ProfilePage({params}) {
             <Navbar />
             <div className="flex w-full">
                 <main className='container mx-auto min-h-lvh font-Adamina flex gap-10'>
-                    <section className='flex flex-col gap-3 items-center min-w-[350px] pt-5 pb-10 rounded-b-md px-5 custom-right-shadow'>
+                    <section className='grow flex flex-col gap-3 items-center max-w-[270px] pt-5 pb-10 rounded-b-md px-5 custom-right-shadow'>
                         <div>
                             <div className="relative flex justify-end">
                                 <div className="absolute badge badge-neutral translate-x-[20%] translate-y-[40%]">
@@ -116,27 +116,33 @@ function ProfilePage({params}) {
                                 <FontAwesomeIcon icon={faEnvelope} className='' />
                                 {email}
                             </p>
+                            {phoneNum && (
                             <p className='flex items-center gap-2'>
                                 <FontAwesomeIcon icon={faPhone} className='' />
                                 {phoneNum}
                             </p>
+                            )}
+                            {location && (
                             <p className='flex items-center gap-2'>
                                 <FontAwesomeIcon icon={faLocationDot} className='' />
                                 {location}
                             </p>
+                            )}
                         </div>
                         <div className='mb-3 w-full'>
                             <p className='font-bold text-lg'>About</p>
                             <pre className='w-full break-all whitespace-pre-wrap font-Adamina'>
-                                {about}
+                                {about ? about : <p className='text-sm opacity-[.7]'>No bio</p>}
                             </pre>
                         </div>
+                        {achievements && (    
                         <div className='w-full'>
                             <p className='font-bold text-lg'>Achievements</p>
                             <pre className='w-full break-all whitespace-pre-wrap font-Adamina'>
                                 {achievements}
                             </pre>
                         </div>
+                        )}
                     </section>
 
                     <section className='grow flex'>
