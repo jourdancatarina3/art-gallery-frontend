@@ -132,8 +132,8 @@ const ArtworkPane = () => {
                 <h3>/</h3>
                 <Link href='/artworks' className='font-semibold' >Artworks</Link>
             </div>
-            <div className='flex gap-10 min-h-lvh'>   
-                <div className='max-w-[200px] min-w-[200px]'>
+            <div className='flex gap-5 min-h-lvh'>   
+                <div className='max-w-[240px] min-w-[240px] px-3 bg-black/[.02] border-r border-black/[.1]'>
                     <h3 className='text-2xl font-semibold mt-5 mb-2'>Category</h3>
                     <input onChange={(e) => {setCategorySearchKey(e.target.value)}} type="text" placeholder="Search category" className="input rounded-sm input-bordered w-full max-w-xs" />
                     <hr className="border-0 h-px bg-gray-300 my-3" />
@@ -165,13 +165,14 @@ const ArtworkPane = () => {
                                 }}
                             />
                             <label className="flex items-center cursor-pointer" for={category.id}>
-                                <h4 className='text-md tracking-widest max-w-[150px] truncate'>{category.name}</h4>
+                                <h4 className='text-md tracking-widest max-w-[120px] truncate'>{category.name}</h4>
                                 <div className="badge">{limitCategoryCount(category.artwork_count)}</div>
                             </label>
                         </div>
                     ))}
                     </div>
                 </div>
+
                 <div className='mt-5 grow'>
                     <h1 className='text-3xl font-semibold'>ARTWORKS</h1>
                     <div className='flex flex-wrap gap-x-5 gap-y-3 items-center mt-2'>
