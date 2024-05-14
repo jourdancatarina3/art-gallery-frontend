@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 function Footer() {
     return (
-        <div className="mt-20 w-full border-t-2">
+        <div className="w-full border-t-2">
             <footer className="footer footer-center p-8 bg-transparent font-Adamina text-black">
                 <aside>
                 <Image

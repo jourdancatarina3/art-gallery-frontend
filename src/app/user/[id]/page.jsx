@@ -14,8 +14,9 @@ import { useArtworkStore } from '@/store/artwork';
 import { useBidStore } from '@/store/bid';
 import Navbar from '@/components/generics/navbar';
 import Footer from '@/components/generics/Footer';
-import FullLoader from '@/components/generics/FullLoader';
+import FullFullLoader from '@/components/generics/FullFullLoader';
 import ArtworkCard from '@/components/artworks/ArtworkCard';
+import BidsSideBarModal from '@/components/profile/BidsSideBarModal';
 
 function ProfilePage({params}) {
     const { id } = params;
@@ -36,6 +37,7 @@ function ProfilePage({params}) {
 
     const [artworks, setArtworks] = useState([]);
     const [bids, setBids] = useState([]);
+    const [showBids, setShowBids] = useState(false);
     
     const initializeUser = (data) => {
         console.log(router, 'heree');
@@ -75,11 +77,6 @@ function ProfilePage({params}) {
         }
     }
 
-    const dateFormatter = (datetime) => {
-        const date = new Date(datetime);
-        return date.toDateString();
-    }
-
     useEffect(() => {
         const setTitle = async () => {
             try {
@@ -96,79 +93,78 @@ function ProfilePage({params}) {
     }, [])
 
     return (
-        <div className='overflow-x-hidden'>
-            {isLoading && <FullLoader />}
+        <div className='overflow-x-hidden profile-page'>
+            {isLoading && <FullFullLoader />}
             <Navbar />
-            <main className='container mx-auto min-h-lvh font-Adamina flex gap-5'>
-                <section className='flex flex-col gap-3 items-center w-[200px] min-w-[200px] pt-5 pb-10 rounded-b-md px-5 shadow-xl'>
-                    <div>
-                        <div className="relative flex justify-end">
-                            <div className="absolute badge badge-neutral translate-x-[20%] translate-y-[40%]">
-                                {userType === 0 ? 'Artist' : 'Collector'}
-                            </div>
-                        </div>
-                        <Image src={avatarUrl} width={150} height={150} className='rounded-full' alt="pfp" />
-                    </div>
-                    <div className='flex flex-col gap-2 pb-3 border-dashed border-b border-black/[.3]'>
-                        <p className='font-bold text-lg flex items-center gap-2'>
-                            <FontAwesomeIcon icon={faPerson} className='' />
-                            {username}
-                        </p>
-                        <p className='flex items-center gap-2'>
-                            <FontAwesomeIcon icon={faEnvelope} className='' />
-                            {email}
-                        </p>
-                        <p className='flex items-center gap-2'>
-                            <FontAwesomeIcon icon={faPhone} className='' />
-                            {phoneNum}
-                        </p>
-                        <p className='flex items-center gap-2'>
-                            <FontAwesomeIcon icon={faLocationDot} className='' />
-                            {location}
-                        </p>
-                    </div>
-                    <div className='mb-3 w-full'>
-                        <p className='font-bold text-lg'>About</p>
-                        <pre className='w-full break-all whitespace-pre-wrap font-Adamina'>
-                            {about}
-                        </pre>
-                    </div>
-                    <div className='w-full'>
-                        <p className='font-bold text-lg'>Achievements</p>
-                        <pre className='w-full break-all whitespace-pre-wrap font-Adamina'>
-                            {achievements}
-                        </pre>
-                    </div>
-                </section>
-                <section className='grow flex'>
-                    <div className='grow py-5 px-5'>
-                        <h2 className='font-bold text-xl border-dashed border-b border-black/[.3] pb-3 mb-5'>Artworks</h2>
-                        <div className='flex flex-wrap gap-5'>
-                            {artworks.map((artwork) => (
-                                <ArtworkCard key={artwork.id} artwork={artwork} />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className='flex flex-col gap-2 w-[300px] min-w-[300px] py-5 px-2 shadow-xl'>
-                        <h2 className='font-bold text-xl border-dashed border-b border-black/[.3] pb-3'>Bids</h2>
-                        <div className="flex flex-col gap-2">
-                            {bids.map((bid, index) => (
-                            <div key={bid.id}>
-                                <div 
-                                    className='border border-black/[.3] rounded-md w-full px-2 py-1 flex justify-between items-center'>
-                                    <div className='flex flex-col gap-2'>
-                                        <Link href={`/artworks/${bid.artwork.slug}?prev=true`} className='font-bold hover:underline'>{bid.artwork.title}</Link>
-                                        <p className='text-xs'>{dateFormatter(bid.bid_on)}</p>
-                                    </div>
-                                    <h3 className='font-bold'>₱{bid.bid_amount}</h3>
+            <div className="flex w-full">
+                <main className='container mx-auto min-h-lvh font-Adamina flex gap-10'>
+                    <section className='flex flex-col gap-3 items-center min-w-[350px] pt-5 pb-10 rounded-b-md px-5 custom-right-shadow'>
+                        <div>
+                            <div className="relative flex justify-end">
+                                <div className="absolute badge badge-neutral translate-x-[20%] translate-y-[40%]">
+                                    {userType === 0 ? 'Artist' : 'Collector'}
                                 </div>
                             </div>
-                            ))}
+                            <Image src={avatarUrl} width={150} height={150} className='rounded-full' alt="pfp" />
                         </div>
-                    </div>
-                </section>
-            </main>
+                        <div className='flex flex-col w-full gap-2 pb-3 border-dashed border-b border-black/[.3]'>
+                            <p className='font-bold text-lg flex items-center gap-2'>
+                                <FontAwesomeIcon icon={faPerson} className='' />
+                                {username}
+                            </p>
+                            <p className='flex items-center gap-2'>
+                                <FontAwesomeIcon icon={faEnvelope} className='' />
+                                {email}
+                            </p>
+                            <p className='flex items-center gap-2'>
+                                <FontAwesomeIcon icon={faPhone} className='' />
+                                {phoneNum}
+                            </p>
+                            <p className='flex items-center gap-2'>
+                                <FontAwesomeIcon icon={faLocationDot} className='' />
+                                {location}
+                            </p>
+                        </div>
+                        <div className='mb-3 w-full'>
+                            <p className='font-bold text-lg'>About</p>
+                            <pre className='w-full break-all whitespace-pre-wrap font-Adamina'>
+                                {about}
+                            </pre>
+                        </div>
+                        <div className='w-full'>
+                            <p className='font-bold text-lg'>Achievements</p>
+                            <pre className='w-full break-all whitespace-pre-wrap font-Adamina'>
+                                {achievements}
+                            </pre>
+                        </div>
+                    </section>
+
+                    <section className='grow flex'>
+                        <div className='grow py-5'>
+                            <div className='flex justify-between border-dashed border-b border-black/[.3] pb-3 mb-5'>
+                                <h2 className='font-bold text-3xl'>Artworks</h2>
+                                <div className="flex gap-3">
+                                    <Link href={'/artworks/new'} className="btn rounded-sm text-xl">
+                                        Add Artwork
+                                    </Link>
+                                    <button
+                                        onClick={() => {setShowBids(true)}}
+                                        className='btn btn-neutral rounded-sm text-xl'
+                                    >
+                                        Show Bids
+                                    </button>
+                                </div>
+                            </div>
+                            <div className='flex flex-wrap gap-8'>
+                                {artworks.map((artwork) => (
+                                    <ArtworkCard key={artwork.id} artwork={artwork} />
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                </main>
+                {showBids && <BidsSideBarModal bids={bids} close={() => setShowBids(false)} />}
+            </div>
             <Footer />
         </div>
     )
