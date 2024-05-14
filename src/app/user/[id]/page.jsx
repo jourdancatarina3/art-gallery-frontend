@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image';
+import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faPhone } from '@fortawesome/free-solid-svg-icons';
@@ -74,6 +75,11 @@ function ProfilePage({params}) {
         }
     }
 
+    const dateFormatter = (datetime) => {
+        const date = new Date(datetime);
+        return date.toDateString();
+    }
+
     useEffect(() => {
         const setTitle = async () => {
             try {
@@ -94,7 +100,7 @@ function ProfilePage({params}) {
             {isLoading && <FullLoader />}
             <Navbar />
             <main className='container mx-auto min-h-lvh font-Adamina flex gap-5'>
-                <section className='flex flex-col items-center w-[200px] min-w-[200px] pt-5 pb-10 rounded-b-md px-5 shadow-xl'>
+                <section className='flex flex-col gap-3 items-center w-[200px] min-w-[200px] pt-5 pb-10 rounded-b-md px-5 shadow-xl'>
                     <div>
                         <div className="relative flex justify-end">
                             <div className="absolute badge badge-neutral translate-x-[20%] translate-y-[40%]">
@@ -146,7 +152,20 @@ function ProfilePage({params}) {
 
                     <div className='flex flex-col gap-2 w-[300px] min-w-[300px] py-5 px-2 shadow-xl'>
                         <h2 className='font-bold text-xl border-dashed border-b border-black/[.3] pb-3'>Bids</h2>
-
+                        <div className="flex flex-col gap-2">
+                            {bids.map((bid, index) => (
+                            <div key={bid.id}>
+                                <div 
+                                    className='border border-black/[.3] rounded-md w-full px-2 py-1 flex justify-between items-center'>
+                                    <div className='flex flex-col gap-2'>
+                                        <Link href={`/artworks/${bid.artwork.slug}?prev=true`} className='font-bold hover:underline'>{bid.artwork.title}</Link>
+                                        <p className='text-xs'>{dateFormatter(bid.bid_on)}</p>
+                                    </div>
+                                    <h3 className='font-bold'>₱{bid.bid_amount}</h3>
+                                </div>
+                            </div>
+                            ))}
+                        </div>
                     </div>
                 </section>
             </main>

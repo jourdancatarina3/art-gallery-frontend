@@ -22,7 +22,7 @@ function AddBidModal(params) {
             bid_amount: parseFloat(bidAmount),
             is_anonymous: isAnonymous,
             user_id: user.id,
-            artwork: artworkId,
+            artwork_id: artworkId,
         }
         try {
             await createBid(data);
@@ -79,7 +79,7 @@ function AddBidModal(params) {
 
                         </div>
                         )}
-                        <button onClick={handleSubmit} className="btn btn-neutral w-full mb-5 w-[90%]">Submit</button>
+                        <button onClick={handleSubmit} className="btn btn-neutral w-full mb-5 w-[80%]">Submit</button>
                     </div>
                 </div>
             </div>

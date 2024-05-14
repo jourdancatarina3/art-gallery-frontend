@@ -34,7 +34,7 @@ const UserDropdown = forwardRef((props, ref) => {
                     </a>
                     <hr className='opacity-20'></hr>
                     <div className='flex flex-col gap-2 pl-3'>
-                        <a href={`/user/${userId}/artworks`} className="text-white hover:underline transition duration-100">My Artworks</a>
+                        <a href={`/user/${userId}`} className="text-white hover:underline transition duration-100">My Artworks</a>
                         <a href={`/user/${userId}/settings`} className="text-white hover:underline transition duration-100">Settings</a>
                         <a
                             onClick={logout}

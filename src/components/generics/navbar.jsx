@@ -29,7 +29,7 @@ const Navbar = (props) => {
         { name: 'Home', route: '/', isLoggedIn: false },
         { name: 'Artworks', route: '/artworks', isLoggedIn: false },
         { name: 'About us', route: '/about', isLoggedIn: false },
-        { name: 'Bids', route: '/bids', isLoggedIn: true }
+        // { name: 'Bids', route: '/bids', isLoggedIn: true }
     ]
     const avatar_url = user?.avatar_url || 'https://i.pinimg.com/564x/80/01/3b/80013ba9fbd82789fba7dd72e2428b96.jpg';
 
