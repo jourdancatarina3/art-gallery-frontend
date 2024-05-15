@@ -20,9 +20,6 @@ function Footer() {
                     FASO GALLERY
                 </p>
                 <p>Copyright © 2024 - All right reserved</p>
-                <button className="font-bold text-sm flex-wrap">
-                    <Link href="/about" className='hover:underline'>About Us</Link>
-                </button>
                 </aside>
 
                 <nav>
