@@ -7,6 +7,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faMessage } from '@fortawesome/free-regular-svg-icons';
+import { faBell } from '@fortawesome/free-regular-svg-icons';
 
 import { useAuthStore } from '@/store/auth';
 import { useArtworkStore } from '@/store/artwork';
@@ -94,6 +95,10 @@ const Navbar = (props) => {
                     <div className="indicator">
                         <span className="indicator-item badge badge-error text-xs px-[2px] w-[10px] h-[10px]"></span> 
                         <Link href='/'><FontAwesomeIcon  className="text-xl" icon={faMessage} /></Link>
+                    </div>
+                    <div className="indicator">
+                        <span className="indicator-item badge badge-error text-xs px-[2px] w-[10px] h-[10px]"></span> 
+                        <Link href='/'><FontAwesomeIcon  className="text-xl" icon={faBell} /></Link>
                     </div>
                     <div className='flex items-center'>
                         <button

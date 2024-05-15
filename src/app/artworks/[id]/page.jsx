@@ -124,7 +124,7 @@ const SingleArtworkPage = ({ params }) => {
           </div>
 
           <div className='flex items-center gap-3'>
-            {isArtworkArtist && artwork.status === 0 && (
+            {isArtworkArtist && artwork.status === 0 && artwork?.current_highest_bid && (
               <button 
                 onClick={() => changeToSold()}
                 className='btn btn-neutral rounded-sm text-xl font-medium'
