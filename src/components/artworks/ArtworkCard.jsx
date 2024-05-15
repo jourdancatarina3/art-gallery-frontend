@@ -53,7 +53,17 @@ const ArtworkCard = (props) => {
                   {artwork.title}
               </h2>
               {artwork.bids_count > 0 && (
-              <div className="badge badge-error text-white">{artwork.bids_count} BID{artwork.bids_count > 1 && 'S'}</div>
+              <div className={`badge text-white ${artwork.status !== 0 ? 'badge-success': 'badge-error'}`}>
+                {artwork.status === 0 ? (
+                  <>
+                    {artwork.bids_count} BID{artwork.bids_count > 1 && 'S'}
+                  </>
+                ) : artwork.status === 1 ? (
+                  'RESERVED'
+                ) : (
+                  'SOLD'
+                )}
+              </div>
               )}
             </div>
             <div className="flex justify-between">

@@ -173,7 +173,7 @@ function NewArtworkPane() {
             {isLoading && <FullLoader />}
             <div className="flex flex-wrap justify-between items-center mb-5 px-3 gap-3">    
                 <FontAwesomeIcon
-                    onClick={() => router.push('/artworks')} icon={faClose}
+                    onClick={() => router.back()} icon={faClose}
                     className='text-3xl h-[30px] cursor-pointer'
                 />
                 <h1 className='font-bold text-xl sm:text-3xl'>New Artwork</h1>

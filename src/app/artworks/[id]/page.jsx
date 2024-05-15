@@ -6,18 +6,19 @@ import Footer from '@/components/generics/Footer';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useArtworkStore } from '@/store/artwork';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { useSearchParams } from 'next/navigation';
 
 import FullLoader from '@/components/generics/FullLoader';
 import ArtworkDeleteModal from '@/components/artworks/ArtworkDeleteModal';
 import AddBidModal from '@/components/artworks/AddBidModal';
 import BidsModal from '@/components/artworks/BidsModal';
+import { useArtworkStore } from '@/store/artwork';
 import { useAuthStore } from '@/store/auth';
 
 const SingleArtworkPage = ({ params }) => {
@@ -25,7 +26,7 @@ const SingleArtworkPage = ({ params }) => {
   const searchParams = useSearchParams();
   const prevPath = searchParams.get('prev');
   const { user, getUser } = useAuthStore();
-  const { fetchArtwork, defaultAvatarUrl, deleteArtwork } = useArtworkStore();
+  const { fetchArtwork, defaultAvatarUrl, deleteArtwork, updateArtwork } = useArtworkStore();
 
   const { id: slug } = params;
   const [artwork, setArtwork] = useState(null);
@@ -40,6 +41,8 @@ const SingleArtworkPage = ({ params }) => {
 
   const isArtworkArtist = user?.id === artwork?.artist.id;
   const price = parseFloat(artwork?.current_highest_bid || artwork?.starting_bid || 0);
+
+  const disableAddBid = isArtworkArtist || artwork?.status !== 0;
 
   const removeArtwork = async () => {
     setShowDeleteModal(false);
@@ -71,6 +74,20 @@ const SingleArtworkPage = ({ params }) => {
     }
   };
 
+  const changeToSold = async () => {
+    try {
+      setIsLoadingArtwork(true);
+      const data = {...artwork, status: 1, artist_id: artwork.artist.id};
+      await updateArtwork(artwork.id, data);
+      await fetchArtworkById();
+    } catch (error) {
+      console.error('Error updating artwork:', error);
+    } finally {
+      setIsLoadingArtwork(false);
+    }
+  
+  }
+
   useEffect(() => {
     fetchArtworkById();
   }, []);
@@ -96,7 +113,7 @@ const SingleArtworkPage = ({ params }) => {
     <div className='overflow-x-hidden'>
       <Navbar className="fixed left-0 top-0" />
       {isLoadingArtwork ? <FullLoader /> : (  
-      <div className='mt-7 container mx-auto min-h-lvh'>
+      <div className='mt-7 container mx-auto min-h-lvh font-Adamina'>
         <div className="flex justify-between items-center w-full">
           <div className='flex gap-3 mt-3 font-light'>
             <Link href='/'>Home</Link>
@@ -107,10 +124,23 @@ const SingleArtworkPage = ({ params }) => {
           </div>
 
           <div className='flex items-center gap-3'>
+            {isArtworkArtist && artwork.status === 0 && (
+              <button 
+                onClick={() => changeToSold()}
+                className='btn btn-neutral rounded-sm text-xl font-medium'
+              >
+                Sell Artwork
+              </button>
+            )}
             {isArtworkArtist && (
               <div className='flex gap-3'>
+                {artwork.status === 0 ? (
+                  <FontAwesomeIcon onClick={() => router.push(`/artworks/${artwork.slug}/edit`)} icon={faPenToSquare} className='h-[25px] cursor-pointer text-success' />
+                ):
+                (
+                  <FontAwesomeIcon icon={faComment} className='h-[25px] cursor-pointer' />
+                )}
                 <FontAwesomeIcon onClick={() => setShowDeleteModal(true)} icon={faTrash} className='h-[25px] cursor-pointer text-error' />
-                <FontAwesomeIcon onClick={() => router.push(`/artworks/${artwork.slug}/edit`)} icon={faPenToSquare} className='h-[25px] cursor-pointer text-success' />
               </div>
             )}
             {prevPath && (
@@ -195,10 +225,10 @@ const SingleArtworkPage = ({ params }) => {
             <div className='flex flex-row flex-wrap gap-3 mt-3'>
               <button
                 onClick={() => setShowAddBidModal(true)}
-                disabled={isArtworkArtist}
-                className={`grow px-5 text-center bg-gray-300 rounded-sm text-center text-black font-bold py-3 ${isArtworkArtist && 'cursor-not-allowed'}`}
+                disabled={disableAddBid}
+                className={`grow px-5 text-center bg-gray-300 rounded-sm text-center text-black font-bold py-3 ${disableAddBid && 'cursor-not-allowed'}`}
               >
-                ADD A BID
+                {artwork.status === 0 ? 'BID NOW' : 'RESERVED'}
               </button>
               <button
                 onClick={() => setShowBidsModal(true)}
