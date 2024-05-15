@@ -176,7 +176,7 @@ const ArtworkPane = () => {
                 <div className='mt-5 grow'>
                     <h1 className='text-3xl font-semibold'>ARTWORKS</h1>
                     <div className='flex flex-wrap gap-x-5 gap-y-3 items-center mt-2'>
-                        <label className="input input-bordered flex bg-gray-200 rounded-sm items-center gap-2 w-[50%]">
+                        <label className="input input-bordered flex bg-black/[.02] rounded-sm items-center gap-2 w-[50%]">
                             <input
                                 value={searchKey}
                                 onChange={(event) => setSearchKey(event.target.value)}

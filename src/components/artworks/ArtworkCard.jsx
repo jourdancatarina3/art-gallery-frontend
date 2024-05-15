@@ -58,7 +58,7 @@ const ArtworkCard = (props) => {
             </div>
             <div className="flex justify-between">
               <p className={`${isUserOwner && 'text-success'}`}>{name}</p>
-              <p className='text-end'>${price}</p>
+              <p className='text-end'>₱ {price}</p>
             </div>
             {artwork?.category && (
             <div className="card-actions justify-end">

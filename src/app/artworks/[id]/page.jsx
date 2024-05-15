@@ -39,6 +39,7 @@ const SingleArtworkPage = ({ params }) => {
   const [selectedImage, setSelectedImage] = useState('');
 
   const isArtworkArtist = user?.id === artwork?.artist.id;
+  const price = parseFloat(artwork?.current_highest_bid || artwork?.starting_bid || 0);
 
   const removeArtwork = async () => {
     setShowDeleteModal(false);
@@ -170,7 +171,7 @@ const SingleArtworkPage = ({ params }) => {
             <div>
               <div className='flex flex-col gap-3'>
                 <h1 className='font-bold text-md'>{artwork.title}</h1>
-                <h1 className='font-bold text-md'>Current Bid: ${artwork.starting_bid}</h1>
+                <h1 className='font-bold text-md'>Current Bid: ₱ {price}</h1>
                 <div className='flex justify-between items-center'>
                     <div className="flex gap-2">
                       Artist: 
