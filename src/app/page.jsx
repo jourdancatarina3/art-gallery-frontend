@@ -58,7 +58,7 @@ export default function Home() {
               <div className="relative h-[30rem] overflow-hidden">
                 {isLoadingFeatured ? <BaseLoading width={1000} height={500}/> :
                   <Image
-                    src={featuredArtworks[0]?.first_image?.image_url || defaultAvatarUrl}
+                    src={featuredArtworks[0]?.image_url || featuredArtworks[0]?.artwork.first_image ||  defaultAvatarUrl}
                     alt="art pic"
                     layout="fill"
                     objectFit="cover"
@@ -79,18 +79,18 @@ export default function Home() {
               ):
               (
                 <>
-                  <h1 className="text-4xl font-semibold">{featuredArtworks[0]?.title || 'The Starry Night'}</h1>
-                  <h2 className="mt-2 font-light">Artist: {featuredArtworks[0]?.artist?.username || 'Yurim'}</h2>
-                  <h2 className="font-light">Date: {formatDate(featuredArtworks[0]?.created_on || null)}</h2>
+                  <h1 className="text-4xl font-semibold">{featuredArtworks[0]?.artwork?.title || 'The Starry Night'}</h1>
+                  <h2 className="mt-2 font-light">Artist: {featuredArtworks[0]?.artwork?.artist?.username || 'Yurim'}</h2>
+                  <h2 className="font-light">Date: {formatDate(featuredArtworks[0]?.artwork?.created_on || null)}</h2>
                   <pre className="mt-5 text-lg max-h-[400px] overflow-hidden line-clamp-6 font-Adamina" style={{ whiteSpace: 'pre-wrap' }}>
-                    {featuredArtworks[0]?.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
+                    {featuredArtworks[0]?.artwork?.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
                   </pre>
                   <h2 className="mt-2 text-xl font-bold">
-                  Current Bid: ${featuredArtworks[0]?.current_highest_bid || featuredArtworks[0]?.starting_bid || 0}
+                  Current Bid: ${featuredArtworks[0]?.artwork?.current_highest_bid || featuredArtworks[0]?.artwork?.starting_bid || 0}
                   </h2>
                   <div className="flex gap-5 mt-3">
-                    <Link href={`/artworks/${featuredArtworks[0].slug}?prev=yes`} className="bg-neutral px-8 py-2 text-lg text-white rounded-sm">Bid Now</Link>
-                    <Link href={`/artworks/${featuredArtworks[0].slug}?prev=yes`} className="text-lg flex items-center">Learn More...</Link>
+                    <Link href={`/artworks/${featuredArtworks[0]?.artwork.slug}?prev=yes`} className="bg-neutral px-8 py-2 text-lg text-white rounded-sm">Bid Now</Link>
+                    <Link href={`/artworks/${featuredArtworks[0]?.artwork.slug}?prev=yes`} className="text-lg flex items-center">Learn More...</Link>
                   </div>
                 </>
               )
