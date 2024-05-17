@@ -52,17 +52,18 @@ const ArtworkCard = (props) => {
               <h2 className="card-title tracking-widest max-w-[180px] line-clamp-1 text-base">
                   {artwork.title}
               </h2>
-              {artwork.bids_count > 0 && (
-              <div className={`badge text-white ${artwork.status !== 0 ? 'badge-success': 'badge-error'}`}>
-                {artwork.status === 0 ? (
-                  <>
-                    {artwork.bids_count} BID{artwork.bids_count > 1 && 'S'}
-                  </>
-                ) : artwork.status === 1 ? (
-                  'RESERVED'
-                ) : (
-                  'SOLD'
-                )}
+              {artwork.bids_count > 0 && artwork.status == 0 && (
+              <div className="badge text-white badge-error">
+                {artwork.bids_count} BID{artwork.bids_count > 1 && 'S'}
+              </div>
+              )}
+              {artwork.status == 1 ? (
+              <div className="badge badge-success text-white">
+                RESERVED
+              </div>
+              ) : artwork.status == 2 && (
+              <div className="badge badge-error text-white">
+                SOLD
               </div>
               )}
             </div>

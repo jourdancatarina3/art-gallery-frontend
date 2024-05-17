@@ -1,7 +1,7 @@
 'use client';
 
 import Image from "next/image";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -9,6 +9,7 @@ import Navbar from "@/components/generics/navbar";
 import ArtworkCard from "@/components/artworks/ArtworkCard";
 import BaseLoading from "@/components/generics/BaseLoading";
 import Footer from "@/components/generics/Footer";
+import FullFullLoader from "@/components/generics/FullFullLoader";
 
 import { useArtworkStore } from '@/store/artwork';
 import { useAuthStore } from '@/store/auth';
@@ -20,12 +21,17 @@ export default function Home() {
   const { fetchArtworks, fetchTopArtist, fetchFeaturedArtworks } = useArtworkStore();
   const { defaultAvatarUrl } = useAuthStore();
   const router = useRouter();
+  const featureContainer = useRef(null);
 
   const [isLoadingFeatured, setIsLoadingFeatured] = useState(true);
   const [isLoadingArtworks, setIsLoadingArtworks] = useState(true);
   const [artworks, setArtworks] = useState([]);
   const [topArtist, setTopArtist] = useState([]);
   const [featuredArtworks, setFeaturedArtworks] = useState([]);
+  const [featureIndex, setFeatureIndex] = useState(0);
+  const [featureContWidth, setFeatureContWidth] = useState(0);
+
+  const featureContHeight = featureContWidth * (9/16);
 
   const getFeaturedArtworks = async () => {
     setIsLoadingFeatured(true);
@@ -42,65 +48,86 @@ export default function Home() {
   }
 
   useEffect(() => {
+    featureContainer.current.style.height = `${featureContHeight}px`;
+  }, [featureContWidth])
+
+  useEffect(() => {
+    if (featureContainer.current) {
+      setFeatureContWidth(featureContainer.current.offsetWidth);
+    }
+    const handleResize = () => {
+      if (featureContainer.current) {
+        setFeatureContWidth(featureContainer.current.offsetWidth);
+      }
+    }
+    window.addEventListener('resize', handleResize);
+    
     getFeaturedArtworks();
-    getArtworks({bottom: 10});
+    const artworksFilters = {
+      bottom: 10,
+      order_by: '-viewers_count',
+      status: 0, // for sale
+      // created_on__gte: formatDate(new Date(new Date().setDate(new Date().getDate() - 7))),
+    }
+    getArtworks(artworksFilters);
     fetchTopArtist().then(artist => setTopArtist(artist));
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden home-page">
+    {isLoadingFeatured && <FullFullLoader />}
     <Navbar showSearch={true} />
     <main className="min-h-screen pb-72 font-Adamina">
-      <div className="container xl w-5/6 mx-auto">
-        <div className="mt-5">
-          <h1 className="font-inter text-5xl">Featured Artwork</h1>
-          <div className="flex gap-7 mt-8">
-            <div className="w-2/3">
-              <div className="relative h-[30rem] overflow-hidden">
-                {isLoadingFeatured ? <BaseLoading width={1000} height={500}/> :
-                  <Image
-                    src={featuredArtworks[0]?.image_url || featuredArtworks[0]?.artwork.first_image ||  defaultAvatarUrl}
-                    alt="art pic"
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-sm"
-                  />
-                }
+      <div className="container max-w-[1536px] mx-auto">
+        <div className="w-full flex flex-col items-center">
+          <div className="flex w-full">
+            <div className="relative inline-block w-full feature-container" ref={featureContainer}>
+              <Image src={featuredArtworks[featureIndex]?.image_url || defaultAvatarUrl} alt='Featured Artwork' layout="fill" objectFit="cover"/>
+            </div>
+            <div className="relative">
+              <div className="absolute right-0 h-full flex flex-col justify-center">
+                <div className="flex flex-col gap-2 w-[300px] my-auto mr-3 text-white">
+                  <h1 className="font-bold text-3xl shadow-md-no-off">
+                    {featuredArtworks[featureIndex]?.artwork.title}
+                  </h1>
+                  <p className="shadow-md-no-off">
+                    Artist: {featuredArtworks[featureIndex]?.artwork.artist.username}
+                  </p>
+                  <p className="shadow-md-no-off">
+                    {featuredArtworks[featureIndex]?.artwork.current_highest_bid ? (
+                      <>
+                        Highest Bid: ₱ {featuredArtworks[featureIndex]?.artwork.current_highest_bid}
+                      </>
+                    ) : (
+                      <>
+                        Starting Bid: ₱ {featuredArtworks[featureIndex]?.artwork.starting_bid}
+                      </>
+                    )}
+                  </p>
+                  {featuredArtworks[featureIndex]?.artwork.bids_count > 0 && (
+                    <p className="shadow-md-no-off">
+                      {featuredArtworks[featureIndex]?.artwork.bids_count} Bid{featuredArtworks[featureIndex]?.artwork.bids_count > 1 && 's'}
+                    </p>
+                  )}
+                  <Link href={`/artworks/${featuredArtworks[featureIndex]?.artwork.slug}?prev=true`} className="flex items-center gap-2 btn rounded-sm w-max">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    More Info
+                  </Link>
+                </div>
               </div>
             </div>
-            <div className="w-1/3 overflow-hidden">
-              {isLoadingFeatured ? (
-                <div className="flex flex-col justify-between h-full">
-                  <div className="flex flex-col gap-3">
-                    <BaseLoading width={300} height={70} />
-                    <BaseLoading width={500} height={250} />
-                  </div>
-                  <BaseLoading width={200} height={70} />
-                </div>
-              ):
-              (
-                <>
-                  <h1 className="text-4xl font-semibold">{featuredArtworks[0]?.artwork?.title || 'The Starry Night'}</h1>
-                  <h2 className="mt-2 font-light">Artist: {featuredArtworks[0]?.artwork?.artist?.username || 'Yurim'}</h2>
-                  <h2 className="font-light">Date: {formatDate(featuredArtworks[0]?.artwork?.created_on || null)}</h2>
-                  <pre className="mt-5 text-lg max-h-[400px] overflow-hidden line-clamp-6 font-Adamina" style={{ whiteSpace: 'pre-wrap' }}>
-                    {featuredArtworks[0]?.artwork?.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Lorem ipsum dolor sit amet, consectetur adipiscing elit.'}
-                  </pre>
-                  <h2 className="mt-2 text-xl font-bold">
-                  Current Bid: ${featuredArtworks[0]?.artwork?.current_highest_bid || featuredArtworks[0]?.artwork?.starting_bid || 0}
-                  </h2>
-                  <div className="flex gap-5 mt-3">
-                    <Link href={`/artworks/${featuredArtworks[0]?.artwork.slug}?prev=yes`} className="bg-neutral px-8 py-2 text-lg text-white rounded-sm">Bid Now</Link>
-                    <Link href={`/artworks/${featuredArtworks[0]?.artwork.slug}?prev=yes`} className="text-lg flex items-center">Learn More...</Link>
-                  </div>
-                </>
-              )
-              }
+          </div>
+          
+          <div className="relative">
+            <div className="absolute bottom-0 text-white">
+              ...
             </div>
           </div>
         </div>
 
-        <div className="mt-32">
-          <h1 className="font-inter text-5xl mb-8">New<br />Artworks</h1>
+        <div className="mt-10">
+          <h2 className="text-4xl font-black mb-3">Popular artworks this week</h2>
           <div className="flex gap-5 pb-3 overflow-x-auto">
             {isLoadingArtworks && (
               <>
@@ -118,8 +145,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mt-32">
-          <h1 className="font-inter text-5xl mb-8">Popular Artists</h1>
+        <div className="mt-10">
+          <h2 className="text-4xl font-black mb-3">Popular month this month</h2>
           <div className="flex gap-10 overflow-x-auto">
             {topArtist.map((artist, index) => (
               <div key={index} className="min-w-[300px] pb-5">
@@ -133,7 +160,9 @@ export default function Home() {
         </div>
       </div>
     </main>
+    {!isLoadingFeatured && (
     <Footer />
+    )}
     </div>
   );
 }
