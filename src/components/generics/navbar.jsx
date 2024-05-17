@@ -33,12 +33,14 @@ const Navbar = (props) => {
         // { name: 'Bids', route: '/bids', isLoggedIn: true }
     ]
     const avatar_url = user?.avatar_url || 'https://i.pinimg.com/564x/80/01/3b/80013ba9fbd82789fba7dd72e2428b96.jpg';
+    const [screenWidth, setScreenWidth] = useState(0);
+    const [collapseLinks, setCollapseLinks] = useState(false);
 
     useEffect(() => {
         if (!isLoggedIn) getUser();
     }, []);
 
-    useEffect(() => {
+    useEffect(() => {    
         function handleClickOutside(event) {
             if (userDropDown.current && !userDropDown.current.contains(event.target)) {
                 setShowUserDropdown(false);
@@ -52,6 +54,20 @@ const Navbar = (props) => {
         };
     }, [])
 
+    useEffect(() => {
+        if (screenWidth < LAPTOP_SCREEN) setCollapseLinks(true);
+        else setCollapseLinks(false);
+    }, [screenWidth])
+
+    useEffect(() => {
+        setScreenWidth(window.innerWidth);
+        function handleResize() {
+            setScreenWidth(window.innerWidth);
+        }
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    },[])
+
 
     return (
     <nav className='navbar h-[75px] w-screen flex justify-center py-3 shadow-md font-Adamina bg-white'>
@@ -60,7 +76,7 @@ const Navbar = (props) => {
                 <Image src='/images/favicon.svg' alt='logo' width={30} height={30} />
                 <h1 className='text-2xl font-semibold text-black font-Adamina'>FASO | GALLERY</h1>
             </div>
-            {showSearch && (
+            {showSearch && !collapseLinks && (
                 <label className="input input-bordered mx-5 grow flex items-center gap-2 rounded-sm">
                     <input
                         onChange={e => setSearchKey(e.target.value)}
@@ -71,6 +87,7 @@ const Navbar = (props) => {
                 </label>
                 )   
             }
+            {!collapseLinks && (
             <div className="flex gap-3">
                 {navRoutes.map((route, index) => (
                     (!route.isLoggedIn || route.isLoggedIn === isLoggedIn) && (
@@ -123,6 +140,7 @@ const Navbar = (props) => {
                 </div>
                 }
             </div>
+            )}
         </div>
     </nav>
     )

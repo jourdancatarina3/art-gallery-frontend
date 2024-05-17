@@ -30,7 +30,7 @@ const ArtworkCard = (props) => {
   return (
     <div
       onClick={() => router.push(`/artworks/${artwork?.slug}?prev=yes`)}
-      className="card w-[300px] bg-base-100 shadow-md rounded-md cursor-pointer"
+      className="card w-[300px] bg-base-100 shadow-md rounded-md cursor-pointer h-max"
     >
         <figure className="w-[300px] h-[400px] max-h-[400px] rounded-t-md overflow-hidden relative">
             <Image src={artwork?.first_image?.image_url || defaultAvatarUrl} layout="fill" objectFit="cover" alt={artwork.title}

@@ -16,7 +16,8 @@ import { useAuthStore } from '@/store/auth';
 import { formatDate } from '@/utils/dateTime'
 import { Router } from "next/router";
 
-// TODO: Add base loader when fetching
+const LAPTOP_SCREEN = 1024;
+
 export default function Home() {
   const { fetchArtworks, fetchTopArtist, fetchFeaturedArtworks } = useArtworkStore();
   const { defaultAvatarUrl } = useAuthStore();
@@ -30,8 +31,10 @@ export default function Home() {
   const [featuredArtworks, setFeaturedArtworks] = useState([]);
   const [featureIndex, setFeatureIndex] = useState(0);
   const [featureContWidth, setFeatureContWidth] = useState(0);
-
-  const featureContHeight = featureContWidth * (9/16);
+  const [ratio, setRatio] = useState(9/16)
+  const featureContHeight = featureContWidth * ratio;
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [isSmallScreen, setIsSmallScreen] = useState(false)
 
   const getFeaturedArtworks = async () => {
     setIsLoadingFeatured(true);
@@ -65,6 +68,25 @@ export default function Home() {
   useEffect(() => {
     featureContainer.current.style.height = `${featureContHeight}px`;
   }, [featureContWidth])
+  
+  useEffect(() => {
+    if (screenWidth < LAPTOP_SCREEN) {
+      setIsSmallScreen(true);
+      setRatio(4/3);
+    } else {
+      setIsSmallScreen(false);
+      setRatio(9/16);
+    }
+  }, [screenWidth])
+
+  useEffect(() => {
+    setScreenWidth(window.innerWidth);
+    function handleResize() {
+        setScreenWidth(window.innerWidth);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+},[])
 
   useEffect(() => {
     if (featureContainer.current) {
@@ -103,8 +125,9 @@ export default function Home() {
             <div className="relative">
               <div className="absolute right-0 h-full flex flex-col justify-center">
                 <div className="flex flex-col gap-2 w-[300px] my-auto mr-3 text-white">
-                  <h1 className="font-bold text-3xl shadow-md-no-off">
-                    {featuredArtworks[featureIndex]?.artwork.title}
+                  <h1 className="text-3xl font-bold mb-3 flex items-center gap-2">
+                    <div className="w-2 h-8 bg-slate-600"></div>
+                    <span className="shadow-md-no-off">{featuredArtworks[featureIndex]?.artwork.title}</span>
                   </h1>
                   <p className="shadow-md-no-off">
                     Artist: {featuredArtworks[featureIndex]?.artwork.artist.username}
@@ -146,8 +169,11 @@ export default function Home() {
         </div>
 
         <div className="mt-10">
-          <h2 className="text-4xl font-black mb-3">Popular artworks this week</h2>
-          <div className="flex gap-5 pb-3 overflow-x-auto">
+          <h2 className="text-4xl font-black mb-3 flex items-center gap-2">
+            <div className="w-2 h-10 bg-slate-600"></div>
+            Popular artworks this week
+          </h2>
+          <div className="flex gap-3 pb-3 overflow-x-auto overflow-y-hidden">
             {isLoadingArtworks && (
               <>
                 {[...Array(6)].map((_, index) => (
@@ -159,13 +185,23 @@ export default function Home() {
             )  
             }
             {artworks.map((art, index) => (
-              <ArtworkCard key={index} artwork={art} />
+              <div key={index} className="flex">
+                <div className="h-[500px] overflow-y-hidden">
+                  <p className="font-kumar text-[400px] h-max text-gray-700">{index + 1}</p>
+                </div>
+                <div className="relative translate-x-[-12%]">
+                  <ArtworkCard artwork={art} />
+                </div>
+              </div>
             ))}
           </div>
         </div>
 
         <div className="mt-10">
-          <h2 className="text-4xl font-black mb-3">Popular month this month</h2>
+          <h2 className="text-4xl font-black mb-3 flex items-center gap-2">
+            <div className="w-2 h-10 bg-slate-600"></div>
+            Popular month this month
+          </h2>
           <div className="flex gap-10 overflow-x-auto">
             {topArtist.map((artist, index) => (
               <div key={index} className="min-w-[300px] pb-5">

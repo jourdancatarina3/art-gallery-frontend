@@ -15,6 +15,8 @@ module.exports = {
       fontFamily: {
         inter: ['Nosifer', 'sans-serif'], // Add the Inter font family
         Adamina: ['Adamina', 'sans-serif'],
+        londrina: ['Londrina Outline'],
+        kumar: ['Kumar One Outline'],
       },
     },
   },
