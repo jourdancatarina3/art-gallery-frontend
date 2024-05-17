@@ -47,6 +47,21 @@ export default function Home() {
     setIsLoadingArtworks(false);
   }
 
+  const moveFeatureIndex = () => {
+    setTimeout(() => {
+      if (featureIndex === featuredArtworks.length - 1) {
+        setFeatureIndex(0);
+      } else {
+        setFeatureIndex(featureIndex + 1);
+      }
+    
+    }, 5000)
+  }
+
+  useEffect(() => {
+    moveFeatureIndex();
+  }, [featureIndex])
+
   useEffect(() => {
     featureContainer.current.style.height = `${featureContHeight}px`;
   }, [featureContWidth])
@@ -101,7 +116,7 @@ export default function Home() {
                       </>
                     ) : (
                       <>
-                        Starting Bid: ₱ {featuredArtworks[featureIndex]?.artwork.starting_bid}
+                        Starting Bid: ₱ {featuredArtworks[featureIndex]?.artwork.starting_bid || '0'}
                       </>
                     )}
                   </p>
@@ -120,8 +135,12 @@ export default function Home() {
           </div>
           
           <div className="relative">
-            <div className="absolute bottom-0 text-white">
-              ...
+            <div className="absolute bottom-0 mb-3 text-white w-max bg-slate-400/[.3] rounded-full flex items-center gap-2 px-2">
+              {featuredArtworks.map((_, index) => (
+                <p key={index}>
+                  {featureIndex === index ? <span>●</span> : <span>○</span>}
+                </p>
+              ))}
             </div>
           </div>
         </div>
