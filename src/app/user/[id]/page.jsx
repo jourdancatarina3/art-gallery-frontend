@@ -98,7 +98,7 @@ function ProfilePage({params}) {
             <Navbar />
             <div className="flex w-full">
                 <main className='container mx-auto min-h-lvh font-Adamina flex gap-10'>
-                    <section className='grow flex flex-col gap-3 items-center max-w-[270px] pt-5 pb-10 rounded-b-md px-5 custom-right-shadow'>
+                    <section className='grow flex flex-col gap-3 items-center max-w-[270px] pt-5 pb-10 rounded-b-md px-5 bg-gray-50 custom-right-shadow'>
                         <div>
                             <div className="relative flex justify-end">
                                 <div className="absolute badge badge-neutral translate-x-[20%] translate-y-[40%]">
@@ -148,7 +148,7 @@ function ProfilePage({params}) {
                     <section className='grow flex'>
                         <div className='grow py-5'>
                             <div className='flex justify-between border-dashed border-b border-black/[.3] pb-3 mb-5'>
-                                <h2 className='font-bold text-3xl'>Artworks</h2>
+                                <h2 className='font-bold text-3xl flex items-center'>Artworks</h2>
                                 <div className="flex gap-3">
                                     <Link href={'/artworks/new'} className="btn rounded-sm text-xl">
                                         Add Artwork
