@@ -363,7 +363,8 @@ const SingleArtworkPage = ({ params }) => {
                   setShowAddBidModal(true)
                 }}
                 disabled={disableAddBid}
-                className={`grow px-5 text-center bg-gray-300 rounded-sm text-center text-black font-bold py-3 ${disableAddBid && 'cursor-not-allowed'}`}
+                className={`grow px-5 text-center bg-gray-300 rounded-sm text-center text-black font-bold py-3
+                            ${disableAddBid && 'cursor-not-allowed'} ${artwork.status !== 0 && 'bg-green-400'}`}
               >
                 {artwork.status === 0 ? 'BID NOW' : artwork.status === 1? 'RESERVED' : 'SOLD'}
               </button>

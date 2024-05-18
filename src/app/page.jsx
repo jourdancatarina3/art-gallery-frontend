@@ -179,7 +179,10 @@ export default function Home() {
         <div className="mt-10">
           <h2 className="text-4xl font-black mb-3 flex items-center gap-2">
             <div className="w-2 h-10 bg-slate-600"></div>
-            Popular artworks this for sale week
+            <span className="mr-2">
+              Top artworks this for sale this week
+            </span>
+            <Link href="/artworks" className="text-base self-end text-gray-500 hover:text-sky-300 transition duration-200">View all &gt;</Link>
           </h2>
           <div className="flex gap-3 pb-3 overflow-x-auto overflow-y-hidden">
             {isLoadingArtworks && (
