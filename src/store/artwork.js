@@ -108,5 +108,32 @@ export const useArtworkStore = create((set) => ({
         } catch (error) {
             console.log(error);
         }
-    }
+    },
+
+    fetchLikes: async (filters) => {
+        try {
+            const response = await axiosInstance.get('likes/', { params: filters });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    createLike: async (data) => {
+        try {
+            const response = await axiosInstance.post('likes/', data);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    deleteLike: async (id) => {
+        try {
+            const response = await axiosInstance.delete(`likes/${id}/`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
 }));

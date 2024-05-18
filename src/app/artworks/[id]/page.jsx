@@ -12,6 +12,7 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
+import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { useSearchParams } from 'next/navigation';
 
@@ -27,7 +28,8 @@ const SingleArtworkPage = ({ params }) => {
   const searchParams = useSearchParams();
   const prevPath = searchParams.get('prev');
   const { user, getUser, defaultAvatarUrl } = useAuthStore();
-  const { fetchArtwork, deleteArtwork, updateArtwork } = useArtworkStore();
+  const { fetchArtwork, deleteArtwork, updateArtwork,
+          fetchLikes, createLike, deleteLike } = useArtworkStore();
 
   const { id: slug } = params;
   const [artwork, setArtwork] = useState(null);
@@ -39,11 +41,61 @@ const SingleArtworkPage = ({ params }) => {
   const [showBidsModal, setShowBidsModal] = useState(false);
   const [showAddBidModal, setShowAddBidModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
+  const [artworkLiked, setArtworkLiked] = useState(false);
+  const [likeId, setLikeId] = useState(null);
+  const [likesCount, setLikesCount] = useState(0);
 
   const isArtworkArtist = user?.id === artwork?.artist.id;
   const price = parseFloat(artwork?.current_highest_bid || artwork?.starting_bid || 0);
 
   const disableAddBid = isArtworkArtist || artwork?.status !== 0;
+
+  const parseLikesCount = (count) => {
+    if (count < 1000) {
+      if (count === 0) return '';
+      return count;
+    }
+    return `${(count / 1000).toFixed(1)}k`;
+  }
+
+  const checkLike = async () => {
+    const user = await getUser();
+    if (!user) return;
+    const filters = {
+      artwork_id: artworkId,
+      user_id: user.id
+    }
+    const like = await fetchLikes(filters);
+    setArtworkLiked(like.objects.length > 0);
+    setLikeId(like.objects[0]?.id);
+  }
+
+  const toggleLike = async () => {
+    if (!user) {
+      router.push(`/login?redirect=/artworks/${artwork.slug}`);
+      return;
+    }
+    const data = {
+      artwork_id: artwork.id,
+      user_id: user.id
+    }
+    if (artworkLiked) {
+      setLikesCount(likesCount - 1);
+    } else {
+      setLikesCount(likesCount + 1);
+    }
+    setArtworkLiked(!artworkLiked);
+    try {
+      if (!artworkLiked) {
+        await createLike(data);
+      } else if (likeId) {
+        await deleteLike(likeId);
+      }
+    } catch (e) {
+      console.error('Error toggling like:', e);
+      setArtworkLiked(!artworkLiked);
+    }
+  }
 
   const removeArtwork = async () => {
     setShowDeleteModal(false);
@@ -66,8 +118,10 @@ const SingleArtworkPage = ({ params }) => {
       setIsLoadingArtwork(true);
       const data = await fetchArtwork(artworkId);
       setArtwork(data);
+      setLikesCount(data.likes_count);
       document.title = `${data.title} | FASO Gallery`;
       setSelectedImage(data.first_image?.image_url);
+      await checkLike();
     } catch (error) {
       console.error('Error fetching artwork:', error);
     } finally {
@@ -234,9 +288,18 @@ const SingleArtworkPage = ({ params }) => {
               <div className='flex flex-col gap-3'>
                 <div className="flex justify-between">
                   <h1 className='font-bold text-2xl'>{artwork.title}</h1>
-                  <button>
-                    <FontAwesomeIcon icon={faHeart} className='text-2xl cursor-pointer' />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <span className='text-sm'>
+                      {parseLikesCount(likesCount)}
+                    </span>
+                    <button onClick={toggleLike}>
+                      {!artworkLiked ? (
+                        <FontAwesomeIcon icon={faHeart} className='text-2xl cursor-pointer' />
+                      ): (
+                        <FontAwesomeIcon icon={faHeartSolid} className='text-2xl cursor-pointer text-red-500' />
+                      )}
+                    </button>
+                  </div>
                 </div>
                 <h1 className='font-bold text-xl py-3 px-4 bg-gray-100'>{artwork.current_highest_bid? 'Highest': 'Starting'} Bid: ₱ {price}</h1>
 
