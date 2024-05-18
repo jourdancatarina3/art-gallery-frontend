@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/generics/navbar';
 import Footer from '@/components/generics/Footer';
 import { useRouter } from 'next/navigation';
@@ -14,6 +14,8 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
+import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { useSearchParams } from 'next/navigation';
 
 import FullLoader from '@/components/generics/FullLoader';
@@ -44,6 +46,9 @@ const SingleArtworkPage = ({ params }) => {
   const [artworkLiked, setArtworkLiked] = useState(false);
   const [likeId, setLikeId] = useState(null);
   const [likesCount, setLikesCount] = useState(0);
+  const [showActions, setShowActions] = useState(false);
+
+  const actionsCont = useRef(null);
 
   const isArtworkArtist = user?.id === artwork?.artist.id;
   const price = parseFloat(artwork?.current_highest_bid || artwork?.starting_bid || 0);
@@ -144,6 +149,21 @@ const SingleArtworkPage = ({ params }) => {
   }
 
   useEffect(() => {
+    const handleClickOutside = (event) => {
+        console.log('hereeee!!!', showActions)
+        if (actionsCont.current && !actionsCont.current.contains(event.target)) {
+            setShowActions(false);
+        }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
     fetchArtworkById();
   }, []);
 
@@ -161,9 +181,6 @@ const SingleArtworkPage = ({ params }) => {
     setSelectedImageIndex(index);
   };
   
-
-  console.log("ARTWORK: ", selectedImage)
-
   return (
     <div className='overflow-x-hidden'>
       <Navbar className="fixed left-0 top-0" />
@@ -187,17 +204,39 @@ const SingleArtworkPage = ({ params }) => {
                 Sell Artwork
               </button>
             )}
-            {isArtworkArtist && (
-              <div className='flex gap-3'>
-                {artwork.status === 0 ? (
-                  <FontAwesomeIcon onClick={() => router.push(`/artworks/${artwork.slug}/edit`)} icon={faPenToSquare} className='h-[25px] cursor-pointer text-success' />
-                ):
-                (
-                  <FontAwesomeIcon icon={faComment} className='h-[25px] cursor-pointer' />
-                )}
-                <FontAwesomeIcon onClick={() => setShowDeleteModal(true)} icon={faTrash} className='h-[25px] cursor-pointer text-error' />
-              </div>
-            )}
+            <div className='flex flex-col' ref={actionsCont}>
+              <FontAwesomeIcon icon={faEllipsisVertical} className='text-xl px-2 cursor-pointer' onClick={() => setShowActions(!showActions)} />
+              {showActions && (
+                <div className="relative">
+                  <div className="absolute flex flex-col gap-2 min-w-[100px] bg-gray-50 px-5 py-3 rounded-sm shadow translate-x-[-90%]">
+                    {isArtworkArtist && (
+                      <div className='flex flex-col gap-2 items-start w-max'>
+                        {artwork.status === 0 ? (
+                          <button onClick={() => router.push(`/artworks/${artwork.slug}/edit`)} className='flex gap-2'>
+                            <FontAwesomeIcon icon={faPenToSquare}/>
+                            <span>Edit</span>
+                          </button>
+                        ):
+                        (
+                          <button className='flex gap-2 items-center w-max'>
+                            <FontAwesomeIcon icon={faComment}/>
+                            <span>Go to chat</span>
+                          </button>
+                        )}
+                        <button onClick={() => setShowDeleteModal(true)} className='flex gap-2 items-center w-max'>
+                          <FontAwesomeIcon icon={faTrash}/>
+                          <span>Delete</span>
+                        </button>
+                      </div>
+                    )}
+                    <button className='w-max flex gap-2 items-center'>
+                      <FontAwesomeIcon icon={faTriangleExclamation}/>
+                      <span>Report</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
             {prevPath && (
             <FontAwesomeIcon
                 onClick={() => router.back()} icon={faClose}

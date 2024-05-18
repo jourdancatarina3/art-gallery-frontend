@@ -38,7 +38,7 @@ const Navbar = (props) => {
 
     useEffect(() => {
         if (!isLoggedIn) getUser();
-    }, []);
+    }, [pathname]);
 
     useEffect(() => {    
         function handleClickOutside(event) {
@@ -117,7 +117,7 @@ const Navbar = (props) => {
                         <span className="indicator-item badge badge-error text-xs px-[2px] w-[10px] h-[10px]"></span> 
                         <Link href='/'><FontAwesomeIcon  className="text-xl" icon={faBell} /></Link>
                     </div>
-                    <div className='flex items-center'>
+                    <div ref={userDropDown} className='flex items-center'>
                         <button
                             className="w-[25px]"
                             onClick={() => {setShowUserDropdown(!showUserDropdown)}}
@@ -135,7 +135,7 @@ const Navbar = (props) => {
                                 }} 
                             />
                         </button>
-                        {showUserDropdown && <UserDropdown ref={userDropDown} userName={user.username} userId={user.id} avatarUrl={user.avatar_url} />}
+                        {showUserDropdown && <UserDropdown userName={user.username} userId={user.id} avatarUrl={user.avatar_url} />}
                     </div>
                 </div>
                 }
