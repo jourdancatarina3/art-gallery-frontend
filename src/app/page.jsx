@@ -36,6 +36,10 @@ export default function Home() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [isSmallScreen, setIsSmallScreen] = useState(false)
 
+  const featuredArtwork = featuredArtworks[featureIndex];
+  const featuredArtworkImage = !isSmallScreen ? (featuredArtwork?.image_url || defaultAvatarUrl) 
+    : featuredArtwork?.artwork?.first_image.image_url || defaultAvatarUrl;
+
   const getFeaturedArtworks = async () => {
     setIsLoadingFeatured(true);
     const data = await fetchFeaturedArtworks();
@@ -122,36 +126,37 @@ export default function Home() {
       <div className="container max-w-[1536px] mx-auto">
         <div className="w-full flex flex-col items-center">
           <div className="flex w-full">
-            <div className="relative inline-block w-full feature-container" ref={featureContainer}>
-              <Image src={featuredArtworks[featureIndex]?.image_url || defaultAvatarUrl} alt='Featured Artwork' layout="fill" objectFit="cover"/>
+            <div className="relative inline-block w-full feature-container h-52" ref={featureContainer}>
+              <Image src={featuredArtworkImage}
+                alt='Featured Artwork' layout="fill" objectFit="cover"/>
             </div>
             <div className="relative">
               <div className="absolute right-0 h-full flex flex-col justify-center">
                 <div className="flex flex-col gap-2 w-[300px] my-auto mr-3 text-white">
                   <h1 className="text-3xl font-bold mb-3 flex items-center gap-2">
                     <div className="w-2 h-8 bg-slate-700"></div>
-                    <span className="shadow-md-no-off">{featuredArtworks[featureIndex]?.artwork.title}</span>
+                    <span className="shadow-md-no-off">{featuredArtwork?.artwork.title}</span>
                   </h1>
                   <p className="shadow-md-no-off">
-                    Artist: {featuredArtworks[featureIndex]?.artwork.artist.username}
+                    Artist: {featuredArtwork?.artwork.artist.username}
                   </p>
                   <p className="shadow-md-no-off">
                     {featuredArtworks[featureIndex]?.artwork.current_highest_bid ? (
                       <>
-                        Highest Bid: ₱ {featuredArtworks[featureIndex]?.artwork.current_highest_bid}
+                        Highest Bid: ₱ {featuredArtwork?.artwork.current_highest_bid}
                       </>
                     ) : (
                       <>
-                        Starting Bid: ₱ {featuredArtworks[featureIndex]?.artwork.starting_bid || '0'}
+                        Starting Bid: ₱ {featuredArtwork?.artwork.starting_bid || '0'}
                       </>
                     )}
                   </p>
                   {featuredArtworks[featureIndex]?.artwork.bids_count > 0 && (
                     <p className="shadow-md-no-off">
-                      {featuredArtworks[featureIndex]?.artwork.bids_count} Bid{featuredArtworks[featureIndex]?.artwork.bids_count > 1 && 's'}
+                      {featuredArtwork?.artwork.bids_count} Bid{featuredArtwork?.artwork.bids_count > 1 && 's'}
                     </p>
                   )}
-                  <Link href={`/artworks/${featuredArtworks[featureIndex]?.artwork.slug}?prev=true`} className="flex items-center gap-2 btn rounded-sm w-max">
+                  <Link href={`/artworks/${featuredArtwork?.artwork.slug}?prev=true`} className="flex items-center gap-2 btn rounded-sm w-max">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 h-6 w-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     More Info
                   </Link>
@@ -174,7 +179,7 @@ export default function Home() {
         <div className="mt-10">
           <h2 className="text-4xl font-black mb-3 flex items-center gap-2">
             <div className="w-2 h-10 bg-slate-600"></div>
-            Popular artworks this week
+            Popular artworks this for sale week
           </h2>
           <div className="flex gap-3 pb-3 overflow-x-auto overflow-y-hidden">
             {isLoadingArtworks && (

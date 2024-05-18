@@ -241,7 +241,10 @@ const SingleArtworkPage = ({ params }) => {
                 <h1 className='font-bold text-xl py-3 px-4 bg-gray-100'>{artwork.current_highest_bid? 'Highest': 'Starting'} Bid: ₱ {price}</h1>
 
                 {artwork?.category && (
-                  <h1 className='text-gray-600 text-md capitalize'>Category: {artwork.category.name}</h1>
+                  <div className='flex gap-2 items-center h-[25px]'>
+                    <div className='w-1 h-full bg-gray-700'></div>
+                    <h1 className='text-gray-600 text-md capitalize'>{artwork.category.name}</h1>
+                  </div>
                 )}
                 <pre className='w-full break-all whitespace-pre-wrap font-Adamina max-h-[400px] overflow-y-auto'>
                   {artwork.description}
@@ -260,7 +263,7 @@ const SingleArtworkPage = ({ params }) => {
                 disabled={disableAddBid}
                 className={`grow px-5 text-center bg-gray-300 rounded-sm text-center text-black font-bold py-3 ${disableAddBid && 'cursor-not-allowed'}`}
               >
-                {artwork.status === 0 ? 'BID NOW' : 'RESERVED'}
+                {artwork.status === 0 ? 'BID NOW' : artwork.status === 1? 'RESERVED' : 'SOLD'}
               </button>
               <button
                 onClick={() => setShowBidsModal(true)}
