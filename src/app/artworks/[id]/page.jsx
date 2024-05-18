@@ -25,8 +25,8 @@ const SingleArtworkPage = ({ params }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const prevPath = searchParams.get('prev');
-  const { user, getUser } = useAuthStore();
-  const { fetchArtwork, defaultAvatarUrl, deleteArtwork, updateArtwork } = useArtworkStore();
+  const { user, getUser, defaultAvatarUrl } = useAuthStore();
+  const { fetchArtwork, deleteArtwork, updateArtwork } = useArtworkStore();
 
   const { id: slug } = params;
   const [artwork, setArtwork] = useState(null);
@@ -113,7 +113,7 @@ const SingleArtworkPage = ({ params }) => {
     <div className='overflow-x-hidden'>
       <Navbar className="fixed left-0 top-0" />
       {isLoadingArtwork ? <FullLoader /> : (  
-      <div className='mt-7 container mx-auto min-h-lvh font-Adamina'>
+      <div className=' py-5 container mx-auto min-h-lvh font-Adamina'>
         <div className="flex justify-between items-center w-full">
           <div className='flex gap-3 mt-3 font-light'>
             <Link href='/'>Home</Link>
@@ -153,73 +153,93 @@ const SingleArtworkPage = ({ params }) => {
         </div>
 
         <div className='w-full h-auto flex flex-wrap justify-center mt-20 gap-10'>
-          <div className='flex gap-6'>
-            <div className="min-w-[400px]">
-              {artwork && (
-                <div className="relative h-[569.4px]">
-                  <Image
-                    src={selectedImage || defaultAvatarUrl}
-                    alt={artwork.title}
-                    layout="fill"
-                    objectFit="cover"
-                    className=" shadow-md"
-                  />
-                </div>
-              )}
+          <div>
+            <div className='flex gap-6'>
+              <div className="min-w-[400px]">
+                {artwork && (
+                  <div className="relative h-[569.4px]">
+                    <Image
+                      src={selectedImage || defaultAvatarUrl}
+                      alt={artwork.title}
+                      layout="fill"
+                      objectFit="cover"
+                      className=" shadow-md"
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className='flex flex-col justify-start gap-3'>
+                {artwork.images.map((image, index) => (
+                  <div
+                    key={index}
+                    className='min-w-[83.2px] cursor-pointer shadow-md'
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(selectedImageIndex)}
+                    onClick={() => handleImageClick(index)}
+                  >
+                    {artwork && (
+                      <div className="relative h-[101.5px]">
+                        <Image
+                          src={image.image_url || defaultAvatarUrl}
+                          alt={artwork.title}
+                          layout="fill"
+                          objectFit="cover"
+                          className={`${
+                            ( index === hoveredIndex || (hoveredIndex === -1 && index === 0))
+                              ? 'opacity-100'
+                              : 'opacity-35'
+                          } transition-opacity duration-300`}
+                        />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className='flex flex-col justify-start gap-3'>
-              {artwork.images.map((image, index) => (
-                <div
-                  key={index}
-                  className='min-w-[83.2px] cursor-pointer shadow-md'
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(selectedImageIndex)}
-                  onClick={() => handleImageClick(index)}
-                >
-                  {artwork && (
-                    <div className="relative h-[101.5px]">
-                      <Image
-                        src={image.image_url || defaultAvatarUrl}
-                        alt={artwork.title}
-                        layout="fill"
-                        objectFit="cover"
-                        className={`${
-                          ( index === hoveredIndex || (hoveredIndex === -1 && index === 0))
-                            ? 'opacity-100'
-                            : 'opacity-35'
-                        } transition-opacity duration-300`}
-                      />
-                    </div>
-                  )}
+            <div className='flex justify-between items-center mt-5 px-5 py-3 border border-gray-300 rounded-md'>
+                <div className="flex gap-3 items-center">
+                  <Image
+                    onClick={() => {router.push(`/user/${artwork.artist.id}`)}}
+                    src={artwork.artist.avatar_url || defaultAvatarUrl} width={40} height={40} alt="pfp" 
+                    className='cursor-pointer'
+                    style={{ 
+                          width: '40px', 
+                          height: '40px', 
+                          objectFit: 'cover', 
+                          borderRadius: '50%',
+                      }}
+                  />
+                  <div className="flex flex-col">
+                    <Link href={`/user/${artwork.artist.id}`} className='text-md capitalize'>{artwork.artist.username}</Link>
+                    <span className='text-xs text-gray-600'>10k followers</span>
+                  </div>
                 </div>
-              ))}
+
+                <div className="flex gap-3 items-center">
+                  <a href={`mailto:${artwork.artist.email}`} onClick={handleEmailClick} target='_blank'>
+                    <FontAwesomeIcon icon={faEnvelope} className='text-2xl cursor-pointer' />
+                  </a>
+                  <button className='btn rounded-full'>
+                    Folow
+                  </button>
+                </div>
             </div>
           </div>
 
-          <div className='w-[300px] flex flex-col justify-between grow border-2 border-solid p-12 font-Adamina'>
+          <div className='w-[300px] flex flex-col justify-between grow border-2 border-solid px-10 py-7 font-Adamina rounded-md'>
             <div>
               <div className='flex flex-col gap-3'>
-                <h1 className='font-bold text-md'>{artwork.title}</h1>
-                <h1 className='font-bold text-md'>Current Bid: ₱ {price}</h1>
-                <div className='flex justify-between items-center'>
-                    <div className="flex gap-2">
-                      Artist: 
-                      <Link href={`/user/${artwork.artist.id}`} className='text-gray-600 text-md capitalize underline'>{artwork.artist.username}</Link>
-                    </div>
-                    <a href={`mailto:${artwork.artist.email}`} onClick={handleEmailClick} target='_blank'>
-                      <FontAwesomeIcon icon={faEnvelope} className='text-2xl cursor-pointer' />
-                    </a>
-                  </div>
+                <h1 className='font-bold text-2xl'>{artwork.title}</h1>
+                <h1 className='font-bold text-xl py-3 px-4 bg-gray-100'>{artwork.current_highest_bid? 'Highest': 'Starting'} Bid: ₱ {price}</h1>
 
                 {artwork?.category && (
-                  <h1 className='text-gray-600 text-md capitalize'>{artwork.category.name}</h1>
+                  <h1 className='text-gray-600 text-md capitalize'>Category: {artwork.category.name}</h1>
                 )}
-                <div className='flex flex-col gap-3 overflow-y-scroll h-52'>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                </div>
+                <pre className='w-full break-all whitespace-pre-wrap font-Adamina max-h-[400px] overflow-y-auto'>
+                  {artwork.description}
+                </pre>
               </div>
             </div>
             <div className='flex flex-row flex-wrap gap-3 mt-3'>
@@ -234,6 +254,7 @@ const SingleArtworkPage = ({ params }) => {
                 onClick={() => setShowBidsModal(true)}
                 className='grow px-5 text-center btn btn-neutral rounded-sm text-center font-bold py-3'>
                 SHOW BIDS
+                <div className="badge">{artwork.bids_count}</div>
               </button>
             </div>
           </div>
@@ -241,8 +262,8 @@ const SingleArtworkPage = ({ params }) => {
       </div>
       )}
       {showDeleteModal && <ArtworkDeleteModal setShowDeleteModal={setShowDeleteModal} deleteArtwork={removeArtwork} />}
-      {showBidsModal && <BidsModal setShowBidsModal={setShowBidsModal} artworkId={artworkId} setShowAddBidModal={setShowAddBidModal} artistId={artwork.artist.id} />}
-      {showAddBidModal && <AddBidModal setShowAddBidModal={setShowAddBidModal} setShowBidsModal={setShowBidsModal} artworkId={artworkId}/>}
+      {showBidsModal && <BidsModal setShowBidsModal={setShowBidsModal} artwork={artwork} setShowAddBidModal={setShowAddBidModal} />}
+      {showAddBidModal && <AddBidModal setShowAddBidModal={setShowAddBidModal} setShowBidsModal={setShowBidsModal} artwork={artwork}/>}
       <Footer />
     </div>
   );

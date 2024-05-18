@@ -134,7 +134,9 @@ const ArtworkPane = () => {
             </div>
             <div className='flex gap-5 min-h-lvh'>   
                 <div className='max-w-[240px] min-w-[240px] px-3 bg-black/[.02] border-r border-black/[.1]'>
-                    <h3 className='text-2xl font-semibold mt-5 mb-2'>Category</h3>
+                    <h3 className='text-2xl font-semibold mt-5 mb-2'>
+                        Top Categories
+                    </h3>
                     <input onChange={(e) => {setCategorySearchKey(e.target.value)}} type="text" placeholder="Search category" className="input rounded-sm input-bordered w-full max-w-xs" />
                     <hr className="border-0 h-px bg-gray-300 my-3" />
                     <div className='flex flex-col gap-5'>

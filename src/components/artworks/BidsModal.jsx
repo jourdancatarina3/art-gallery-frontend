@@ -10,14 +10,19 @@ import { useAuthStore } from '@/store/auth';
 import ArtworkDeleteModal from './ArtworkDeleteModal';
 
 function BidsModal(params) {
-    const { setShowBidsModal, artworkId, setShowAddBidModal, artistId } = params;
+    const { setShowBidsModal, setShowAddBidModal, artwork } = params;
     const { fetchBids, deleteBid } = useBidStore();
     const { user } = useAuthStore();
+    const artistId = artwork.artist.id;
+    const artworkId = artwork.id;
 
     const [isLoading, setIsloading] = useState(true);
     const [bids, setBids] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedBidId, setSelectedBidId] = useState(null);
+
+    const isArtworkOwner = user.id === artistId;
+    const isForSale = artwork.status === 0;
 
     const getBids = async () => {
         setIsloading(true);
@@ -59,7 +64,7 @@ function BidsModal(params) {
                     <div className="artboard artboard-demo phone-1 justify-start">
                         <div className='flex justify-between w-full px-5 py-3 items-center flex-row-reverse'>
                             <FontAwesomeIcon onClick={() => setShowBidsModal(false)} className='cursor-pointer' icon={faClose} width={15} height={15} />
-                            {user.id !== artistId && (
+                            {!isArtworkOwner && isForSale && (
                             <button
                                 onClick={() => {
                                     setShowBidsModal(false);
@@ -79,7 +84,7 @@ function BidsModal(params) {
                         (<div className='grow w-full px-2 pt-3 flex flex-col gap-3 overflow-y-auto'>
                             {bids.map((bid, index) => (
                             <div key={bid.id}>
-                                {user.id === bid.user.id && (
+                                {user.id === bid.user.id && isForSale && (
                                 <div className='relative flex justify-end'>
                                     <button
                                         onClick={() => {
@@ -106,6 +111,7 @@ function BidsModal(params) {
                         (
                         <div className="grow w-full flex flex-col justify-center gap-2 items-center">
                             <p className="text-gray-400 text-sm">No bids yet.</p>
+                            {!isArtworkOwner && (
                             <button
                                 onClick={() => {
                                     setShowBidsModal(false);
@@ -114,6 +120,7 @@ function BidsModal(params) {
                                 className="badge badge-success text-white text-sm">
                                 + Add Bid
                             </button>
+                            )}
                         </div>
                             
                         )

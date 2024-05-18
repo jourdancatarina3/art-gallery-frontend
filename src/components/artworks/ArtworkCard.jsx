@@ -52,6 +52,15 @@ const ArtworkCard = (props) => {
               <h2 className="card-title tracking-widest max-w-[180px] line-clamp-1 text-base">
                   {artwork.title}
               </h2>
+            </div>
+            <div className="flex justify-between">
+              <p className={`${isUserOwner && 'text-success'}`}>{name}</p>
+              <p className='text-end'>₱ {price}</p>
+            </div>
+            {artwork?.category && (
+            <div className="card-actions justify-end gap-3">
+              <div className="badge badge-outline">{artwork?.category?.name || ''}</div> 
+
               {artwork.bids_count > 0 && artwork.status == 0 && (
               <div className="badge text-white badge-error">
                 {artwork.bids_count} BID{artwork.bids_count > 1 && 'S'}
@@ -66,14 +75,7 @@ const ArtworkCard = (props) => {
                 SOLD
               </div>
               )}
-            </div>
-            <div className="flex justify-between">
-              <p className={`${isUserOwner && 'text-success'}`}>{name}</p>
-              <p className='text-end'>₱ {price}</p>
-            </div>
-            {artwork?.category && (
-            <div className="card-actions justify-end">
-                <div className="badge badge-outline">{artwork?.category?.name || ''}</div> 
+              
             </div>
             )}
         </div>

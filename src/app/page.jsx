@@ -62,12 +62,15 @@ export default function Home() {
   }
 
   useEffect(() => {
-    moveFeatureIndex();
   }, [featureIndex])
+  moveFeatureIndex();
 
   useEffect(() => {
     featureContainer.current.style.height = `${featureContHeight}px`;
-  }, [featureContWidth])
+    console.log(ratio, 'ratio')
+    console.log(featureContWidth, 'width')
+    console.log(featureContHeight, 'height'); 
+  }, [featureContWidth, ratio])
   
   useEffect(() => {
     if (screenWidth < LAPTOP_SCREEN) {
@@ -126,7 +129,7 @@ export default function Home() {
               <div className="absolute right-0 h-full flex flex-col justify-center">
                 <div className="flex flex-col gap-2 w-[300px] my-auto mr-3 text-white">
                   <h1 className="text-3xl font-bold mb-3 flex items-center gap-2">
-                    <div className="w-2 h-8 bg-slate-600"></div>
+                    <div className="w-2 h-8 bg-slate-700"></div>
                     <span className="shadow-md-no-off">{featuredArtworks[featureIndex]?.artwork.title}</span>
                   </h1>
                   <p className="shadow-md-no-off">
@@ -149,7 +152,7 @@ export default function Home() {
                     </p>
                   )}
                   <Link href={`/artworks/${featuredArtworks[featureIndex]?.artwork.slug}?prev=true`} className="flex items-center gap-2 btn rounded-sm w-max">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 h-6 w-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     More Info
                   </Link>
                 </div>
@@ -200,7 +203,7 @@ export default function Home() {
         <div className="mt-10">
           <h2 className="text-4xl font-black mb-3 flex items-center gap-2">
             <div className="w-2 h-10 bg-slate-600"></div>
-            Popular month this month
+            Popular artists this month
           </h2>
           <div className="flex gap-10 overflow-x-auto">
             {topArtist.map((artist, index) => (
