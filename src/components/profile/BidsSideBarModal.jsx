@@ -16,7 +16,7 @@ function BidsSideBarModal(props) {
 
     return (
         <div className="relative">
-            <div className={`slide-in-bids flex flex-col gap-2 h-full w-[300px] min-w-[300px] translate-x-[-100%] bg-white py-5 px-2 custom-left-shadow absolute
+            <div className={`slide-in-bids flex flex-col gap-2 h-full w-[300px] min-w-[300px] translate-x-[-100%] bg-gray-50 py-5 px-2 custom-left-shadow absolute
                             ${!isVisible ? 'slide-out-bids': ''}`}>
                 <h2 className='font-bold text-xl border-dashed border-b border-black/[.3] pb-3 flex justify-between items-center'>
                     Bids
@@ -31,7 +31,7 @@ function BidsSideBarModal(props) {
                     {bids.map((bid, index) => (
                     <div key={bid.id}>
                         <div 
-                            className='border border-black/[.3] rounded-md w-full px-2 py-1 flex justify-between items-center'>
+                            className='border bg-white border-black/[.3] rounded-md w-full px-2 py-1 flex justify-between items-center'>
                             <div className='flex flex-col gap-2'>
                                 <Link href={`/artworks/${bid.artwork.slug}?prev=true`} className='font-bold hover:underline'>{bid.artwork.title}</Link>
                                 <p className='text-xs'>{dateFormatter(bid.bid_on)}</p>

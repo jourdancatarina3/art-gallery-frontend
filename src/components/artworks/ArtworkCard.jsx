@@ -62,12 +62,12 @@ const ArtworkCard = (props) => {
               <div className="badge badge-outline">{artwork?.category?.name || ''}</div> 
 
               {artwork.bids_count > 0 && artwork.status == 0 && (
-              <div className="badge text-white badge-error">
+              <div className="badge text-white badge-success">
                 {artwork.bids_count} BID{artwork.bids_count > 1 && 'S'}
               </div>
               )}
               {artwork.status == 1 ? (
-              <div className="badge badge-success text-white">
+              <div className="badge badge-error text-white">
                 RESERVED
               </div>
               ) : artwork.status == 2 && (
@@ -75,7 +75,7 @@ const ArtworkCard = (props) => {
                 SOLD
               </div>
               )}
-              
+
             </div>
             )}
         </div>

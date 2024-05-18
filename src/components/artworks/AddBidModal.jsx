@@ -120,7 +120,7 @@ function AddBidModal(props) {
                                 <div 
                                     className="border border-black/[.3] rounded-md w-full px-2 py-1 flex justify-between items-center bg-black text-white">
                                     <div className='flex flex-col gap-2'>
-                                        <h3 className='font-bold'>{user.id !== highestBid.user.id? (bid.is_anonymous? 'Anonymous' : highestBid.user.username): 'You'}</h3>
+                                        <h3 className='font-bold'>{user.id !== highestBid.user.id? (highestBid.is_anonymous? 'Anonymous' : highestBid.user.username): 'You'}</h3>
                                         <p className='text-xs'>{dateFormatter(highestBid.bid_on)}</p>
                                     </div>
                                     <h3 className='font-bold'>₱{highestBid.bid_amount}</h3>

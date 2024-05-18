@@ -11,6 +11,7 @@ import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { useSearchParams } from 'next/navigation';
 
@@ -231,7 +232,12 @@ const SingleArtworkPage = ({ params }) => {
           <div className='w-[300px] flex flex-col justify-between grow border-2 border-solid px-10 py-7 font-Adamina rounded-md'>
             <div>
               <div className='flex flex-col gap-3'>
-                <h1 className='font-bold text-2xl'>{artwork.title}</h1>
+                <div className="flex justify-between">
+                  <h1 className='font-bold text-2xl'>{artwork.title}</h1>
+                  <button>
+                    <FontAwesomeIcon icon={faHeart} className='text-2xl cursor-pointer' />
+                  </button>
+                </div>
                 <h1 className='font-bold text-xl py-3 px-4 bg-gray-100'>{artwork.current_highest_bid? 'Highest': 'Starting'} Bid: ₱ {price}</h1>
 
                 {artwork?.category && (
@@ -244,7 +250,13 @@ const SingleArtworkPage = ({ params }) => {
             </div>
             <div className='flex flex-row flex-wrap gap-3 mt-3'>
               <button
-                onClick={() => setShowAddBidModal(true)}
+                onClick={() => {
+                  if (!user) {
+                    router.push(`/login?redirect=/artworks/${artwork.slug}`);
+                    return;
+                  }
+                  setShowAddBidModal(true)
+                }}
                 disabled={disableAddBid}
                 className={`grow px-5 text-center bg-gray-300 rounded-sm text-center text-black font-bold py-3 ${disableAddBid && 'cursor-not-allowed'}`}
               >

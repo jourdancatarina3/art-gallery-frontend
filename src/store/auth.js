@@ -65,13 +65,15 @@ export const useAuthStore = create((set) => ({
         console.log('herere')
         try {
             const data = await axiosInstance.post('login/', { email, password })
+            if (data.data.user.is_banned) {
+                return false;
+            }
             const jwt_token = data.data.jwt;
             setCookie(null, 'jwt', jwt_token, { maxAge: 60 * 60 * 24 * 365, path: '/' });
             set({ user: data.data.user });
             return true;
         } catch (error) {
-            console.log(error);
-            return false;
+            throw error;
         }
     },
     checkEmailAvailability: async (email) => {

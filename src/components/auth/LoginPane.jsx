@@ -21,13 +21,19 @@ function LoginPane() {
     const handleLogin = async (event) => {
         event.preventDefault()
         setIsLoggingIn(true)
-        const loginStatus = await login(email, password);
-        setIsLoggingIn(false)
-        if (!loginStatus) {
-            setLoginFail(true)
-        } else {
+        try {
+            const not_banned = await login(email, password);
             setLoginFail(false)
+            if (!not_banned) {
+                router.push('/banned')
+                return
+            }
             router.push(redirect);
+        } catch (e) {
+            setLoginFail(true)
+            console.error(e)
+        } finally {
+            setIsLoggingIn(false)
         }
     }
 
