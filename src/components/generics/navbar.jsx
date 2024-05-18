@@ -108,7 +108,6 @@ const Navbar = (props) => {
                 </div>
                 :
                 <div className="flex gap-5 ml-3 items-center">
-                    <Link href='/'><FontAwesomeIcon className="text-xl" icon={faHeart} /></Link>
                     <div className="indicator">
                         <span className="indicator-item badge badge-error text-xs px-[2px] w-[10px] h-[10px]"></span> 
                         <Link href='/'><FontAwesomeIcon  className="text-xl" icon={faMessage} /></Link>

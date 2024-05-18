@@ -6,6 +6,9 @@ import Image from 'next/image';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { faPalette } from '@fortawesome/free-solid-svg-icons';
 
 import { useAuthStore } from '@/store/auth';
 
@@ -34,8 +37,18 @@ const UserDropdown = forwardRef((props, ref) => {
                     </a>
                     <hr className='opacity-20'></hr>
                     <div className='flex flex-col gap-2 pl-3'>
-                        <a href={`/user/${userId}`} className="text-white hover:underline transition duration-100">My Artworks</a>
-                        <a href={`/user/${userId}/settings`} className="text-white hover:underline transition duration-100">Settings</a>
+                        <a href={`/user/${userId}`} className="flex gap-2 items-center text-white hover:underline transition duration-100">
+                            <FontAwesomeIcon icon={faPalette} />
+                            My Artworks
+                        </a>
+                        <a href={`/liked`} className="flex gap-2 items-center text-white hover:underline transition duration-100">
+                            <FontAwesomeIcon icon={faHeart} />
+                            Liked artworks
+                        </a>
+                        <a href={`/user/${userId}/settings`} className="flex gap-2 items-center text-white hover:underline transition duration-100">
+                            <FontAwesomeIcon icon={faGear} />
+                            Settings
+                        </a>
                         <a
                             onClick={logout}
                             className="flex gap-2 items-center text-red-500 drop-shadow-md cursor-pointer hover:underline transition duration-100"

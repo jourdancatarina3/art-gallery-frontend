@@ -4,7 +4,7 @@ import Footer from '@/components/generics/Footer';
 import ArtworkPane from '@/components/artworks/ArtworkPane';
 
 export const metadata = {
-  title: 'FASO GALLERY | Artworks',
+  title: 'Artworks | FASO GALLERY',
   description: 'Discover and bid on your favorite artworks.',
 };
 

@@ -136,4 +136,13 @@ export const useArtworkStore = create((set) => ({
             throw error;
         }
     },
+
+    fetchLikedArtworks: async (id, filters={}) => {
+        try {
+            const response = await axiosInstance.get(`liked-artworks/${id}/`, { params: filters });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 }));
