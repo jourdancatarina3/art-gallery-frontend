@@ -131,11 +131,16 @@ export default function Home() {
                 alt='Featured Artwork' layout="fill" objectFit="cover"/>
             </div>
             <div className="relative">
-              <div className="absolute right-0 h-full flex flex-col justify-center">
-                <div className="flex flex-col gap-2 w-[300px] my-auto mr-3 text-white">
+              <div className="absolute right-0 h-full flex flex-col justify-end md:justify-center">
+                <div className="flex flex-col gap-2 w-[300px] items-end text-white mb-10 mr-3 md:items-start">
                   <h1 className="text-3xl font-bold mb-3 flex items-center gap-2">
-                    <div className="w-2 h-8 bg-slate-700"></div>
+                    {!isSmallScreen && (
+                      <div className="w-2 h-8 bg-slate-700"></div>
+                    )}
                     <span className="shadow-md-no-off">{featuredArtwork?.artwork.title}</span>
+                    {isSmallScreen && (
+                      <div className="w-2 h-8 bg-slate-700"></div>
+                    )}
                   </h1>
                   <p className="shadow-md-no-off">
                     Artist: {featuredArtwork?.artwork.artist.username}
@@ -165,7 +170,7 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="relative">
+          <div className="relative w-full flex justify-center">
             <div className="absolute bottom-0 mb-3 text-white w-max bg-slate-400/[.3] rounded-full flex items-center gap-2 px-2">
               {featuredArtworks.map((_, index) => (
                 <p key={index}>
@@ -176,13 +181,13 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mt-10">
-          <h2 className="text-4xl font-black mb-3 flex items-center gap-2">
-            <div className="w-2 h-10 bg-slate-600"></div>
+        <div className="mt-10 px-3">
+          <h2 className="text-4xl font-black mb-3 flex items-stretch gap-2">
+            <div className="w-2 min-w-2 bg-slate-600"></div>
             <span className="mr-2">
               Top artworks this for sale this week
             </span>
-            <Link href="/artworks" className="text-base self-end text-gray-500 hover:text-sky-300 transition duration-200">View all &gt;</Link>
+            <Link href="/artworks" className="grow whitespace-nowrap text-base self-end text-gray-500 hover:text-sky-300 transition duration-200">View all &gt;</Link>
           </h2>
           <div className="flex gap-3 pb-3 overflow-x-auto overflow-y-hidden">
             {isLoadingArtworks && (
@@ -208,9 +213,9 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mt-10">
-          <h2 className="text-4xl font-black mb-3 flex items-center gap-2">
-            <div className="w-2 h-10 bg-slate-600"></div>
+        <div className="mt-10 px-3">
+          <h2 className="text-4xl font-black mb-3 flex items-stretch gap-2">
+            <div className="w-2 min-w-2 bg-slate-600"></div>
             Popular artists this month
           </h2>
           <div className="flex gap-10 overflow-x-auto">
