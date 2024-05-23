@@ -155,7 +155,7 @@ export default function Home() {
                           {artwork.artwork.bids_count} Bid{artwork.artwork.bids_count > 1 && 's'}
                         </p>
                       )}
-                      <Link href={`/artworks/${artwork.artwork.slug}?prev=true`} className="flex items-center gap-2 btn btn-ghost p-0 rounded-sm w-max">
+                      <Link href={`/artworks/${artwork.artwork.slug}?prev=true`} className="flex items-center gap-2 btn btn-ghost p-0 rounded-sm w-max shadow-md-no-off">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 h-6 w-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         More Info
                       </Link>
@@ -209,9 +209,12 @@ export default function Home() {
         </div>
 
         <div className="mt-10 px-3">
-          <h2 className="text-4xl font-black mb-3 flex items-stretch gap-2">
+        <h2 className="text-4xl font-black mb-3 flex items-stretch gap-2">
             <div className="w-2 min-w-2 bg-slate-600"></div>
-            Popular artists this month
+            <span className="mr-2">
+              Popular artists this month
+            </span>
+            <Link href="/artworks" className="grow whitespace-nowrap text-base self-end text-gray-500 hover:text-sky-300 transition duration-200">View all &gt;</Link>
           </h2>
           <div className="flex gap-10 overflow-x-auto snap-mandatory snap-x">
             {topArtist.map((artist, index) => (
