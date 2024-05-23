@@ -10,7 +10,7 @@ import ArtworkCard from "@/components/artworks/ArtworkCard";
 import BaseLoading from "@/components/generics/BaseLoading";
 import Footer from "@/components/generics/Footer";
 import FullFullLoader from "@/components/generics/FullFullLoader";
-
+import { Carousel } from '@material-tailwind/react';
 import { useArtworkStore } from '@/store/artwork';
 import { useAuthStore } from '@/store/auth';
 import { formatDate } from '@/utils/dateTime'
@@ -22,7 +22,6 @@ export default function Home() {
   const { fetchArtworks, fetchTopArtist, fetchFeaturedArtworks } = useArtworkStore();
   const { defaultAvatarUrl } = useAuthStore();
   const router = useRouter();
-  const featureContainer = useRef(null);
 
   const [isLoadingFeatured, setIsLoadingFeatured] = useState(true);
   const [isLoadingArtworks, setIsLoadingArtworks] = useState(true);
@@ -33,7 +32,7 @@ export default function Home() {
   const [featureContWidth, setFeatureContWidth] = useState(0);
   const [ratio, setRatio] = useState(9/16)
   const featureContHeight = featureContWidth * ratio;
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [screenWidth, setScreenWidth] = useState();
   const [isSmallScreen, setIsSmallScreen] = useState(false)
 
   const featuredArtwork = featuredArtworks[featureIndex];
@@ -68,13 +67,6 @@ export default function Home() {
   useEffect(() => {
   }, [featureIndex])
   moveFeatureIndex();
-
-  useEffect(() => {
-    featureContainer.current.style.height = `${featureContHeight}px`;
-    console.log(ratio, 'ratio')
-    console.log(featureContWidth, 'width')
-    console.log(featureContHeight, 'height'); 
-  }, [featureContWidth, ratio])
   
   useEffect(() => {
     if (screenWidth < LAPTOP_SCREEN) {
@@ -96,16 +88,6 @@ export default function Home() {
 },[])
 
   useEffect(() => {
-    if (featureContainer.current) {
-      setFeatureContWidth(featureContainer.current.offsetWidth);
-    }
-    const handleResize = () => {
-      if (featureContainer.current) {
-        setFeatureContWidth(featureContainer.current.offsetWidth);
-      }
-    }
-    window.addEventListener('resize', handleResize);
-    
     getFeaturedArtworks();
     const artworksFilters = {
       bottom: 10,
@@ -116,70 +98,81 @@ export default function Home() {
     getArtworks(artworksFilters);
     fetchTopArtist().then(artist => setTopArtist(artist));
 
-    return () => window.removeEventListener('resize', handleResize);
   }, []);
   return (
     <div className="overflow-x-hidden home-page">
     {isLoadingFeatured && <FullFullLoader />}
-    <Navbar showSearch={true} />
+    <div className="fixed z-30">
+      <Navbar showSearch={true} />
+    </div>
     <main className="min-h-screen pb-72 font-Adamina">
       <div className="container max-w-[1536px] mx-auto">
-        <div className="w-full flex flex-col items-center">
-          <div className="flex w-full">
-            <div className="relative inline-block w-full feature-container h-52" ref={featureContainer}>
-              <Image src={featuredArtworkImage}
-                alt='Featured Artwork' layout="fill" objectFit="cover"/>
-            </div>
-            <div className="relative">
-              <div className="absolute right-0 h-full flex flex-col justify-end md:justify-center">
-                <div className="flex flex-col gap-2 w-[300px] items-end text-white mb-10 mr-3 md:items-start">
-                  <h1 className="text-3xl font-bold mb-3 flex items-center gap-2">
-                    {!isSmallScreen && (
-                      <div className="w-2 h-8 bg-slate-700"></div>
-                    )}
-                    <span className="shadow-md-no-off">{featuredArtwork?.artwork.title}</span>
-                    {isSmallScreen && (
-                      <div className="w-2 h-8 bg-slate-700"></div>
-                    )}
-                  </h1>
-                  <p className="shadow-md-no-off">
-                    Artist: {featuredArtwork?.artwork.artist.username}
-                  </p>
-                  <p className="shadow-md-no-off">
-                    {featuredArtworks[featureIndex]?.artwork.current_highest_bid ? (
-                      <>
-                        Highest Bid: ₱ {featuredArtwork?.artwork.current_highest_bid}
-                      </>
-                    ) : (
-                      <>
-                        Starting Bid: ₱ {featuredArtwork?.artwork.starting_bid || '0'}
-                      </>
-                    )}
-                  </p>
-                  {featuredArtworks[featureIndex]?.artwork.bids_count > 0 && (
-                    <p className="shadow-md-no-off">
-                      {featuredArtwork?.artwork.bids_count} Bid{featuredArtwork?.artwork.bids_count > 1 && 's'}
-                    </p>
-                  )}
-                  <Link href={`/artworks/${featuredArtwork?.artwork.slug}?prev=true`} className="flex items-center gap-2 btn rounded-sm w-max">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 h-6 w-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    More Info
-                  </Link>
-                </div>
+        {!isLoadingArtworks && (
+        <div className="w-full h-lvh pt-[75px] sm:h-[925px]">
+          <Carousel
+            autoplay 
+            loop
+            className="rounded-sm"
+            navigation={({ setActiveIndex, activeIndex, length }) => (
+              <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
+                {new Array(length).fill("").map((_, i) => (
+                  <span
+                    key={i}
+                    className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
+                      activeIndex === i ? "w-8 bg-white" : "w-4 bg-white/50"
+                    }`}
+                    onClick={() => setActiveIndex(i)}
+                  />
+                ))}
               </div>
-            </div>
-          </div>
-          
-          <div className="relative w-full flex justify-center">
-            <div className="absolute bottom-0 mb-3 text-white w-max bg-slate-400/[.3] rounded-full flex items-center gap-2 px-2">
-              {featuredArtworks.map((_, index) => (
-                <p key={index}>
-                  {featureIndex === index ? <span>●</span> : <span>○</span>}
-                </p>
-              ))}
-            </div>
-          </div>
+            )}
+          >
+            {featuredArtworks.map((artwork, index) => (
+              <div key={index} className="w-full h-full flex flex-col">
+                <div className="relative">
+                  <div className="absolute m-5 text-white flex flex-col gap-2">
+                    <h1 className="text-2xl font-medium flex items-stretch gap-2">
+                      <div className="w-2 bg-slate-700"></div>
+                      <span className="shadow-md-no-off">{artwork.artwork.title}</span>
+                    </h1>
+                    <div className="pl-5 flex flex-col gap-1">
+                      <p className="shadow-md-no-off">
+                        Artist: {artwork.artwork.artist.username}
+                      </p>
+                      <p className="shadow-md-no-off">
+                        {artwork.artwork.current_highest_bid ? (
+                          <>
+                            Highest Bid: ₱ {artwork.artwork.current_highest_bid}
+                          </>
+                        ) : (
+                          <>
+                            Starting Bid: ₱ {artwork.artwork.starting_bid || '0'}
+                          </>
+                        )}
+                      </p>
+                      {artwork.artwork.bids_count > 0 && (
+                        <p className="shadow-md-no-off">
+                          {artwork.artwork.bids_count} Bid{artwork.artwork.bids_count > 1 && 's'}
+                        </p>
+                      )}
+                      <Link href={`/artworks/${artwork.artwork.slug}?prev=true`} className="flex items-center gap-2 btn btn-ghost p-0 rounded-sm w-max">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current shrink-0 h-6 w-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        More Info
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                <img
+                  src={!isSmallScreen ? artwork.image_url || defaultAvatarUrl : artwork.artwork?.first_image.image_url || defaultAvatarUrl}
+                  alt="image 1"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            ))}
+          </Carousel>
         </div>
+        )}
 
         <div className="mt-10 px-3">
           <h2 className="text-4xl font-black mb-3 flex items-stretch gap-2">
@@ -189,7 +182,7 @@ export default function Home() {
             </span>
             <Link href="/artworks" className="grow whitespace-nowrap text-base self-end text-gray-500 hover:text-sky-300 transition duration-200">View all &gt;</Link>
           </h2>
-          <div className="flex gap-3 pb-3 overflow-x-auto overflow-y-hidden">
+          <div className="flex gap-3 pb-3 overflow-x-auto snap-mandatory snap-x overflow-y-hidden">
             {isLoadingArtworks && (
               <>
                 {[...Array(6)].map((_, index) => (
@@ -205,8 +198,10 @@ export default function Home() {
                 <div className="h-[500px] overflow-y-hidden">
                   <p className="font-kumar text-[400px] h-max text-gray-700">{index + 1}</p>
                 </div>
-                <div className="relative translate-x-[-12%]">
-                  <ArtworkCard artwork={art} />
+                <div className="relative w-[270px]">
+                  <div className="absolute translate-x-[-12%] snap-center">
+                    <ArtworkCard artwork={art} />
+                  </div>
                 </div>
               </div>
             ))}
@@ -218,11 +213,11 @@ export default function Home() {
             <div className="w-2 min-w-2 bg-slate-600"></div>
             Popular artists this month
           </h2>
-          <div className="flex gap-10 overflow-x-auto">
+          <div className="flex gap-10 overflow-x-auto snap-mandatory snap-x">
             {topArtist.map((artist, index) => (
               <div key={index} className="min-w-[300px] pb-5">
                 <div className="relative h-[300px]">
-                  <Image onClick={() => {router.push(`/user/${artist.id}`)}} src={artist.avatar_url || defaultAvatarUrl} alt='Artist Profile' layout="fill" objectFit="cover" className="rounded-full cursor-pointer" />
+                  <Image onClick={() => {router.push(`/user/${artist.id}`)}} src={artist.avatar_url || defaultAvatarUrl} alt='Artist Profile' layout="fill" objectFit="cover" className="rounded-full cursor-pointer snap-center" />
                 </div>
                   <h3 className="text-lg font-semibold text-center mt-3">{artist.username}</h3>
               </div>
