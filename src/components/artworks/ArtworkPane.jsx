@@ -126,7 +126,7 @@ const ArtworkPane = () => {
 
 
     return (
-        <div className='container xl overflow-hidden mx-auto font-Adamina mb-5'>
+        <div className='container xl overflow-hidden mx-auto font-Adamina'>
             <div className='flex gap-3 mt-3 font-light'>
                 <Link href='/'>Home</Link>
                 <h3>/</h3>
