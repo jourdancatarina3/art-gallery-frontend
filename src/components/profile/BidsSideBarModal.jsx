@@ -16,7 +16,7 @@ function BidsSideBarModal(props) {
 
     return (
         <div className="relative">
-            <div className={`slide-in-bids flex flex-col gap-2 h-full w-[300px] min-w-[300px] translate-x-[-100%] bg-gray-50 py-5 px-2 custom-left-shadow absolute
+            <div className={`slide-in-bids flex flex-col gap-2 h-full w-[300px] min-w-[300px] translate-x-[-100%] bg-white py-5 px-2 custom-left-shadow absolute
                             ${!isVisible ? 'slide-out-bids': ''}`}>
                 <h2 className='font-bold text-xl border-dashed border-b border-black/[.3] pb-3 flex justify-between items-center'>
                     Bids

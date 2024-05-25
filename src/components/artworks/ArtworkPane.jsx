@@ -3,13 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation'   
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { faPaintbrush } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import Icon from '@mdi/react';
+import { mdiFilterVariant } from '@mdi/js';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
-import Image from 'next/image';
+import { CSSTransition } from 'react-transition-group';
+import '@/styles/ArtworkPane.scss';
 
 import ArtworkCard from '@/components/artworks/ArtworkCard';
 import BaseLoading from '@/components/generics/BaseLoading';
@@ -39,6 +40,7 @@ const ArtworkPane = () => {
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [categorySearchKey, setCategorySearchKey] = useState('');
     const [finishedInitialFetch, setFinishedInitialFetch] = useState(false);
+    const [showCategories, setShowCategories] = useState(true);
 
     const pageCount = Math.ceil(totalArtworks / ARTWORK_SIZE_PER_REQUEST);
     const currentPage = Math.ceil(top + 1 / ARTWORK_SIZE_PER_REQUEST)
@@ -132,52 +134,59 @@ const ArtworkPane = () => {
                 <h3>/</h3>
                 <Link href='/artworks' className='font-semibold' >Artworks</Link>
             </div>
-            <div className='flex gap-5 min-h-lvh'>   
-                <div className='max-w-[240px] min-w-[240px] px-3 bg-black/[.02] border-r border-black/[.1]'>
-                    <h3 className='text-2xl font-semibold mt-5 mb-2'>
-                        Top Categories
-                    </h3>
-                    <input onChange={(e) => {setCategorySearchKey(e.target.value)}} type="text" placeholder="Search category" className="input rounded-sm input-bordered w-full max-w-xs" />
-                    <hr className="border-0 h-px bg-gray-300 my-3" />
-                    <div className='flex flex-col gap-5'>
-                    <div className="flex flex-col gap-1">
-                        {isFetchingCategories && (
-                            <>
-                                {[...Array(6)].map((_, index) => (
-                                    <div className="max-w-full overflow-hidden rounded-md" key={index}>
-                                        <BaseLoading width={230} height={45} />
-                                    </div>
-                                ))}
-                            </>
-                        )}
-                    </div>
-                    {categories.map((category) => (
-                        <div className='flex gap-3 items-center' key={category.id}>
-                            <input
-                                id={category.id}
-                                type='checkbox'
-                                className='checkbox checkbox-sm rounded-sm hover:cursor-pointer'
-                                checked={selectedCategories.includes(category.id)}
-                                onChange={(event) => {
-                                    if (event.target.checked) {
-                                        setSelectedCategories([...selectedCategories, category.id]);
-                                    } else {
-                                        setSelectedCategories(selectedCategories.filter((cat) => cat !== category.id));
-                                    }
-                                }}
-                            />
-                            <label className="flex items-center cursor-pointer" for={category.id}>
-                                <h4 className='text-md tracking-widest max-w-[120px] truncate'>{category.name}</h4>
-                                <div className="badge">{limitCategoryCount(category.artwork_count)}</div>
-                            </label>
+            <div className='flex gap-5 min-h-lvh'>
+                <CSSTransition
+                    in={showCategories}
+                    timeout={300}
+                    classNames="category"
+                    unmountOnExit
+                >
+                    <div className='max-w-[240px] min-w-[240px] px-3 bg-black/[.02] border-r border-black/[.1]'>
+                        <h3 className='text-2xl font-semibold mt-5 mb-2'>
+                            Top Categories
+                        </h3>
+                        <input onChange={(e) => {setCategorySearchKey(e.target.value)}} type="text" placeholder="Search category" className="input rounded-sm input-bordered w-full max-w-xs" />
+                        <hr className="border-0 h-px bg-gray-300 my-3" />
+                        <div className='flex flex-col gap-5'>
+                        <div className="flex flex-col gap-1">
+                            {isFetchingCategories && (
+                                <>
+                                    {[...Array(6)].map((_, index) => (
+                                        <div className="max-w-full overflow-hidden rounded-md" key={index}>
+                                            <BaseLoading width={230} height={45} />
+                                        </div>
+                                    ))}
+                                </>
+                            )}
                         </div>
-                    ))}
+                        {categories.map((category) => (
+                            <div className='flex gap-3 items-center' key={category.id}>
+                                <input
+                                    id={category.id}
+                                    type='checkbox'
+                                    className='checkbox checkbox-sm rounded-sm hover:cursor-pointer'
+                                    checked={selectedCategories.includes(category.id)}
+                                    onChange={(event) => {
+                                        if (event.target.checked) {
+                                            setSelectedCategories([...selectedCategories, category.id]);
+                                        } else {
+                                            setSelectedCategories(selectedCategories.filter((cat) => cat !== category.id));
+                                        }
+                                    }}
+                                />
+                                <label className="flex items-center cursor-pointer" for={category.id}>
+                                    <h4 className='text-md tracking-widest max-w-[120px] truncate'>{category.name}</h4>
+                                    <div className="badge">{limitCategoryCount(category.artwork_count)}</div>
+                                </label>
+                            </div>
+                        ))}
+                        </div>
                     </div>
-                </div>
+                </CSSTransition>
 
                 <div className='mt-5 grow'>
                     <h1 className='text-3xl font-semibold'>ARTWORKS</h1>
-                    <div className='flex flex-wrap gap-x-5 gap-y-3 items-center mt-2'>
+                    <div className='flex flex-wrap gap-x-3 gap-y-3 items-center mt-2'>
                         <label className="input input-bordered flex bg-black/[.02] rounded-sm items-center gap-2 w-[50%]">
                             <input
                                 value={searchKey}
@@ -193,6 +202,12 @@ const ArtworkPane = () => {
                             <FontAwesomeIcon icon={faPlus} width={20} height={20} />
                             Add Artwork
                         </Link>
+                        <button
+                            onClick={() => setShowCategories(!showCategories)}
+                            className='btn rounded-sm'
+                        >
+                            <Icon path={mdiFilterVariant} size={1} color='currentColor' />
+                        </button>
                     </div>
                     <div className='mt-10 flex gap-5 flex-wrap'>
                     {isFetchingArtworks && (

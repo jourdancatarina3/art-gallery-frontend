@@ -1,0 +1,21 @@
+.category-enter {
+    transform: translateX(-100%);
+}
+
+.category-enter-active {
+transform: translateX(0);
+transition: transform 300ms;
+}
+
+.category-exit {
+transform: translateX(0);
+}
+
+.category-exit-active {
+transform: translateX(-100%);
+transition: transform 300ms;
+}
+
+.category-container {
+overflow: hidden;
+}
