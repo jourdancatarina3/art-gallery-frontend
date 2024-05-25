@@ -38,6 +38,8 @@ function ProfilePage({params}) {
     const [artworks, setArtworks] = useState([]);
     const [bids, setBids] = useState([]);
     const [showBids, setShowBids] = useState(false);
+
+    const logedInUser = user;
     
     const initializeUser = (data) => {
         console.log(router, 'heree');
@@ -150,9 +152,11 @@ function ProfilePage({params}) {
                             <div className='flex justify-between border-dashed border-b border-black/[.3] pb-3 mb-5'>
                                 <h2 className='font-bold text-3xl flex items-center'>Artworks</h2>
                                 <div className="flex gap-3">
+                                    {parseInt(id) === logedInUser?.id && (
                                     <Link href={'/artworks/new'} className="btn rounded-sm text-xl">
                                         Add Artwork
                                     </Link>
+                                    )}
                                     <button
                                         onClick={() => {setShowBids(true)}}
                                         className='btn btn-neutral rounded-sm text-xl'

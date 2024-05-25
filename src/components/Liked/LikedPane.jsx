@@ -54,6 +54,21 @@ function LikedPane() {
                     <ArtworkCard key={index} artwork={item} />
                 ))}
             </div>
+            {!artworks.length && (
+                <div className="h-full w-full flex items-center justify-center">
+                    <div className="flex flex-col gap-3">
+                        <span>
+                            No liked artwork
+                        </span>
+                        <button
+                            onClick={() => router.push('/artworks')}
+                            className='btn btn-neutral rounded-sm font-light'
+                        >
+                            Go to artworks
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
